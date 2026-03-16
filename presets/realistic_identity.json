@@ -4,7 +4,7 @@
     "default_refiner_switch": 0.5,
     "default_loras": [
         [
-            true,
+            false,
             "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
             0.15
         ],
@@ -29,28 +29,26 @@
             1.0
         ]
     ],
-    "default_cfg_scale": 4.0,
-    "default_sample_sharpness": 1.6,
+    "default_cfg_scale": 3.6,
+    "default_sample_sharpness": 1.2,
     "default_sampler": "dpmpp_2m_sde_gpu",
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "unrealistic, saturated, high contrast, waxy skin, plastic skin, painting, drawing, sketch, cartoon, anime, manga, render, CG, 3d, watermark, signature, label, blurry iris, deformed eyes",
-    "default_styles": [
-        "Fooocus Photograph",
-        "Fooocus Negative"
-    ],
-    "default_aspect_ratio": "896*1152",
-    "default_overwrite_step": 60,
+    "default_prompt_negative": "different person, different identity, changed facial structure, changed eyes, changed nose, changed lips, unrealistic, saturated, high contrast, waxy skin, plastic skin, painting, drawing, sketch, cartoon, anime, manga, render, CG, 3d, watermark, signature, label, blurry iris, deformed eyes",
+    "default_styles": [],
+    "default_aspect_ratio": "1024*1024",
+    "default_overwrite_step": 72,
+    "default_image_number": 1,
     "default_image_prompt_checkbox": true,
     "default_image_prompt_advanced_checkbox": true,
     "default_selected_image_input_tab_id": "ip_tab",
     "default_ip_type_1": "FaceSwap",
-    "default_ip_stop_at_1": 0.97,
-    "default_ip_weight_1": 1.15,
-    "default_ip_type_2": "ImagePrompt",
-    "default_ip_stop_at_2": 0.6,
-    "default_ip_weight_2": 0.35,
+    "default_ip_stop_at_1": 0.99,
+    "default_ip_weight_1": 1.35,
+    "default_ip_type_2": "FaceSwap",
+    "default_ip_stop_at_2": 0.99,
+    "default_ip_weight_2": 0.9,
     "checkpoint_downloads": {
         "realisticStockPhoto_v20.safetensors": "https://huggingface.co/lllyasviel/fav_models/resolve/main/fav/realisticStockPhoto_v20.safetensors"
     },
