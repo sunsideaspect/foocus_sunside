@@ -10,6 +10,12 @@ Use the new preset:
 python entry_with_update.py --preset realistic_identity
 ```
 
+For an automated best-of-N flow (generate many, keep top-ranked), use:
+
+```bash
+python entry_with_update.py --preset realistic_pro
+```
+
 The preset enables:
 
 - `Quality` performance mode
@@ -54,6 +60,16 @@ Use this checklist:
 4. Keep `CFG` in the moderate range (`3.4-4.0`).
 5. Keep `Steps` high (`64-80`).
 6. Generate a small batch with fixed seed, choose the closest face, then iterate that seed.
+
+## Pro mode (automatic ranking)
+
+`realistic_pro` adds a first-stage ranking system to reduce manual cherry-picking:
+
+- generates a larger batch (`default_image_number = 8`)
+- scores candidates by detail/contrast/exposure/entropy proxies
+- keeps only the top results (`default_pro_mode_keep_count = 2`)
+
+This is an approximation-based scorer, not a semantic human judge, but it usually removes the weakest outputs automatically.
 
 ## Practical limits
 

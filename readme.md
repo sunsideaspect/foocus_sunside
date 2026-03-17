@@ -282,6 +282,7 @@ Given different goals, the default models and configs of Fooocus are different:
 | General   | run.bat |  | juggernautXL_v8Rundiffusion | not used | [presets/default.json](./presets/default.json) |
 | Realistic | run_realistic.bat | --preset realistic | realisticStockPhoto_v20     | not used | [presets/realistic.json](./presets/realistic.json) |
 | Realistic + Identity |  | --preset realistic_identity | realisticStockPhoto_v20 | not used | [presets/realistic_identity.json](./presets/realistic_identity.json) |
+| Realistic + Pro Auto Rank |  | --preset realistic_pro | realisticStockPhoto_v20 | not used | [presets/realistic_pro.json](./presets/realistic_pro.json) |
 | Anime     | run_anime.bat | --preset anime | animaPencilXL_v500          | not used | [presets/anime.json](./presets/anime.json) |
 
 Note that the download is **automatic** - you do not need to do anything if the internet connection is okay. However, you can download them manually if you (or move them from somewhere else) have your own preparation.

@@ -61,6 +61,9 @@ class AsyncTask:
 
         self.aspect_ratios_selection = args.pop()
         self.image_number = args.pop()
+        self.pro_mode_enabled = modules.config.default_pro_mode_enabled
+        self.pro_mode_keep_count = modules.config.default_pro_mode_keep_count
+        self.pro_mode_min_images = modules.config.default_pro_mode_min_images
         self.output_format = args.pop()
         self.seed = int(args.pop())
         self.read_wildcards_in_order = args.pop()
@@ -299,6 +302,37 @@ def worker():
 
         # must use deep copy otherwise gradio is super laggy. Do not use list.append() .
         async_task.results = async_task.results + [wall]
+        return
+
+    def apply_pro_mode_ranking(async_task):
+        if not async_task.pro_mode_enabled:
+            return
+        if len(async_task.results) < async_task.pro_mode_min_images:
+            return
+
+        try:
+            from modules.pro_ranking import rank_results
+
+            ranked_items, unscored_items, scored_meta = rank_results(async_task.results)
+            if len(scored_meta) == 0:
+                print('[Pro Mode] No rankable images found. Skipped.')
+                return
+
+            keep_count = int(async_task.pro_mode_keep_count)
+            if keep_count > 0:
+                ranked_items = ranked_items[:keep_count]
+
+            async_task.results = ranked_items + unscored_items
+
+            top = scored_meta[:min(3, len(scored_meta))]
+            for i, x in enumerate(top):
+                print(
+                    f'[Pro Mode] Rank {i + 1}: score={x.score:.4f}, sharp={x.sharpness:.4f}, '
+                    f'contrast={x.contrast:.4f}, exposure={x.exposure:.4f}, entropy={x.entropy:.4f}'
+                )
+            print(f'[Pro Mode] Ranked {len(scored_meta)} images, kept {len(ranked_items)} scored item(s).')
+        except Exception as e:
+            print(f'[Pro Mode] Ranking failed: {e}')
         return
 
     def process_task(all_steps, async_task, callback, controlnet_canny_path, controlnet_cpds_path, current_task_id,
@@ -1497,6 +1531,7 @@ def worker():
 
             try:
                 handler(task)
+                apply_pro_mode_ranking(task)
                 if task.generate_image_grid:
                     build_image_wall(task)
                 task.yields.append(['finish', task.results])
