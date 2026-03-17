@@ -64,6 +64,12 @@ class AsyncTask:
         self.pro_mode_enabled = modules.config.default_pro_mode_enabled
         self.pro_mode_keep_count = modules.config.default_pro_mode_keep_count
         self.pro_mode_min_images = modules.config.default_pro_mode_min_images
+        self.pro_mode_detail_pass_enabled = modules.config.default_pro_mode_detail_pass_enabled
+        self.pro_mode_detail_prompts = modules.config.default_pro_mode_detail_prompts
+        self.pro_mode_detail_inpaint_engine = modules.config.default_pro_mode_detail_inpaint_engine
+        self.pro_mode_detail_strength = modules.config.default_pro_mode_detail_strength
+        self.pro_mode_detail_respective_field = modules.config.default_pro_mode_detail_respective_field
+        self.pro_mode_detail_erode_or_dilate = modules.config.default_pro_mode_detail_erode_or_dilate
         self.output_format = args.pop()
         self.seed = int(args.pop())
         self.read_wildcards_in_order = args.pop()
@@ -333,6 +339,51 @@ def worker():
             print(f'[Pro Mode] Ranked {len(scored_meta)} images, kept {len(ranked_items)} scored item(s).')
         except Exception as e:
             print(f'[Pro Mode] Ranking failed: {e}')
+        return
+
+    def configure_pro_mode_detail_pass(async_task):
+        if not async_task.pro_mode_enabled:
+            return
+        if not async_task.pro_mode_detail_pass_enabled:
+            return
+        if len(async_task.enhance_ctrls) > 0 and async_task.enhance_checkbox:
+            # Respect explicit user-defined enhance pipeline.
+            return
+
+        prompts = [safe_str(x).strip() for x in async_task.pro_mode_detail_prompts]
+        prompts = [x for x in prompts if x != '']
+        if len(prompts) == 0:
+            return
+
+        async_task.enhance_checkbox = True
+        async_task.save_final_enhanced_image_only = True
+        async_task.enhance_ctrls = []
+
+        for detection_prompt in prompts:
+            async_task.enhance_ctrls.append([
+                detection_prompt,                              # enhance_mask_dino_prompt_text
+                '',                                            # enhance_prompt (fallback to global prompt)
+                '',                                            # enhance_negative_prompt (fallback to global negative)
+                'sam',                                         # enhance_mask_model
+                modules.config.default_inpaint_mask_cloth_category,
+                modules.config.default_inpaint_mask_sam_model,
+                0.25,                                          # enhance_mask_text_threshold
+                0.30,                                          # enhance_mask_box_threshold
+                modules.config.default_sam_max_detections,     # enhance_mask_sam_max_detections
+                False,                                         # enhance_inpaint_disable_initial_latent
+                async_task.pro_mode_detail_inpaint_engine,     # enhance_inpaint_engine
+                async_task.pro_mode_detail_strength,           # enhance_inpaint_strength
+                async_task.pro_mode_detail_respective_field,   # enhance_inpaint_respective_field
+                async_task.pro_mode_detail_erode_or_dilate,    # enhance_inpaint_erode_or_dilate
+                False                                          # enhance_mask_invert
+            ])
+
+        print(
+            f'[Pro Mode] Enabled auto detail pass with prompts={prompts}, '
+            f'engine={async_task.pro_mode_detail_inpaint_engine}, '
+            f'strength={async_task.pro_mode_detail_strength}, '
+            f'respective={async_task.pro_mode_detail_respective_field}'
+        )
         return
 
     def process_task(all_steps, async_task, callback, controlnet_canny_path, controlnet_cpds_path, current_task_id,
@@ -1224,6 +1275,7 @@ def worker():
             current_progress += 1
             progressbar(async_task, current_progress, 'Image processing ...')
 
+        configure_pro_mode_detail_pass(async_task)
         should_enhance = async_task.enhance_checkbox and (async_task.enhance_uov_method != flags.disabled.casefold() or len(async_task.enhance_ctrls) > 0)
 
         if 'vary' in goals:

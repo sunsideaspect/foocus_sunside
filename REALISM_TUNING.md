@@ -68,6 +68,8 @@ Use this checklist:
 - generates a larger batch (`default_image_number = 8`)
 - scores candidates by detail/contrast/exposure/entropy proxies
 - keeps only the top results (`default_pro_mode_keep_count = 2`)
+- runs automatic local detail passes for `face`, `hand`, and `body` using SAM masks + inpaint
+- stores only final enhanced outputs by default to reduce noisy intermediate picks
 
 This is an approximation-based scorer, not a semantic human judge, but it usually removes the weakest outputs automatically.
 

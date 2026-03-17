@@ -469,6 +469,42 @@ default_pro_mode_min_images = get_config_item_or_set_default(
     validator=lambda x: isinstance(x, int) and x >= 2,
     expected_type=int
 )
+default_pro_mode_detail_pass_enabled = get_config_item_or_set_default(
+    key='default_pro_mode_detail_pass_enabled',
+    default_value=False,
+    validator=lambda x: isinstance(x, bool),
+    expected_type=bool
+)
+default_pro_mode_detail_prompts = get_config_item_or_set_default(
+    key='default_pro_mode_detail_prompts',
+    default_value=['face', 'hand', 'body'],
+    validator=lambda x: isinstance(x, list) and all(isinstance(v, str) and v.strip() != '' for v in x),
+    expected_type=list
+)
+default_pro_mode_detail_inpaint_engine = get_config_item_or_set_default(
+    key='default_pro_mode_detail_inpaint_engine',
+    default_value='v2.6',
+    validator=lambda x: x in modules.flags.inpaint_engine_versions,
+    expected_type=str
+)
+default_pro_mode_detail_strength = get_config_item_or_set_default(
+    key='default_pro_mode_detail_strength',
+    default_value=0.38,
+    validator=lambda x: isinstance(x, numbers.Number) and 0 <= x <= 1,
+    expected_type=numbers.Number
+)
+default_pro_mode_detail_respective_field = get_config_item_or_set_default(
+    key='default_pro_mode_detail_respective_field',
+    default_value=0.35,
+    validator=lambda x: isinstance(x, numbers.Number) and 0 <= x <= 1,
+    expected_type=numbers.Number
+)
+default_pro_mode_detail_erode_or_dilate = get_config_item_or_set_default(
+    key='default_pro_mode_detail_erode_or_dilate',
+    default_value=0,
+    validator=lambda x: isinstance(x, int) and -64 <= x <= 64,
+    expected_type=int
+)
 checkpoint_downloads = get_config_item_or_set_default(
     key='checkpoint_downloads',
     default_value={},
@@ -761,6 +797,12 @@ possible_preset_keys = {
     "default_pro_mode_enabled": "pro_mode_enabled",
     "default_pro_mode_keep_count": "pro_mode_keep_count",
     "default_pro_mode_min_images": "pro_mode_min_images",
+    "default_pro_mode_detail_pass_enabled": "pro_mode_detail_pass_enabled",
+    "default_pro_mode_detail_prompts": "pro_mode_detail_prompts",
+    "default_pro_mode_detail_inpaint_engine": "pro_mode_detail_inpaint_engine",
+    "default_pro_mode_detail_strength": "pro_mode_detail_strength",
+    "default_pro_mode_detail_respective_field": "pro_mode_detail_respective_field",
+    "default_pro_mode_detail_erode_or_dilate": "pro_mode_detail_erode_or_dilate",
     "default_prompt": "prompt",
     "default_prompt_negative": "negative_prompt",
     "default_styles": "styles",

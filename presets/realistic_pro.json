@@ -43,6 +43,16 @@
     "default_pro_mode_enabled": true,
     "default_pro_mode_keep_count": 2,
     "default_pro_mode_min_images": 4,
+    "default_pro_mode_detail_pass_enabled": true,
+    "default_pro_mode_detail_prompts": [
+        "face",
+        "hand",
+        "body"
+    ],
+    "default_pro_mode_detail_inpaint_engine": "v2.6",
+    "default_pro_mode_detail_strength": 0.38,
+    "default_pro_mode_detail_respective_field": 0.35,
+    "default_pro_mode_detail_erode_or_dilate": 0,
     "default_image_prompt_checkbox": true,
     "default_image_prompt_advanced_checkbox": true,
     "default_selected_image_input_tab_id": "ip_tab",
