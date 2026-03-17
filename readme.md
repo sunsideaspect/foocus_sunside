@@ -115,11 +115,11 @@ See also the common problems and troubleshoots [here](troubleshoot.md).
 | --- | --- |
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb) | Fooocus Official
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (diverse-faces preset by default)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, diverse-faces preset)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, diverse-detail preset)
 
 In Colab, you can modify the last line to `!python entry_with_update.py --share --always-high-vram` or `!python entry_with_update.py --share --always-high-vram --preset anime` or `!python entry_with_update.py --share --always-high-vram --preset realistic` for Fooocus Default/Anime/Realistic Edition.
 The full fork notebook starts with `--preset realistic_diverse`.
-The Easy notebook starts with `--preset realistic_diverse`.
+The Easy notebook starts with `--preset realistic_diverse_detail`.
 
 You can also change the preset in the UI. Please be aware that this may lead to timeouts after 60 seconds. If this is the case, please wait until the download has finished, change the preset to initial and back to the one you've selected or reload the page.
 
@@ -286,6 +286,7 @@ Given different goals, the default models and configs of Fooocus are different:
 | Realistic + Identity |  | --preset realistic_identity | realisticStockPhoto_v20 | not used | [presets/realistic_identity.json](./presets/realistic_identity.json) |
 | Realistic + Direct Prompt |  | --preset realistic_direct_prompt | realisticStockPhoto_v20 | not used | [presets/realistic_direct_prompt.json](./presets/realistic_direct_prompt.json) |
 | Realistic + Diverse Faces |  | --preset realistic_diverse | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse.json](./presets/realistic_diverse.json) |
+| Realistic + Diverse Detail |  | --preset realistic_diverse_detail | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse_detail.json](./presets/realistic_diverse_detail.json) |
 | Realistic + Pro Auto Rank |  | --preset realistic_pro | realisticStockPhoto_v20 | not used | [presets/realistic_pro.json](./presets/realistic_pro.json) |
 | Realistic + Super (Pro + Structure) |  | --preset realistic_super | realisticStockPhoto_v20 | not used | [presets/realistic_super.json](./presets/realistic_super.json) |
 | Anime     | run_anime.bat | --preset anime | animaPencilXL_v500          | not used | [presets/anime.json](./presets/anime.json) |

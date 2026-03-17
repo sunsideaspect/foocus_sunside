@@ -28,6 +28,12 @@ For reducing "same default face" bias across generations, use:
 python entry_with_update.py --preset realistic_diverse
 ```
 
+For higher body/skin detail while keeping diverse faces, use:
+
+```bash
+python entry_with_update.py --preset realistic_diverse_detail
+```
+
 For the strongest one-click preset (extra steps + stronger structure/detail control), use:
 
 ```bash
@@ -114,6 +120,14 @@ If your prompt is still constrained, start from this preset and only then enable
 - keeps pro/detail/structure controls disabled
 - starts on `uov_tab` with image-prompt off by default
 - uses lighter CFG/steps defaults to avoid collapsing to one repeated face
+
+## Diverse detail preset (body/skin detail)
+
+`realistic_diverse_detail` keeps the diverse base and adds a gentle detail stack:
+
+- enables pro detail pass with prompts `face`, `hand`, `torso`, `body`
+- enables low-weight structure guidance to stabilize anatomy without heavy lock
+- keeps `image_number = 1` and ranking effectively inactive (`min_images = 4`)
 
 ## Super preset (maximum quality defaults)
 
