@@ -22,6 +22,12 @@ For maximum prompt-following with minimal auto-corrections, use:
 python entry_with_update.py --preset realistic_direct_prompt
 ```
 
+For reducing "same default face" bias across generations, use:
+
+```bash
+python entry_with_update.py --preset realistic_diverse
+```
+
 For the strongest one-click preset (extra steps + stronger structure/detail control), use:
 
 ```bash
@@ -98,6 +104,16 @@ This is an approximation-based scorer, not a semantic human judge, but it usuall
 - image-prompt UI is off by default and IP type defaults to `ImagePrompt` (not `FaceSwap`) to avoid hidden identity lock
 
 If your prompt is still constrained, start from this preset and only then enable extra modules one by one.
+
+## Diverse faces preset (anti face-lock)
+
+`realistic_diverse` is tuned for stronger facial variety:
+
+- switches base model to `juggernautXL_v8Rundiffusion`
+- disables style LoRAs by default
+- keeps pro/detail/structure controls disabled
+- starts on `uov_tab` with image-prompt off by default
+- uses lighter CFG/steps defaults to avoid collapsing to one repeated face
 
 ## Super preset (maximum quality defaults)
 
