@@ -1,0 +1,66 @@
+{
+    "default_model": "realisticStockPhoto_v20.safetensors",
+    "default_refiner": "None",
+    "default_refiner_switch": 0.5,
+    "default_loras": [
+        [
+            false,
+            "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
+            0.1
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ]
+    ],
+    "default_cfg_scale": 4.2,
+    "default_sample_sharpness": 1.3,
+    "default_sampler": "dpmpp_2m_sde_gpu",
+    "default_scheduler": "karras",
+    "default_performance": "Quality",
+    "default_prompt": "",
+    "default_prompt_negative": "lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, extra fingers, deformed hands, watermark, text, signature",
+    "default_styles": [],
+    "default_aspect_ratio": "1024*1024",
+    "default_overwrite_step": 64,
+    "default_image_number": 1,
+    "default_black_out_nsfw": false,
+    "default_pro_mode_enabled": false,
+    "default_pro_mode_detail_pass_enabled": false,
+    "default_pro_mode_structure_control_enabled": false,
+    "default_image_prompt_checkbox": true,
+    "default_image_prompt_advanced_checkbox": true,
+    "default_selected_image_input_tab_id": "ip_tab",
+    "default_ip_type_1": "FaceSwap",
+    "default_ip_stop_at_1": 0.95,
+    "default_ip_weight_1": 1.15,
+    "default_ip_type_2": "FaceSwap",
+    "default_ip_stop_at_2": 0.9,
+    "default_ip_weight_2": 0.7,
+    "checkpoint_downloads": {
+        "realisticStockPhoto_v20.safetensors": "https://huggingface.co/lllyasviel/fav_models/resolve/main/fav/realisticStockPhoto_v20.safetensors"
+    },
+    "embeddings_downloads": {},
+    "lora_downloads": {
+        "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors": "https://huggingface.co/mashb1t/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors"
+    },
+    "previous_default_models": [
+        "realisticStockPhoto_v10.safetensors"
+    ]
+}

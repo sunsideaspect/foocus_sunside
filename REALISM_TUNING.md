@@ -16,6 +16,12 @@ For an automated best-of-N flow (generate many, keep top-ranked), use:
 python entry_with_update.py --preset realistic_pro
 ```
 
+For maximum prompt-following with minimal auto-corrections, use:
+
+```bash
+python entry_with_update.py --preset realistic_direct_prompt
+```
+
 For the strongest one-click preset (extra steps + stronger structure/detail control), use:
 
 ```bash
@@ -79,6 +85,18 @@ Use this checklist:
 - stores only final enhanced outputs by default to reduce noisy intermediate picks
 
 This is an approximation-based scorer, not a semantic human judge, but it usually removes the weakest outputs automatically.
+
+## Direct prompt preset (minimum interference)
+
+`realistic_direct_prompt` is tuned to reduce pipeline "override" behavior:
+
+- `default_pro_mode_enabled = false` (no auto ranking / keep-top filtering)
+- `default_pro_mode_detail_pass_enabled = false`
+- `default_pro_mode_structure_control_enabled = false`
+- lighter negative prompt to avoid over-blocking prompt intent
+- single-image default (`default_image_number = 1`) to simplify direct comparisons
+
+If your prompt is still constrained, start from this preset and only then enable extra modules one by one.
 
 ## Super preset (maximum quality defaults)
 
