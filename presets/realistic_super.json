@@ -1,0 +1,82 @@
+{
+    "default_model": "realisticStockPhoto_v20.safetensors",
+    "default_refiner": "None",
+    "default_refiner_switch": 0.5,
+    "default_loras": [
+        [
+            false,
+            "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
+            0.15
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ],
+        [
+            true,
+            "None",
+            1.0
+        ]
+    ],
+    "default_cfg_scale": 3.8,
+    "default_sample_sharpness": 1.15,
+    "default_sampler": "dpmpp_2m_sde_gpu",
+    "default_scheduler": "karras",
+    "default_performance": "Quality",
+    "default_prompt": "",
+    "default_prompt_negative": "different person, different identity, changed facial structure, changed eyes, changed nose, changed lips, unrealistic, saturated, high contrast, waxy skin, plastic skin, painting, drawing, sketch, cartoon, anime, manga, render, CG, 3d, watermark, signature, label, blurry iris, deformed eyes, deformed body, extra limbs",
+    "default_styles": [],
+    "default_aspect_ratio": "1024*1024",
+    "default_overwrite_step": 84,
+    "default_image_number": 6,
+    "default_pro_mode_enabled": true,
+    "default_pro_mode_keep_count": 2,
+    "default_pro_mode_min_images": 4,
+    "default_pro_mode_detail_pass_enabled": true,
+    "default_pro_mode_detail_prompts": [
+        "face",
+        "hand",
+        "body"
+    ],
+    "default_pro_mode_detail_inpaint_engine": "v2.6",
+    "default_pro_mode_detail_strength": 0.42,
+    "default_pro_mode_detail_respective_field": 0.35,
+    "default_pro_mode_detail_erode_or_dilate": 0,
+    "default_pro_mode_structure_control_enabled": true,
+    "default_pro_mode_structure_use_canny": true,
+    "default_pro_mode_structure_use_cpds": true,
+    "default_pro_mode_structure_canny_stop": 0.6,
+    "default_pro_mode_structure_canny_weight": 0.95,
+    "default_pro_mode_structure_cpds_stop": 0.6,
+    "default_pro_mode_structure_cpds_weight": 0.8,
+    "default_image_prompt_checkbox": true,
+    "default_image_prompt_advanced_checkbox": true,
+    "default_selected_image_input_tab_id": "ip_tab",
+    "default_ip_type_1": "FaceSwap",
+    "default_ip_stop_at_1": 0.99,
+    "default_ip_weight_1": 1.35,
+    "default_ip_type_2": "FaceSwap",
+    "default_ip_stop_at_2": 0.99,
+    "default_ip_weight_2": 0.9,
+    "checkpoint_downloads": {
+        "realisticStockPhoto_v20.safetensors": "https://huggingface.co/lllyasviel/fav_models/resolve/main/fav/realisticStockPhoto_v20.safetensors"
+    },
+    "embeddings_downloads": {},
+    "lora_downloads": {
+        "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors": "https://huggingface.co/mashb1t/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors"
+    },
+    "previous_default_models": [
+        "realisticStockPhoto_v10.safetensors"
+    ]
+}

@@ -114,10 +114,11 @@ See also the common problems and troubleshoots [here](troubleshoot.md).
 | Colab | Info
 | --- | --- |
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb) | Fooocus Official
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (realistic identity preset by default)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (super realism preset by default)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, super preset)
 
 In Colab, you can modify the last line to `!python entry_with_update.py --share --always-high-vram` or `!python entry_with_update.py --share --always-high-vram --preset anime` or `!python entry_with_update.py --share --always-high-vram --preset realistic` for Fooocus Default/Anime/Realistic Edition.
-The fork notebook above already starts with `--preset realistic_identity`.
+The fork notebooks above start with `--preset realistic_super`.
 
 You can also change the preset in the UI. Please be aware that this may lead to timeouts after 60 seconds. If this is the case, please wait until the download has finished, change the preset to initial and back to the one you've selected or reload the page.
 
@@ -283,6 +284,7 @@ Given different goals, the default models and configs of Fooocus are different:
 | Realistic | run_realistic.bat | --preset realistic | realisticStockPhoto_v20     | not used | [presets/realistic.json](./presets/realistic.json) |
 | Realistic + Identity |  | --preset realistic_identity | realisticStockPhoto_v20 | not used | [presets/realistic_identity.json](./presets/realistic_identity.json) |
 | Realistic + Pro Auto Rank |  | --preset realistic_pro | realisticStockPhoto_v20 | not used | [presets/realistic_pro.json](./presets/realistic_pro.json) |
+| Realistic + Super (Pro + Structure) |  | --preset realistic_super | realisticStockPhoto_v20 | not used | [presets/realistic_super.json](./presets/realistic_super.json) |
 | Anime     | run_anime.bat | --preset anime | animaPencilXL_v500          | not used | [presets/anime.json](./presets/anime.json) |
 
 Note that the download is **automatic** - you do not need to do anything if the internet connection is okay. However, you can download them manually if you (or move them from somewhere else) have your own preparation.

@@ -16,6 +16,12 @@ For an automated best-of-N flow (generate many, keep top-ranked), use:
 python entry_with_update.py --preset realistic_pro
 ```
 
+For the strongest one-click preset (extra steps + stronger structure/detail control), use:
+
+```bash
+python entry_with_update.py --preset realistic_super
+```
+
 The preset enables:
 
 - `Quality` performance mode
@@ -73,6 +79,15 @@ Use this checklist:
 - stores only final enhanced outputs by default to reduce noisy intermediate picks
 
 This is an approximation-based scorer, not a semantic human judge, but it usually removes the weakest outputs automatically.
+
+## Super preset (maximum quality defaults)
+
+`realistic_super` is an aggressive variant of `realistic_pro` for quick "max quality" tests:
+
+- higher default steps (`default_overwrite_step = 84`)
+- stronger local detail pass (`default_pro_mode_detail_strength = 0.42`)
+- stronger structure control (`canny_weight = 0.95`, `cpds_weight = 0.8`)
+- moderate batch size (`default_image_number = 6`) to keep runtime practical
 
 ### Pro structure-control tuning
 
