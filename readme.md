@@ -114,11 +114,11 @@ See also the common problems and troubleshoots [here](troubleshoot.md).
 | Colab | Info
 | --- | --- |
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb) | Fooocus Official
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (super realism preset by default)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (direct-prompt preset by default)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, direct-prompt preset)
 
 In Colab, you can modify the last line to `!python entry_with_update.py --share --always-high-vram` or `!python entry_with_update.py --share --always-high-vram --preset anime` or `!python entry_with_update.py --share --always-high-vram --preset realistic` for Fooocus Default/Anime/Realistic Edition.
-The full fork notebook starts with `--preset realistic_super`.
+The full fork notebook starts with `--preset realistic_direct_prompt`.
 The Easy notebook starts with `--preset realistic_direct_prompt`.
 
 You can also change the preset in the UI. Please be aware that this may lead to timeouts after 60 seconds. If this is the case, please wait until the download has finished, change the preset to initial and back to the one you've selected or reload the page.

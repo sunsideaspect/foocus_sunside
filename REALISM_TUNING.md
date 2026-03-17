@@ -95,6 +95,7 @@ This is an approximation-based scorer, not a semantic human judge, but it usuall
 - `default_pro_mode_structure_control_enabled = false`
 - lighter negative prompt to avoid over-blocking prompt intent
 - single-image default (`default_image_number = 1`) to simplify direct comparisons
+- image-prompt UI is off by default and IP type defaults to `ImagePrompt` (not `FaceSwap`) to avoid hidden identity lock
 
 If your prompt is still constrained, start from this preset and only then enable extra modules one by one.
 
