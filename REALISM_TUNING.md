@@ -22,6 +22,12 @@ For maximum prompt-following with minimal auto-corrections, use:
 python entry_with_update.py --preset realistic_direct_prompt
 ```
 
+For the strictest prompt obedience defaults, use:
+
+```bash
+python entry_with_update.py --preset realistic_prompt_strict
+```
+
 For reducing "same default face" bias across generations, use:
 
 ```bash
@@ -110,6 +116,15 @@ This is an approximation-based scorer, not a semantic human judge, but it usuall
 - image-prompt UI is off by default and IP type defaults to `ImagePrompt` (not `FaceSwap`) to avoid hidden identity lock
 
 If your prompt is still constrained, start from this preset and only then enable extra modules one by one.
+
+## Prompt strict preset (maximum obedience)
+
+`realistic_prompt_strict` pushes prompt adherence further:
+
+- higher CFG (`5.2`) and no style LoRAs
+- pro/detail/structure controls disabled
+- image prompt disabled by default to avoid hidden bias
+- minimal negative list to reduce unintended blocking
 
 ## Diverse faces preset (anti face-lock)
 

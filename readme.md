@@ -114,12 +114,12 @@ See also the common problems and troubleshoots [here](troubleshoot.md).
 | Colab | Info
 | --- | --- |
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb) | Fooocus Official
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (diverse-faces preset by default)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, diverse-detail preset)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab.ipynb) | This fork (prompt-strict preset by default)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/cursor/git-eaf0/fooocus_colab_easy.ipynb) | This fork Easy (one-click proxy, prompt-strict preset)
 
 In Colab, you can modify the last line to `!python entry_with_update.py --share --always-high-vram` or `!python entry_with_update.py --share --always-high-vram --preset anime` or `!python entry_with_update.py --share --always-high-vram --preset realistic` for Fooocus Default/Anime/Realistic Edition.
-The full fork notebook starts with `--preset realistic_diverse`.
-The Easy notebook starts with `--preset realistic_diverse_detail`.
+The full fork notebook starts with `--preset realistic_prompt_strict`.
+The Easy notebook starts with `--preset realistic_prompt_strict`.
 
 You can also change the preset in the UI. Please be aware that this may lead to timeouts after 60 seconds. If this is the case, please wait until the download has finished, change the preset to initial and back to the one you've selected or reload the page.
 
@@ -285,6 +285,7 @@ Given different goals, the default models and configs of Fooocus are different:
 | Realistic | run_realistic.bat | --preset realistic | realisticStockPhoto_v20     | not used | [presets/realistic.json](./presets/realistic.json) |
 | Realistic + Identity |  | --preset realistic_identity | realisticStockPhoto_v20 | not used | [presets/realistic_identity.json](./presets/realistic_identity.json) |
 | Realistic + Direct Prompt |  | --preset realistic_direct_prompt | realisticStockPhoto_v20 | not used | [presets/realistic_direct_prompt.json](./presets/realistic_direct_prompt.json) |
+| Realistic + Prompt Strict |  | --preset realistic_prompt_strict | juggernautXL_v8Rundiffusion | not used | [presets/realistic_prompt_strict.json](./presets/realistic_prompt_strict.json) |
 | Realistic + Diverse Faces |  | --preset realistic_diverse | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse.json](./presets/realistic_diverse.json) |
 | Realistic + Diverse Detail |  | --preset realistic_diverse_detail | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse_detail.json](./presets/realistic_diverse_detail.json) |
 | Realistic + Pro Auto Rank |  | --preset realistic_pro | realisticStockPhoto_v20 | not used | [presets/realistic_pro.json](./presets/realistic_pro.json) |
