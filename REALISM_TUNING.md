@@ -28,6 +28,12 @@ For the strictest prompt obedience defaults, use:
 python entry_with_update.py --preset realistic_prompt_strict
 ```
 
+For the best stable all-round quality (prompt + anatomy + detail), use:
+
+```bash
+python entry_with_update.py --preset realistic_hyper_stable
+```
+
 For reducing "same default face" bias across generations, use:
 
 ```bash
@@ -125,6 +131,16 @@ If your prompt is still constrained, start from this preset and only then enable
 - pro/detail/structure controls disabled
 - image prompt disabled by default to avoid hidden bias
 - minimal negative list to reduce unintended blocking
+
+## Hyper stable preset (balanced maximum)
+
+`realistic_hyper_stable` is tuned for strong, stable outputs:
+
+- juggernaut base + light film-photo LoRA
+- moderate-high CFG with high step budget
+- pro detail pass enabled with controlled strength
+- low-weight structure guidance for anatomy stability
+- image prompt panel enabled with FaceSwap defaults for reference-driven tasks
 
 ## Diverse faces preset (anti face-lock)
 

@@ -10,6 +10,7 @@
 !realistic_prompt_strict.json
 !realistic_diverse.json
 !realistic_diverse_detail.json
+!realistic_hyper_stable.json
 !realistic_pro.json
 !realistic_super.json
 !sai.json
