@@ -136,11 +136,11 @@ If your prompt is still constrained, start from this preset and only then enable
 
 `realistic_hyper_stable` is tuned for strong, stable outputs:
 
-- juggernaut base + light film-photo LoRA
-- moderate-high CFG with high step budget
+- realistic stock-photo base + optional light film-photo LoRA (disabled by default)
+- balanced CFG with high-enough step budget for detail without CGI overdrive
 - pro detail pass enabled with controlled strength
 - low-weight structure guidance for anatomy stability
-- image prompt panel enabled with FaceSwap defaults for reference-driven tasks
+- image prompt panel disabled by default to avoid hidden identity lock
 
 ## Diverse faces preset (anti face-lock)
 

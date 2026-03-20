@@ -287,7 +287,7 @@ Given different goals, the default models and configs of Fooocus are different:
 | Realistic + Identity |  | --preset realistic_identity | realisticStockPhoto_v20 | not used | [presets/realistic_identity.json](./presets/realistic_identity.json) |
 | Realistic + Direct Prompt |  | --preset realistic_direct_prompt | realisticStockPhoto_v20 | not used | [presets/realistic_direct_prompt.json](./presets/realistic_direct_prompt.json) |
 | Realistic + Prompt Strict |  | --preset realistic_prompt_strict | juggernautXL_v8Rundiffusion | not used | [presets/realistic_prompt_strict.json](./presets/realistic_prompt_strict.json) |
-| Realistic + Hyper Stable |  | --preset realistic_hyper_stable | juggernautXL_v8Rundiffusion | not used | [presets/realistic_hyper_stable.json](./presets/realistic_hyper_stable.json) |
+| Realistic + Hyper Stable |  | --preset realistic_hyper_stable | realisticStockPhoto_v20 | not used | [presets/realistic_hyper_stable.json](./presets/realistic_hyper_stable.json) |
 | Realistic + Diverse Faces |  | --preset realistic_diverse | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse.json](./presets/realistic_diverse.json) |
 | Realistic + Diverse Detail |  | --preset realistic_diverse_detail | juggernautXL_v8Rundiffusion | not used | [presets/realistic_diverse_detail.json](./presets/realistic_diverse_detail.json) |
 | Realistic + Pro Auto Rank |  | --preset realistic_pro | realisticStockPhoto_v20 | not used | [presets/realistic_pro.json](./presets/realistic_pro.json) |
