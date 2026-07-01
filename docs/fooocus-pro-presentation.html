@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fooocus Pro — презентація</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --text: #e8edf4;
+      --muted: #94a3b8;
+      --accent: #8b5cf6;
+      --accent2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --code-bg: #0b1020;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .deck { height: 100vh; position: relative; }
+
+    .slide {
+      display: none;
+      height: 100vh;
+      padding: 40px 56px 88px;
+      overflow-y: auto;
+    }
+
+    .slide.active { display: block; }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .epic-tag {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 40px;
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 12px;
+      max-width: 920px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    h3 {
+      font-size: 17px;
+      margin: 14px 0 8px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    p, li {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    ul { margin: 10px 0 0 22px; }
+    li { margin-bottom: 6px; }
+
+    .subtitle {
+      font-size: 20px;
+      color: var(--muted);
+      max-width: 820px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .card h3 { margin-top: 0; font-size: 16px; }
+    .card p, .card li { font-size: 15px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 600;
+      width: 28%;
+    }
+
+    td { color: #cbd5e1; }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 10px;
+      color: #dbeafe;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    code { font-family: Consolas, "Courier New", monospace; font-size: 13px; }
+
+    .note {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--warn);
+      background: #2a2008;
+      border-radius: 0 8px 8px 0;
+      font-size: 15px;
+      color: #fde68a;
+    }
+
+    .note.ok {
+      border-left-color: var(--accent2);
+      background: #102a18;
+      color: #bbf7d0;
+    }
+
+    .layout-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      color: #94a3b8;
+      margin-top: 12px;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: rgba(15, 20, 25, 0.95);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav button {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav button:hover { background: var(--accent); border-color: var(--accent); }
+
+    .progress { color: var(--muted); font-size: 14px; }
+
+    .title-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: calc(100vh - 140px);
+    }
+
+    .links a { color: #c4b5fd; text-decoration: none; }
+    .links a:hover { text-decoration: underline; }
+
+    .copy-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover { opacity: 0.9; }
+
+    .checklist { list-style: none; margin-left: 0; }
+    .checklist li::before { content: "☐ "; color: var(--accent); }
+
+    .metric-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      min-width: 160px;
+    }
+
+    .metric strong { display: block; font-size: 22px; color: var(--accent); }
+    .metric span { font-size: 13px; color: var(--muted); }
+
+    /* UI mockup — зрозуміла схема екрану */
+    .ui-mockup {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 14px;
+      margin-top: 16px;
+      min-height: 320px;
+    }
+
+    .ui-panel {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ui-panel.right {
+      border-color: var(--accent);
+      background: #1e1a2e;
+    }
+
+    .ui-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .ui-block {
+      background: var(--surface2);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #e2e8f0;
+    }
+
+    .ui-block.highlight {
+      border-color: var(--accent);
+      border-style: solid;
+      background: #2a2240;
+    }
+
+    .ui-block.tall { flex: 1; min-height: 100px; }
+
+    .ui-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .ui-checks {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .ui-checks span::before { content: "☑ "; color: var(--accent2); }
+
+    .ui-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ui-tab {
+      font-size: 12px;
+      padding: 5px 10px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: #94a3b8;
+    }
+
+    .ui-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .ui-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .ui-legend .card { padding: 12px 14px; }
+    .ui-legend .card p { font-size: 14px; margin: 0; }
+
+    .pipeline {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pipe-step {
+      flex: 1;
+      min-width: 120px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .pipe-step .num {
+      display: inline-block;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pipe-step strong {
+      display: block;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .pipe-step span {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .pipe-arrow {
+      align-self: center;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .slide-compact p, .slide-compact li { font-size: 15px; }
+    .slide-compact h3 { font-size: 15px; margin: 10px 0 6px; }
+    .slide-compact .card { padding: 12px 14px; }
+    .slide-compact .card li { font-size: 14px; margin-bottom: 4px; }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .tier-grid { grid-template-columns: 1fr; }
+    }
+
+    .tier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tier-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.3);
+    }
+
+    .tier-badge {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .tier-card h3 {
+      margin: 0;
+      font-size: 17px;
+      color: var(--text);
+    }
+
+    .tier-card p, .tier-card li {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .tier-card ul { margin-left: 18px; }
+
+    .tier-meta {
+      font-size: 13px;
+      color: var(--accent2);
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- 1 -->
+    <section class="slide active" data-title="Титул">
+      <div class="title-slide">
+        <div class="slide-header" style="border:none;margin-bottom:32px;">
+          <span class="epic-tag">Fooocus Pro · червень 2026</span>
+        </div>
+        <h1>Fooocus Pro</h1>
+        <p class="subtitle">Генератор реалістичних фото в браузері. Описуєш сцену → отримуєш зображення. Без установки програм — через Google Colab.</p>
+        <div class="metric-row">
+          <div class="metric"><strong>1</strong><span>Colab-ноутбук</span></div>
+          <div class="metric"><strong>GPU</strong><span>хмара T4</span></div>
+          <div class="metric"><strong>Juggernaut</strong><span>preset</span></div>
+        </div>
+        <p class="links" style="margin-top:28px;font-size:16px;">
+          <a href="https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/fooocus_colab.ipynb" target="_blank">Відкрити Colab</a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/sunsideaspect/foocus_sunside" target="_blank">GitHub</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide slide-compact" data-title="Що це">
+      <div class="slide-header"><span class="epic-tag">01 · Вступ</span></div>
+      <h2>Що таке Fooocus і як це працює</h2>
+
+      <p><strong>Fooocus</strong> — безкоштовна open-source програма для генерації зображень з тексту. Ти описуєш сцену словами → нейромережа «малює» фото → отримуєш PNG. Інтерфейс у браузері, без Photoshop і без підписки на Midjourney.</p>
+
+      <h3>На чому це побудовано</h3>
+      <table>
+        <tr><th>Движок (AI)</th><td><strong>Stable Diffusion XL (SDXL)</strong> — велика нейромережа, навчена на мільйонах фото. «Розуміє» англійський текст і перетворює його на пікселі.</td></tr>
+        <tr><th>Модель у Colab</th><td><strong>Juggernaut XL Ragnarok</strong> — варіант SDXL, заточений під фотореалізм (шкіра, світло, тіло).</td></tr>
+        <tr><th>LoRA</th><td>Невеликі «доповнення» до моделі (anatomy, detail) — підсилюють окремі аспекти без заміни базової моделі.</td></tr>
+        <tr><th>Інтерфейс</th><td><strong>Gradio</strong> — веб-UI у браузері (поля, кнопки, галерея).</td></tr>
+        <tr><th>Де рахує</th><td><strong>GPU</strong> (відеокарта). У нас — <strong>Google Colab T4</strong> в хмарі; на комп’ютері нічого не встановлюєш.</td></tr>
+        <tr><th>Код</th><td>База — <a href="https://github.com/lllyasviel/Fooocus" target="_blank" style="color:#c4b5fd">lllyasviel/Fooocus</a>. Наш форк — <a href="https://github.com/sunsideaspect/foocus_sunside" target="_blank" style="color:#c4b5fd">sunsideaspect/foocus_sunside</a> (Colab, preset, без blur).</td></tr>
+      </table>
+
+      <h3>Як працює генерація (5 кроків)</h3>
+      <div class="pipeline">
+        <div class="pipe-step"><div class="num">1</div><strong>Prompt</strong><span>Ти пишеш опис сцени англійською + negative (чого уникати)</span></div>
+        <span class="pipe-arrow">→</span>
+        <div class="pipe-step"><div class="num">2</div><strong>Налаштування</strong><span>Розмір, стилі, LoRA, кількість кроків (sampling)</span></div>
+        <span class="pipe-arrow">→</span>
+        <div class="pipe-step"><div class="num">3</div><strong>Generate</strong><span>GPU багато разів уточнює «шум → картинка» (48–60 кроків)</span></div>
+        <span class="pipe-arrow">→</span>
+        <div class="pipe-step"><div class="num">4</div><strong>Enhance</strong><span>Опційно: дорисовка face/hand по маці (SAM + inpaint)</span></div>
+        <span class="pipe-arrow">→</span>
+        <div class="pipe-step"><div class="num">5</div><strong>Gallery</strong><span>Готовий PNG — перегляд і завантаження</span></div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="card">
+          <h3>Чим не схоже на ChatGPT Images</h3>
+          <ul>
+            <li>ChatGPT — «чорна скринька», мало налаштувань</li>
+            <li>Fooocus — повний контроль: розмір, seed, стилі, inpaint, FaceSwap</li>
+            <li>Детальний промпт = передбачуваніший результат</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Fooocus Pro (наш Colab)</h3>
+          <ul>
+            <li>Один ноутбук → Run all → лінк на UI</li>
+            <li>Preset Juggernaut + anatomy LoRA вже налаштовані</li>
+            <li>Без автоматичного blur на контенті</li>
+            <li>Оптимізовано під безкоштовний T4</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note ok" style="font-size:14px;margin-top:10px;">Аналогія: SDXL — це «художник», Prompt — технічне завдання, LoRA/Styles — референси стилю, GPU — час роботи художника, Gallery — готове полотно.</div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-title="Запуск">
+      <div class="slide-header"><span class="epic-tag">02 · Запуск</span></div>
+      <h2>Як потрапити в інтерфейс</h2>
+      <ol style="margin-left:22px;font-size:17px;color:#cbd5e1;line-height:1.7;">
+        <li>Відкрий <a href="https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/fooocus_colab.ipynb" target="_blank" style="color:#c4b5fd">Colab-ноутбук</a></li>
+        <li><strong>Runtime → Change runtime type → GPU (T4)</strong></li>
+        <li><strong>Runtime → Restart session</strong></li>
+        <li><strong>Runtime → Run all</strong></li>
+        <li>Дочекайся <strong>Open Fooocus (Colab proxy)</strong> → нова вкладка</li>
+      </ol>
+      <div class="note ok">Перший запуск: 10–15 хв (моделі). Наступні картинки: 2–5 хв.</div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-title="Екран">
+      <div class="slide-header"><span class="epic-tag">03 · Інтерфейс</span></div>
+      <h2>Головний екран — де що знаходиться</h2>
+      <p style="font-size:16px;margin-bottom:4px;">Екран поділений на <strong>ліву</strong> (генерація) і <strong>праву</strong> (налаштування) частини.</p>
+
+      <div class="ui-mockup">
+        <div class="ui-panel">
+          <div class="ui-label">Ліва частина — завжди видима</div>
+          <div class="ui-block tall highlight">🖼 Gallery — тут з’являються готові картинки</div>
+          <div class="ui-block">✏️ Prompt — поле для опису сцени (англійською)</div>
+          <div class="ui-btn">Generate</div>
+          <div class="ui-checks">
+            <span>Input Image</span>
+            <span>Enhance</span>
+            <span>Advanced</span>
+          </div>
+          <div class="ui-block" style="font-size:13px;color:var(--muted);">↑ галочки відкривають додаткові панелі під Prompt</div>
+        </div>
+
+        <div class="ui-panel right">
+          <div class="ui-label">Права частина — коли ☑ Advanced</div>
+          <div class="ui-tabs">
+            <span class="ui-tab active">Settings</span>
+            <span class="ui-tab">Styles</span>
+            <span class="ui-tab">Models</span>
+            <span class="ui-tab">Advanced</span>
+          </div>
+          <div class="ui-block">Performance · Aspect · Image Number</div>
+          <div class="ui-block">Negative Prompt · Seed</div>
+          <div class="ui-block" style="font-size:13px;color:#c4b5fd;">У Colab Advanced увімкнено автоматично</div>
+        </div>
+      </div>
+
+      <div class="ui-legend">
+        <div class="card">
+          <h3>Що робиш найчастіше</h3>
+          <p>1. Пишеш Prompt → 2. Generate → 3. Дивишся Gallery → 4. Завантажуєш PNG</p>
+        </div>
+        <div class="card">
+          <h3>Коли чіпати праву колонку</h3>
+          <p>Розмір кадру, стилі, кроки sampling — перед Generate на слайді «Тест»</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-title="Кнопки">
+      <div class="slide-header"><span class="epic-tag">04 · Кнопки</span></div>
+      <h2>Головні кнопки</h2>
+      <table>
+        <tr><th>Generate</th><td>Запуск генерації. Бере Prompt + всі налаштування справа.</td></tr>
+        <tr><th>Stop</th><td>Зупиняє поточну генерацію.</td></tr>
+        <tr><th>Skip</th><td>Пропускає крок (наприклад, один enhance-прохід у ланцюжку).</td></tr>
+        <tr><th>Reconnect</th><td>Перепідключення, якщо UI «відвалився».</td></tr>
+        <tr><th>Load Parameters</th><td>Підвантажує параметри з буфера / metadata.</td></tr>
+        <tr><th>Gallery</th><td>Готові картинки. Клік → перегляд і завантаження PNG.</td></tr>
+        <tr><th>Preview / Progress</th><td>Під час генерації — попередній перегляд і прогрес-бар.</td></tr>
+      </table>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-title="Галочки">
+      <div class="slide-header"><span class="epic-tag">05 · Перемикачі</span></div>
+      <h2>Три галочки над Input Image</h2>
+      <table>
+        <tr><th>Input Image</th><td>Відкриває панель роботи <strong>з готовим фото</strong>: upscale, референс, inpaint, describe, metadata.</td></tr>
+        <tr><th>Enhance</th><td>Другий етап <strong>після</strong> генерації: авто-дорисовка face / hand / body по маці (SAM + inpaint).</td></tr>
+        <tr><th>Advanced</th><td>Права колонка: Settings, Styles, Models, Advanced — розмір, стилі, моделі, кроки.</td></tr>
+      </table>
+      <div class="note">Перший тест: Input Image <strong>OFF</strong>, Enhance <strong>OFF</strong>, Advanced <strong>ON</strong>.</div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-title="Settings">
+      <div class="slide-header"><span class="epic-tag">06 · Settings</span></div>
+      <h2>Settings (права колонка)</h2>
+      <table>
+        <tr><th>Performance</th><td><strong>Quality</strong> (~60 кроків) — детальніше. <strong>Speed</strong> (~30) — швидше. Lightning/Hyper — дуже швидко, гірша якість.</td></tr>
+        <tr><th>Aspect Ratios</th><td>Пропорції: 768×1344 portrait, 1024×1024 square, інші — landscape / full body.</td></tr>
+        <tr><th>Image Number</th><td>Скільки варіантів за один Generate. 2–4 = вибрати найкращий кадр.</td></tr>
+        <tr><th>Output Format</th><td>PNG (без втрат), JPEG, WebP.</td></tr>
+        <tr><th>Negative Prompt</th><td>Чого <strong>не</strong> хочеш: cartoon, blur, bad anatomy… (у Colab заповнено preset-ом).</td></tr>
+        <tr><th>Random / Seed</th><td>Random ON = кожна генерація нова. Random OFF + seed = повторюваний результат.</td></tr>
+        <tr><th>History Log</th><td>Посилання на локальний лог згенерованих файлів.</td></tr>
+      </table>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" data-title="Styles">
+      <div class="slide-header"><span class="epic-tag">07 · Styles</span></div>
+      <h2>Styles</h2>
+      <table>
+        <tr><th>Пошук</th><td>Фільтр списку стилів.</td></tr>
+        <tr><th>CheckboxGroup</th><td>Готові «фільтри камери» — додають до промпту слова про освітлення, mood, тип зйомки.</td></tr>
+      </table>
+      <p style="margin-top:12px;">Стилі <strong>не замінюють</strong> промпт — доповнюють його.</p>
+      <div class="note ok">Для реалістичного phone-look: <strong>MRE Spontaneous Picture</strong> + <strong>Semi Realistic</strong>. Не змішуй Photo Iphone з cinematic-стилями.</div>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" data-title="Models">
+      <div class="slide-header"><span class="epic-tag">08 · Models</span></div>
+      <h2>Models</h2>
+      <table>
+        <tr><th>Base Model</th><td>Основна модель. Colab: <strong>Juggernaut XL Ragnarok</strong> — фотореалізм.</td></tr>
+        <tr><th>Refiner</th><td>Другий прохід для деталей. Рекомендовано <strong>None</strong>. Та сама модель = refiner ігнорується.</td></tr>
+        <tr><th>Refiner Switch At</th><td>% кроків для перемикання на refiner (лише якщо refiner ≠ None).</td></tr>
+        <tr><th>LoRA 1–5</th><td>Надбудови: anatomy, add detail (увімкнені в preset). Enable/Weight — сила ефекту.</td></tr>
+        <tr><th>Refresh</th><td>Оновити списки файлів після ручного додавання моделей.</td></tr>
+      </table>
+      <div class="note">Якщо обличчя слабке — знизь <strong>dynamic_anatomy</strong> Weight до 1.0–1.2 (замість 1.4).</div>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide" data-title="Advanced">
+      <div class="slide-header"><span class="epic-tag">09 · Advanced</span></div>
+      <h2>Advanced + Debug Tools</h2>
+      <table>
+        <tr><th>Guidance Scale (CFG)</th><td>Наскільки модель слухається промпту. 3.5–4.5 — реалізм. Preset: ~4.2.</td></tr>
+        <tr><th>Image Sharpness</th><td>Різкість текстур. Занадто високо — «перешарп».</td></tr>
+        <tr><th>Developer Debug Mode</th><td>Відкриває Debug Tools: кроки, sampler, scheduler.</td></tr>
+        <tr><th>Sampling Step</th><td>Кількість кроків генерації. Preset: 48. Sweet spot: 48–58. Не гони 80+ — «пластикова» шкіра.</td></tr>
+        <tr><th>Sampler / Scheduler</th><td>dpmpp_2m_sde_gpu + karras — не міняти без причини.</td></tr>
+        <tr><th>Save Metadata</th><td>Зберігає параметри в PNG → повтор через Metadata tab.</td></tr>
+      </table>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide" data-title="Input Image 1">
+      <div class="slide-header"><span class="epic-tag">10 · Input Image</span></div>
+      <h2>Input Image → Upscale &amp; Image Prompt</h2>
+      <h3>Upscale or Variation</h3>
+      <table>
+        <tr><th>Image</th><td>Завантаж своє або згенероване фото.</td></tr>
+        <tr><th>Vary Subtle / Strong</th><td>Варіація схожого кадру без нового промпту.</td></tr>
+        <tr><th>Upscale 1.5x / 2x</th><td>Збільшення з дорисовкою деталей.</td></tr>
+      </table>
+      <h3>Image Prompt (до 4 слотів)</h3>
+      <table>
+        <tr><th>ImagePrompt</th><td>Стиль / композиція з референсу.</td></tr>
+        <tr><th>FaceSwap</th><td>Обличчя з референсу. Weight ~1.2–1.4, Stop ~0.98.</td></tr>
+        <tr><th>PyraCanny / CPDS</th><td>Утримати позу / структуру тіла.</td></tr>
+        <tr><th>Stop At / Weight</th><td>До якого % і з якою силою діє референс. Advanced — показує всі параметри.</td></tr>
+      </table>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide" data-title="Input Image 2">
+      <div class="slide-header"><span class="epic-tag">11 · Input Image</span></div>
+      <h2>Inpaint · Describe · Metadata</h2>
+      <table>
+        <tr><th>Inpaint / Outpaint</th><td>Біла маска пензлем → перегенерувати зону. Outpaint — розширити кадр. Improve Detail — face/hand. Modify Content — змінити одяг/фон.</td></tr>
+        <tr><th>Generate mask</th><td>Авто-маска (SAM, u2net).</td></tr>
+        <tr><th>Describe</th><td>Завантаж фото → AI пише промпт → потрапляє в Prompt. Навчання формулювань.</td></tr>
+        <tr><th>Enhance upload</th><td>Готове PNG → тільки Enhance, без нової генерації.</td></tr>
+        <tr><th>Metadata</th><td>Завантаж PNG Fooocus → Apply Metadata → відновлює промпт, seed, налаштування.</td></tr>
+      </table>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide" data-title="Enhance">
+      <div class="slide-header"><span class="epic-tag">12 · Enhance</span></div>
+      <h2>Enhance (галочка + панель)</h2>
+      <p>Другий етап <strong>після</strong> основної генерації. SAM знаходить зону → inpaint дорисовує деталі.</p>
+      <table>
+        <tr><th>#1, #2, #3…</th><td>Окремі проходи. Enable — увімкнути.</td></tr>
+        <tr><th>Detection prompt</th><td>Що знайти: <code>face</code>, <code>hand</code>, <code>eyes</code>, <code>body</code>.</td></tr>
+        <tr><th>Inpaint Engine</th><td>v2.6 — алгоритм Fooocus.</td></tr>
+        <tr><th>Denoising Strength</th><td>0.35–0.45 для face — типово.</td></tr>
+        <tr><th>Respective Field</th><td>Розмір області навколо маски.</td></tr>
+      </table>
+      <div class="note ok">Кейс: Generate → Enhance ON → #1 Enable → detection <code>face</code> → Generate знову.</div>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide" data-title="Workflow">
+      <div class="slide-header"><span class="epic-tag">13 · Workflow</span></div>
+      <h2>Типові сценарії</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>A. Проста генерація</h3>
+          <p>Advanced ON → Prompt → Generate → Download PNG</p>
+        </div>
+        <div class="card">
+          <h3>B. Краще обличчя</h3>
+          <p>Generate → Enhance ON → #1 <code>face</code> → або Inpaint на обличчя</p>
+        </div>
+        <div class="card">
+          <h3>C. Конкретне обличчя</h3>
+          <p>Input Image → Image Prompt → FaceSwap + референс → Prompt про тіло/сцену</p>
+        </div>
+        <div class="card">
+          <h3>D. Повтор вдалого кадру</h3>
+          <p>Metadata → Apply → змінити seed → Generate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide" data-title="Обмеження">
+      <div class="slide-header"><span class="epic-tag">14 · Реальність</span></div>
+      <h2>Обмеження та позиціонування</h2>
+      <table>
+        <tr><th>Colab</th><td>Сесія може обірватись → Restart + Run all.</td></tr>
+        <tr><th>Обличчя на full body</th><td>Часто слабше — FaceSwap або Enhance face.</td></tr>
+        <tr><th>Промпт</th><td>Англійською працює найкраще. Чим детальніше — тим передбачуваніше.</td></tr>
+        <tr><th>Кроки</th><td>Більше ≠ завжди краще. Sweet spot 48–58.</td></tr>
+        <tr><th>vs ChatGPT</th><td>Вищий поріг входу, але більше контролю і сильніший full body реалізм.</td></tr>
+      </table>
+    </section>
+
+    <!-- 16 TEST -->
+    <section class="slide" data-title="Тест — налаштування">
+      <div class="slide-header"><span class="epic-tag">15 · Self-test</span></div>
+      <h2>Готовий preset для тесту — налаштування UI</h2>
+      <p>Після Run all у Colab вистави <strong>перед Generate</strong>:</p>
+      <table>
+        <tr><th>Input Image</th><td><strong>OFF</strong></td></tr>
+        <tr><th>Enhance</th><td><strong>OFF</strong> (крок 2 — якщо face слабкий)</td></tr>
+        <tr><th>Advanced</th><td><strong>ON</strong></td></tr>
+        <tr><th>Performance</th><td><strong>Quality</strong></td></tr>
+        <tr><th>Aspect Ratios</th><td><strong>768 × 1344</strong> (portrait, full body)</td></tr>
+        <tr><th>Image Number</th><td><strong>2</strong></td></tr>
+        <tr><th>Styles</th><td>✅ <strong>MRE Spontaneous Picture</strong> + ✅ <strong>Semi Realistic</strong></td></tr>
+        <tr><th>Models → Refiner</th><td><strong>None</strong></td></tr>
+        <tr><th>Models → LoRA anatomy</th><td>Weight <strong>1.2</strong> (якщо face пливе — 1.0)</td></tr>
+        <tr><th>Debug Mode</th><td><strong>ON</strong></td></tr>
+        <tr><th>Sampling Step</th><td><strong>56</strong> (діапазон 52–58)</td></tr>
+        <tr><th>CFG</th><td>Залиш preset <strong>~4.2</strong></td></tr>
+      </table>
+      <div class="note">Не вмикай Photo Iphone разом із сильними cinematic-стилями.</div>
+    </section>
+
+    <!-- 17 TEST PROMPT -->
+    <section class="slide" data-title="Тест — промпт">
+      <div class="slide-header"><span class="epic-tag">16 · Self-test</span></div>
+      <h2>Готовий промпт для тесту</h2>
+      <p><strong>Структура:</strong> персонаж → сцена → поза → камера (phone candid).</p>
+      <h3>Positive Prompt</h3>
+      <pre id="prompt-pos">32-year-old woman, striking pale eyes, straight messy hair with one distinct bleached-blonde streak framing her face, firm lips, sharp facial structure, realistic skin texture with visible pores, fine lines near eyes. Standing naked on the rooftop of a high-rise building at night, city lights blurred in the background, leaning over the metal railing, exposed skin, nipples erect, gritty urban environment, intense and defiant expression. Realistic smartphone photo, taken with a modern phone camera, casual everyday moment, unposed, candid lifestyle photo, natural lighting, realistic skin pores, tiny imperfections, authentic human appearance.</pre>
+      <div class="copy-row"><button class="copy-btn" type="button" data-target="prompt-pos">Копіювати Prompt</button></div>
+      <h3>Negative Prompt</h3>
+      <pre id="prompt-neg">cartoon, anime, manga, cgi, 3d render, illustration, painting, drawing, plastic skin, waxy skin, airbrushed, beauty filter, overprocessed, oversaturated, studio lighting, professional photoshoot, glamour lighting, soft focus portrait blur, blurry, out of focus, lowres, jpeg artifacts, watermark, text, signature, logo, deformed face, deformed body, bad anatomy, extra limbs, extra fingers, missing fingers, fused fingers, cross-eyed, asymmetric eyes, unnatural pose, floating objects, duplicate person, mannequin, doll-like skin, uncanny valley</pre>
+      <div class="copy-row"><button class="copy-btn" type="button" data-target="prompt-neg">Копіювати Negative</button></div>
+    </section>
+
+    <!-- 18 TEST CHECKLIST -->
+    <section class="slide" data-title="Тест — чеклист">
+      <div class="slide-header"><span class="epic-tag">17 · Self-test</span></div>
+      <h2>Чеклист після Generate</h2>
+      <ul class="checklist">
+        <li>Обличчя — очі, streak у волоссі, риси з промпту</li>
+        <li>Тіло / поза — дах, перила, full body</li>
+        <li>Фон — нічне місто, bokeh вогнів</li>
+        <li>Стиль — phone candid, не 3D-рендер</li>
+        <li>Шкіра — pores, imperfections, не пластик</li>
+        <li>Немає blur / watermark</li>
+      </ul>
+      <h3>Якщо обличчя слабке (крок 2)</h3>
+      <p>Enhance ON → #1 Enable → detection <code>face</code> → Strength 0.35–0.45 → Generate (той самий seed).</p>
+      <h3>Якщо потрібне конкретне обличчя (крок 3)</h3>
+      <p>Input Image → Image Prompt → FaceSwap → Weight 1.3, Stop 0.98 → той самий Prompt.</p>
+      <div class="note ok">Звіт: час до PNG ___ хв · якість 1–5 ___ · Colab впав так/ні · seed + скрін при багах.</div>
+    </section>
+
+    <!-- 19 ROADMAP -->
+    <section class="slide slide-compact" data-title="Майбутнє">
+      <div class="slide-header"><span class="epic-tag">18 · Roadmap</span></div>
+      <h2>Куди можна розвивати Fooocus Pro</h2>
+      <p>Зараз — <strong>безкоштовний Colab T4</strong> (MVP, тест, демо). Якщо потрібні швидкість, стабільність і вища якість — є три напрямки масштабування.</p>
+
+      <div class="tier-grid">
+        <div class="tier-card">
+          <span class="tier-badge">Варіант A</span>
+          <h3>Локально на ПК</h3>
+          <p>Якщо є <strong>NVIDIA GPU</strong> (рекомендовано від 8 GB VRAM, комфортно 12 GB+).</p>
+          <ul>
+            <li>Клон <code>foocus_sunside</code> → <code>run.bat</code> / <code>entry_with_update.py</code></li>
+            <li>Той самий preset + прапорці (<code>--disable-censor</code>)</li>
+            <li>Без обривів Colab-сесії</li>
+            <li>Можна увімкнути Enhance / більше Image Number без страху timeout</li>
+          </ul>
+          <div class="tier-meta">💰 Разова вартість GPU · найкращий контроль</div>
+        </div>
+
+        <div class="tier-card featured">
+          <span class="tier-badge">Варіант B</span>
+          <h3>Colab Pro / Pro+</h3>
+          <p>Платна підписка Google — <strong>той самий ноутбук</strong>, кращі умови.</p>
+          <ul>
+            <li>Швидші GPU (частіше A100 / кращий T4 tier)</li>
+            <li>Довші сесії, менше «відвалів» посеред генерації</li>
+            <li>Менше черг на GPU</li>
+            <li>Мінімальні зміни в продукті — лише акаунт Colab</li>
+          </ul>
+          <div class="tier-meta">💰 ~$10–50/міс · найпростіший апгрейд</div>
+        </div>
+
+        <div class="tier-card">
+          <span class="tier-badge">Варіант C</span>
+          <h3>Хмара з оплатою за годину</h3>
+          <p>Перенос Fooocus на <strong>RunPod, Vast.ai, Lambda, Paperspace</strong> тощо.</p>
+          <ul>
+            <li>RTX 4090 / A100 — швидше і стабільніше за free T4</li>
+            <li>Docker або VM + Gradio з <code>--share</code> або власний URL</li>
+            <li>Передбачуваний uptime для команди / продакшн-use</li>
+            <li>Можна один інстанс на кілька користувачів (VPN / auth)</li>
+          </ul>
+          <div class="tier-meta">💰 Pay-as-you-go · для регулярного production</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:18px;">Покращення продукту (не лише GPU)</h3>
+      <table>
+        <tr><th>Preset «phone selfie»</th><td>Окремий рецепт під селфі — менше ручних стилів.</td></tr>
+        <tr><th>Prompt Builder у UI</th><td>Форма замість довгого англ. тексту — персонаж, сцена, камера.</td></tr>
+        <tr><th>Pro mode lite для Colab</th><td>Auto Enhance face без падінь на T4.</td></tr>
+        <tr><th>Власний hosted UI</th><td>Один лінк для команди без Colab — потребує GPU-сервер (варіант C).</td></tr>
+        <tr><th>Нові моделі</th><td>Flux / SD3 — окремий Colab, коли стабілізується стек (не зараз).</td></tr>
+      </table>
+
+      <div class="note" style="font-size:14px;margin-top:12px;">
+        <strong>Для PM:</strong> free Colab = zero cost MVP. Colab Pro = low-friction upgrade. Локально / RunPod = коли якість і uptime важливіші за простоту входу.
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="nav">
+    <button id="prev" type="button">← Previous</button>
+    <span class="progress" id="progress">1 / 18</span>
+    <button id="next" type="button">Next →</button>
+  </nav>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    let index = 0;
+
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle("active", i === index));
+      document.getElementById("progress").textContent =
+        `${index + 1} / ${slides.length} · ${slides[index].dataset.title || ""}`;
+      slides[index].scrollTop = 0;
+    }
+
+    document.getElementById("prev").addEventListener("click", () => {
+      index = Math.max(0, index - 1);
+      render();
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+      index = Math.min(slides.length - 1, index + 1);
+      render();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        index = Math.min(slides.length - 1, index + 1);
+        render();
+      }
+      if (e.key === "ArrowLeft") {
+        index = Math.max(0, index - 1);
+        render();
+      }
+    });
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = document.getElementById(btn.dataset.target);
+        if (!el) return;
+        navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = "Скопійовано ✓";
+          setTimeout(() => { btn.textContent = orig; }, 1500);
+        });
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
