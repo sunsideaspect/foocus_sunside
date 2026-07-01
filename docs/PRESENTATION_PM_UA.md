@@ -4,7 +4,7 @@
 **Мова:** українська, без технічного жаргону  
 **Актуально:** один Colab-ноутбук · preset Juggernaut Ragnarok
 
-**Colab:** https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/fooocus_colab.ipynb
+**Colab:** https://colab.research.google.com/github/sunsideaspect/foocus_new/blob/main/fooocus_colab.ipynb
 
 ---
 
