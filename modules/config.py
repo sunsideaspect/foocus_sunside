@@ -679,7 +679,7 @@ default_clip_skip = get_config_item_or_set_default(
 )
 default_overwrite_step = get_config_item_or_set_default(
     key='default_overwrite_step',
-    default_value=-1,
+    default_value=48,
     validator=lambda x: isinstance(x, int),
     expected_type=int
 )

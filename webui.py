@@ -832,7 +832,8 @@ with shared.gradio_root:
                         overwrite_step = gr.Slider(label='Forced Overwrite of Sampling Step',
                                                    minimum=-1, maximum=200, step=1,
                                                    value=modules.config.default_overwrite_step,
-                                                   info='Set as -1 to disable. For developer debugging.')
+                                                   info='-1 = use Performance (Quality=60, Speed=30). '
+                                                        'Colab preset: use 48 for fixed steps.')
                         overwrite_switch = gr.Slider(label='Forced Overwrite of Refiner Switch Step',
                                                      minimum=-1, maximum=200, step=1,
                                                      value=modules.config.default_overwrite_switch,
