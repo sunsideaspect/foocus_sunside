@@ -3,7 +3,6 @@
 Форк [Fooocus](https://github.com/lllyasviel/Fooocus) для **Google Colab**: фотореалізм, без цензури, один preset.
 
 **Репозиторій:** https://github.com/sunsideaspect/foocus_sunside  
-*(перейменуй у GitHub Settings → `foocus_sunside`, якщо потрібна нова назва — старі лінки редіректять)*
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/fooocus_colab.ipynb)
 
