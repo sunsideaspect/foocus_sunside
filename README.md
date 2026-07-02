@@ -1,6 +1,6 @@
 # Fooocus Sunside
 
-Форк [Fooocus](https://github.com/lllyasviel/Fooocus) для **Google Colab**: фотореалізм, без цензури, один preset.
+Форк [Fooocus](https://github.com/lllyasviel/Fooocus) для **Google Colab**: фотореалізм, без цензури, вибір preset.
 
 **Репозиторій:** https://github.com/sunsideaspect/foocus_sunside  
 
@@ -10,10 +10,18 @@
 
 1. **Runtime → GPU (T4 / L4 / A100)** → **Restart session**
 2. **Run all** — перший запуск **10–20 хв** (завантаження моделей)
-3. У launch-комірці дочекайся **`App started successful`**
-4. Відкрий **`https://….gradio.live`** з виводу комірки
+3. У комірці **«КРОК 2 — Обери модель»** вибери **Juggernaut** або **RealCore XL**
+4. Дочекайся в launch-комірці **`App started successful`**
+5. Відкрий **`https://….gradio.live`** з виводу комірки
 
-**Preset:** `realistic_juggernaut_ragnarok` (Juggernaut XL Ragnarok + anatomy LoRAs)  
+**Моделі (вибір у Colab, комірка «КРОК 2»):**
+
+| Preset | Checkpoint | Розмір |
+|--------|------------|--------|
+| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok | ~7 GB |
+| `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) | ~13 GB |
+
+Завантажується **лише обрана** модель + спільні LoRA.  
 **Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
 
 ## Що всередині
@@ -21,7 +29,9 @@
 | Файл | Призначення |
 |------|-------------|
 | `fooocus_colab.ipynb` | Єдиний Colab-ноутбук |
-| `presets/realistic_juggernaut_ragnarok.json` | Модель + LoRA + кроки |
+| `presets/realistic_juggernaut_ragnarok.json` | Juggernaut + LoRA + кроки |
+| `presets/realistic_realcore_xl.json` | RealCore XL + LoRA + кроки |
+| `docs/PRESENTATION_PM_UA.md` | Презентація для PM |
 | `docs/fooocus-pro-presentation.html` | HTML-слайди |
 
 ## Локальний запуск (NVIDIA)
