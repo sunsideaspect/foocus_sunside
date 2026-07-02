@@ -22,7 +22,6 @@
 |------|-------------|
 | `fooocus_colab.ipynb` | Єдиний Colab-ноутбук |
 | `presets/realistic_juggernaut_ragnarok.json` | Модель + LoRA + кроки |
-| `docs/PRESENTATION_PM_UA.md` | Презентація для PM |
 | `docs/fooocus-pro-presentation.html` | HTML-слайди |
 
 ## Локальний запуск (NVIDIA)
