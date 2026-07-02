@@ -35,7 +35,7 @@ python launch.py --preset realistic_juggernaut_ragnarok --disable-censor --disab
 
 ## Презентація
 
-- [fooocus-pro-presentation.html]([Z:\cursor\foocus_new-main\foocus_new\docs\fooocus-pro-presentation.html](https://github.com/sunsideaspect/foocus_sunside/blob/main/docs/fooocus-pro-presentation.html))
+[Презентація Fooocus Pro](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sunsideaspect/foocus_sunside/main/docs/fooocus-pro-presentation.html)
 
 ## Ліцензія
 
