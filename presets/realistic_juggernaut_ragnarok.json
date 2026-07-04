@@ -20,8 +20,8 @@
         ],
         [
             true,
-            "None",
-            1.0
+            "face_xl_v0_1.safetensors",
+            0.75
         ],
         [
             true,
@@ -35,7 +35,7 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed",
+    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, deformed face, bad eyes, asymmetrical eyes, cross-eyed, blurry face",
     "default_styles": [],
     "default_aspect_ratio": "768*1344",
     "default_overwrite_step": 48,
@@ -54,7 +54,8 @@
     "lora_downloads": {
         "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors": "https://huggingface.co/mashb1t/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
         "dynamic_anatomy.safetensors": "https://huggingface.co/ntc-ai/SDXL-LoRA-slider.dynamic-anatomy/resolve/main/dynamic%20anatomy.safetensors",
-        "add_detail_xl.safetensors": "https://huggingface.co/shauray/sdxl_loras/resolve/main/add-detail-xl.safetensors"
+        "add_detail_xl.safetensors": "https://huggingface.co/shauray/sdxl_loras/resolve/main/add-detail-xl.safetensors",
+        "face_xl_v0_1.safetensors": "https://huggingface.co/ostris/face-helper-sdxl-lora/resolve/main/face_xl_v0_1.safetensors"
     },
     "previous_default_models": [
         "juggernautXL_v8Rundiffusion.safetensors",

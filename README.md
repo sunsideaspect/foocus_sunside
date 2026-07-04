@@ -21,7 +21,7 @@
 | `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok | ~7 GB |
 | `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) | ~13 GB |
 
-Завантажується **лише обрана** модель + спільні LoRA.  
+Завантажується **лише обрана** модель + спільні LoRA (anatomy, add_detail, [face-helper](https://huggingface.co/ostris/face-helper-sdxl-lora)).  
 **Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
 
 ## Що всередині
