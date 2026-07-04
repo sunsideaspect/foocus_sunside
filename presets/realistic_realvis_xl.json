@@ -11,7 +11,7 @@
         [
             true,
             "dynamic_anatomy.safetensors",
-            1.1
+            1.15
         ],
         [
             true,
@@ -19,9 +19,9 @@
             0.25
         ],
         [
-            true,
+            false,
             "face_xl_v0_1.safetensors",
-            0.65
+            0.35
         ],
         [
             true,
@@ -35,7 +35,7 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, deformed face, bad eyes, asymmetrical eyes, cross-eyed, blurry face, bad hands, extra fingers, missing fingers, fused fingers, malformed hands",
+    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, deformed face, bad eyes, asymmetrical eyes, cross-eyed, blurry face, bad hands, extra fingers, missing fingers, fused fingers, malformed hands, headshot, close-up, bust shot, cropped body, face filling frame",
     "default_styles": [],
     "default_aspect_ratio": "768*1344",
     "default_overwrite_step": 52,

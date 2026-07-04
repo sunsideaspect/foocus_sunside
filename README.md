@@ -10,7 +10,7 @@
 
 1. **Runtime → GPU (T4 / L4 / A100)** → **Restart session**
 2. **Run all** — перший запуск **10–20 хв** (завантаження моделей)
-3. У комірці **«КРОК 2 — Обери модель»** — за замовчуванням **RealVis XL** (face + body)
+3. У комірці **«КРОК 2»** — за замовчуванням **Juggernaut** (full body + face)
 4. Дочекайся в launch-комірці **`App started successful`**
 5. Відкрий **`https://….gradio.live`** з виводу комірки
 
@@ -18,8 +18,8 @@
 
 | Preset | Checkpoint | Коли брати |
 |--------|------------|------------|
-| `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | **Рекомендовано:** обличчя + тіло |
-| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | Cinematic full body, освітлення |
+| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | **Default:** full body + face |
+| `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Краще лице; без face-helper (щоб не різати в портрет) |
 | `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Amateur / soft photo (експеримент) |
 
 Спільні LoRA: `dynamic_anatomy`, `add_detail`, [face-helper](https://huggingface.co/ostris/face-helper-sdxl-lora) — ваги підібрані під full body 768×1344.
@@ -40,7 +40,7 @@
 ## Локальний запуск (NVIDIA)
 
 ```bash
-python launch.py --preset realistic_realvis_xl --disable-censor --disable-pro-mode --disable-preset-selection
+python launch.py --preset realistic_juggernaut_ragnarok --disable-censor --disable-pro-mode --disable-preset-selection
 ```
 
 Потрібна відеокарта NVIDIA з CUDA (мінімум ~4 GB VRAM).
