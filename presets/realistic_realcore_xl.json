@@ -11,17 +11,17 @@
         [
             true,
             "dynamic_anatomy.safetensors",
-            1.2
+            1.1
         ],
         [
             true,
             "add_detail_xl.safetensors",
-            0.22
+            0.25
         ],
         [
             true,
             "face_xl_v0_1.safetensors",
-            0.75
+            0.65
         ],
         [
             true,
@@ -35,10 +35,10 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, deformed face, bad eyes, asymmetrical eyes, cross-eyed, blurry face",
+    "default_prompt_negative": "lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, deformed face, bad eyes, asymmetrical eyes, cross-eyed, blurry face, bad hands, extra fingers, missing fingers, fused fingers, malformed hands",
     "default_styles": [],
     "default_aspect_ratio": "768*1344",
-    "default_overwrite_step": 48,
+    "default_overwrite_step": 52,
     "default_image_number": 1,
     "default_black_out_nsfw": false,
     "default_pro_mode_enabled": false,
