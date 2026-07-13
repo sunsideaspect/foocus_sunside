@@ -24,8 +24,9 @@
 | `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Портрет / лице |
 | `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Soft photo (експеримент; OOM на T4) |
 
-Спільні LoRA: `dynamic_anatomy`, `add_detail`, SOAP (phone), [face-helper](https://huggingface.co/ostris/face-helper-sdxl-lora).  
-Нові стилі: **Sunside Iphone Selfie**, **Sunside Amateur Candid**, **Sunside Mirror Selfie**.
+Спільні LoRA (ideal): `10mb_bodyproportion` (~0.8), `nudity_v03XL` Sufficient Nudity (~0.55), SOAP phone (~0.2).  
+Styles: **Sunside Iphone Selfie** + **Fooocus Semi Realistic**.  
+Face-helper — OFF за замовчуванням (увімкни в Advanced якщо треба).
 
 **Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
 
