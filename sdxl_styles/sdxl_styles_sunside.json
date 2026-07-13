@@ -1,0 +1,17 @@
+[
+    {
+        "name": "sunside-iphone-selfie",
+        "prompt": "iphone front camera selfie of {prompt}, casual phone photo, natural indoor light, slight lens distortion, realistic skin texture, candid, unedited social media photo",
+        "negative_prompt": "studio lighting, softbox, cinematic, dslr, bokeh, shallow depth of field, airbrushed, glamour, plastic skin, 8k, hdr, professional photoshoot"
+    },
+    {
+        "name": "sunside-amateur-candid",
+        "prompt": "candid amateur photo of {prompt}, shot on a phone, imperfect framing, natural look, raw photo, everyday moment",
+        "negative_prompt": "studio, professional photography, cinematic, polished, perfect composition, airbrushed, cgi, render"
+    },
+    {
+        "name": "sunside-mirror-selfie",
+        "prompt": "mirror selfie phone photo of {prompt}, front-facing camera, bathroom or apartment interior, soft window light, casual pose, realistic phone capture",
+        "negative_prompt": "studio backdrop, cinematic lighting, fashion editorial, airbrushed, plastic skin, perfect makeup photoshoot"
+    }
+]

@@ -18,11 +18,14 @@
 
 | Preset | Checkpoint | Коли брати |
 |--------|------------|------------|
-| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | **Default:** full body + face |
-| `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Краще лице; без face-helper (щоб не різати в портрет) |
-| `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Amateur / soft photo (експеримент) |
+| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | **Default:** full body + amateur pack |
+| `realistic_cyberrealistic_xl` | [CyberRealistic XL V10](https://huggingface.co/cyberdelia/CyberRealisticXL) (~6.5 GB) | Чистий фотореал, шкіра |
+| `realistic_epicrealism_xl` | epiCRealism XL Pure (~7 GB) | Люди / обличчя / тіло |
+| `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Портрет / лице |
+| `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Soft photo (експеримент; OOM на T4) |
 
-Спільні LoRA: `dynamic_anatomy`, `add_detail`, [face-helper](https://huggingface.co/ostris/face-helper-sdxl-lora) — ваги підібрані під full body 768×1344.
+Спільні LoRA: `dynamic_anatomy`, `add_detail`, SOAP (phone), [face-helper](https://huggingface.co/ostris/face-helper-sdxl-lora).  
+Нові стилі: **Sunside Iphone Selfie**, **Sunside Amateur Candid**, **Sunside Mirror Selfie**.
 
 **Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
 
@@ -31,9 +34,12 @@
 | Файл | Призначення |
 |------|-------------|
 | `fooocus_colab.ipynb` | Єдиний Colab-ноутбук |
-| `presets/realistic_realvis_xl.json` | RealVis + LoRA (default) |
 | `presets/realistic_juggernaut_ragnarok.json` | Juggernaut + LoRA |
+| `presets/realistic_cyberrealistic_xl.json` | CyberRealistic XL V10 |
+| `presets/realistic_epicrealism_xl.json` | epiCRealism XL Pure |
+| `presets/realistic_realvis_xl.json` | RealVis + LoRA |
 | `presets/realistic_realcore_xl.json` | RealCore XL + LoRA |
+| `sdxl_styles/sdxl_styles_sunside.json` | Phone / amateur стилі |
 | `docs/PRESENTATION_PM_UA.md` | Презентація для PM |
 | `docs/fooocus-pro-presentation.html` | HTML-слайди |
 
