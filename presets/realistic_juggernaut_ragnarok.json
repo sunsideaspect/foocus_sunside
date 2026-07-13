@@ -4,29 +4,29 @@
     "default_refiner_switch": 0.5,
     "default_loras": [
         [
-            false,
-            "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
-            0.08
-        ],
-        [
             true,
-            "10mb_bodyproportion.safetensors",
+            "emotional.safetensors",
             0.7
         ],
         [
             true,
+            "10mb_bodyproportion.safetensors",
+            0.65
+        ],
+        [
+            true,
             "nudity_v03XL.safetensors",
-            0.4
+            0.32
         ],
         [
             true,
             "soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors",
-            0.18
+            0.15
         ],
         [
             true,
             "face_xl_v0_1.safetensors",
-            0.45
+            0.35
         ]
     ],
     "default_cfg_scale": 4.8,
@@ -55,7 +55,7 @@
     },
     "embeddings_downloads": {},
     "lora_downloads": {
-        "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors": "https://huggingface.co/mashb1t/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
+        "emotional.safetensors": "https://huggingface.co/ntc-ai/SDXL-LoRA-slider.emotional/resolve/main/emotional.safetensors",
         "10mb_bodyproportion.safetensors": "https://huggingface.co/NicoEmb/BodyEnhancement-LoRAs/resolve/main/10mb_bodyproportion.safetensors",
         "nudity_v03XL.safetensors": "https://huggingface.co/TonariNoTaku/SDXL_sufficient_nudity/resolve/main/nudity_v03XL_i1762_prod256n128b2_swn2_offset_e5.safetensors",
         "soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors": "https://huggingface.co/Muapi/soap-photo-enhancer-for-sdxl-shot-on-a-phone/resolve/main/soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors",

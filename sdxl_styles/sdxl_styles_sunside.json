@@ -13,5 +13,10 @@
         "name": "sunside-mirror-selfie",
         "prompt": "mirror selfie phone photo of {prompt}, front-facing camera, bathroom or apartment interior, soft window light, casual pose, realistic phone capture",
         "negative_prompt": "studio backdrop, cinematic lighting, fashion editorial, airbrushed, plastic skin, perfect makeup photoshoot"
+    },
+    {
+        "name": "sunside-expressive-face",
+        "prompt": "expressive face of {prompt}, clear facial emotion, natural microexpressions, realistic eyes and mouth, authentic reaction, not a blank stare",
+        "negative_prompt": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, broken teeth, asymmetrical eyes, airbrushed face, doll face"
     }
 ]
