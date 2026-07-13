@@ -1,22 +1,12 @@
 [
     {
-        "name": "sunside-iphone-selfie",
-        "prompt": "iphone front camera selfie of {prompt}, casual phone photo, natural indoor light, slight lens distortion, realistic skin texture, candid, unedited social media photo",
-        "negative_prompt": "studio lighting, softbox, cinematic, dslr, bokeh, shallow depth of field, airbrushed, glamour, plastic skin, 8k, hdr, professional photoshoot"
-    },
-    {
-        "name": "sunside-amateur-candid",
-        "prompt": "candid amateur photo of {prompt}, shot on a phone, imperfect framing, natural look, raw photo, everyday moment",
-        "negative_prompt": "studio, professional photography, cinematic, polished, perfect composition, airbrushed, cgi, render"
+        "name": "sunside-expressive-selfie",
+        "prompt": "candid iphone selfie of {prompt}, clear natural facial emotion, realistic eyes and mouth, authentic expression, soft natural light, unedited phone photo",
+        "negative_prompt": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, broken teeth, asymmetrical eyes, doll face, studio lighting, softbox, cinematic, airbrushed, glamour, bokeh, dslr, 8k, hdr"
     },
     {
         "name": "sunside-mirror-selfie",
-        "prompt": "mirror selfie phone photo of {prompt}, front-facing camera, bathroom or apartment interior, soft window light, casual pose, realistic phone capture",
-        "negative_prompt": "studio backdrop, cinematic lighting, fashion editorial, airbrushed, plastic skin, perfect makeup photoshoot"
-    },
-    {
-        "name": "sunside-expressive-face",
-        "prompt": "expressive face of {prompt}, clear facial emotion, natural microexpressions, realistic eyes and mouth, authentic reaction, not a blank stare",
-        "negative_prompt": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, broken teeth, asymmetrical eyes, airbrushed face, doll face"
+        "prompt": "mirror selfie phone photo of {prompt}, clear natural facial emotion, realistic eyes and mouth, front-facing camera, soft window light, casual unedited phone capture",
+        "negative_prompt": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, studio backdrop, cinematic, airbrushed, doll face"
     }
 ]

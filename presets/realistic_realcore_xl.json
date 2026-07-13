@@ -6,7 +6,12 @@
         [
             true,
             "emotional.safetensors",
-            0.7
+            0.9
+        ],
+        [
+            true,
+            "face_xl_v0_1.safetensors",
+            0.4
         ],
         [
             true,
@@ -14,19 +19,14 @@
             0.65
         ],
         [
-            true,
-            "nudity_v03XL.safetensors",
-            0.32
+            false,
+            "None",
+            1.0
         ],
         [
-            true,
-            "soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors",
-            0.15
-        ],
-        [
-            true,
-            "face_xl_v0_1.safetensors",
-            0.35
+            false,
+            "None",
+            1.0
         ]
     ],
     "default_cfg_scale": 4.5,
@@ -35,9 +35,9 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, bad hands, extra fingers, missing fingers, lowres, blurry, jpeg artifacts, watermark, text, signature, cartoon, anime, cgi",
+    "default_prompt_negative": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, broken teeth, studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, bad hands, lowres, blurry, jpeg artifacts, watermark, text, cartoon, anime, cgi",
     "default_styles": [
-        "Sunside Iphone Selfie",
+        "Sunside Expressive Selfie",
         "Fooocus Semi Realistic"
     ],
     "default_aspect_ratio": "768*1344",
@@ -56,10 +56,8 @@
     "embeddings_downloads": {},
     "lora_downloads": {
         "emotional.safetensors": "https://huggingface.co/ntc-ai/SDXL-LoRA-slider.emotional/resolve/main/emotional.safetensors",
-        "10mb_bodyproportion.safetensors": "https://huggingface.co/NicoEmb/BodyEnhancement-LoRAs/resolve/main/10mb_bodyproportion.safetensors",
-        "nudity_v03XL.safetensors": "https://huggingface.co/TonariNoTaku/SDXL_sufficient_nudity/resolve/main/nudity_v03XL_i1762_prod256n128b2_swn2_offset_e5.safetensors",
-        "soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors": "https://huggingface.co/Muapi/soap-photo-enhancer-for-sdxl-shot-on-a-phone/resolve/main/soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors",
-        "face_xl_v0_1.safetensors": "https://huggingface.co/ostris/face-helper-sdxl-lora/resolve/main/face_xl_v0_1.safetensors"
+        "face_xl_v0_1.safetensors": "https://huggingface.co/ostris/face-helper-sdxl-lora/resolve/main/face_xl_v0_1.safetensors",
+        "10mb_bodyproportion.safetensors": "https://huggingface.co/NicoEmb/BodyEnhancement-LoRAs/resolve/main/10mb_bodyproportion.safetensors"
     },
     "previous_default_models": []
 }
