@@ -11,12 +11,12 @@
         [
             true,
             "10mb_bodyproportion.safetensors",
-            0.75
+            0.65
         ],
         [
             true,
             "nudity_v03XL.safetensors",
-            0.5
+            0.35
         ],
         [
             true,
@@ -24,7 +24,7 @@
             0.15
         ],
         [
-            false,
+            true,
             "face_xl_v0_1.safetensors",
             0.4
         ]

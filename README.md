@@ -18,15 +18,14 @@
 
 | Preset | Checkpoint | Коли брати |
 |--------|------------|------------|
-| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | **Default:** full body + amateur pack |
-| `realistic_cyberrealistic_xl` | [CyberRealistic XL V10](https://huggingface.co/cyberdelia/CyberRealisticXL) (~6.5 GB) | Чистий фотореал, шкіра |
-| `realistic_epicrealism_xl` | epiCRealism XL Pure (~7 GB) | Люди / обличчя / тіло |
+| `realistic_cyberrealistic_xl` | [CyberRealistic XL V10](https://huggingface.co/cyberdelia/CyberRealisticXL) (~6.5 GB) | **Default:** чистий фотореал |
+| `realistic_epicrealism_xl` | epiCRealism XL Pure (~7 GB) | Люди / тіло |
+| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | Full body + universal |
 | `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Портрет / лице |
 | `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Soft photo (експеримент; OOM на T4) |
 
-Спільні LoRA (ideal): `10mb_bodyproportion` (~0.8), `nudity_v03XL` Sufficient Nudity (~0.55), SOAP phone (~0.2).  
-Styles: **Sunside Iphone Selfie** + **Fooocus Semi Realistic**.  
-Face-helper — OFF за замовчуванням (увімкни в Advanced якщо треба).
+Спільні LoRA (ideal, баланс тіло+лице): `bodyproportion` (~0.7), Sufficient Nudity (~0.4), SOAP (~0.18), **face-helper ON** (~0.45–0.5).  
+Styles: **Sunside Iphone Selfie** + **Fooocus Semi Realistic**.
 
 **Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
 
@@ -47,7 +46,7 @@ Face-helper — OFF за замовчуванням (увімкни в Advanced 
 ## Локальний запуск (NVIDIA)
 
 ```bash
-python launch.py --preset realistic_juggernaut_ragnarok --disable-censor --disable-pro-mode --disable-preset-selection
+python launch.py --preset realistic_cyberrealistic_xl --disable-censor --disable-pro-mode --disable-preset-selection
 ```
 
 Потрібна відеокарта NVIDIA з CUDA (мінімум ~4 GB VRAM).

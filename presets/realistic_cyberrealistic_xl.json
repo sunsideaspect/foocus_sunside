@@ -11,22 +11,22 @@
         [
             true,
             "10mb_bodyproportion.safetensors",
-            0.8
+            0.7
         ],
         [
             true,
             "nudity_v03XL.safetensors",
-            0.55
+            0.4
         ],
         [
             true,
             "soap-photo-enhancer-for-sdxl-shot-on-a-phone.safetensors",
-            0.2
+            0.18
         ],
         [
-            false,
+            true,
             "face_xl_v0_1.safetensors",
-            0.4
+            0.5
         ]
     ],
     "default_cfg_scale": 4.5,
