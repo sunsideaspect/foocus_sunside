@@ -183,6 +183,21 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+const SUNSIDE_STYLE_TIPS = {
+    "Sunside Expressive Selfie": "селфі з живою емоцією",
+    "Sunside Mirror Selfie": "селфі в дзеркало",
+    "Sunside Hidden Camera": "прихована камера / voyeur",
+    "Sunside Tripod Phone": "телефон на штативі, full body",
+    "Sunside Spontaneous Snap": "спійманий момент, motion",
+    "Sunside Through Doorway": "зйомка через дверний проєм",
+    "Sunside Bedside Night": "ліжко вночі, лампа / glow",
+    "Sunside Bathroom Steam": "пар у ванній, вологе скло",
+    "Sunside Zoom Crop": "дуже близький crop",
+    "Sunside Shower Peek": "підгляд через двері в душ",
+    "Sunside Towel Drop": "рушник сповзає після душу",
+    "Sunside Send Nudes Crop": "фронт-камера, face+торс «скинь»",
+};
+
 function initStylePreviewOverlay() {
     let overlayVisible = false;
     const samplesPath = document.querySelector("meta[name='samples-path']").getAttribute("content")
@@ -206,7 +221,7 @@ function initStylePreviewOverlay() {
             name.toLowerCase().replaceAll(" ", "_")
         ).replaceAll("\\", "\\\\")}")`;
 
-        tooltip.textContent = name;
+        tooltip.textContent = SUNSIDE_STYLE_TIPS[name] || name;
 
         function onMouseLeave() {
             overlayVisible = false;

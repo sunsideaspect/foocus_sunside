@@ -402,11 +402,15 @@ div:has(> #positive_prompt) {
 
 /* styles preview tooltip */
 .preview-tooltip {
-  background-color: #fff8;
-  font-family: monospace;
+  background-color: rgba(12, 12, 14, 0.92);
+  color: #f2f2f2;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.25;
   text-align: center;
   border-radius: 5px 5px 0px 0px;
-  display: none; /* remove this to enable tooltip in preview image */
+  padding: 4px 6px;
+  display: block;
 }
 
 #inpaint_canvas .canvas-tooltip-info {
