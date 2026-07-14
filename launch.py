@@ -2,6 +2,11 @@ import os
 import ssl
 import sys
 
+# MUST be first: Colab/GCP breaks Hugging Face Xet CDN (403 SignatureError)
+os.environ["HF_HUB_DISABLE_XET"] = "1"
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
+
 print('[System ARGV] ' + str(sys.argv))
 
 root = os.path.dirname(os.path.abspath(__file__))

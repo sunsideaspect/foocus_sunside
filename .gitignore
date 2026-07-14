@@ -4,6 +4,10 @@ __pycache__
 *.pth
 *.pt
 *.bin
+# Small Fooocus startup assets (avoid HF Xet 403 on Colab)
+!models/vae_approx/xlvaeapp.pth
+!models/vae_approx/vaeapp_sd15.pth
+!models/vae_approx/xl-to-v1_interposer-v4.0.safetensors
 *.patch
 *.backup
 *.corrupted
