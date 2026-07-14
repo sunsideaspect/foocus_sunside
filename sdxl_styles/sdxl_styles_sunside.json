@@ -11,8 +11,8 @@
     },
     {
         "name": "sunside-hidden-camera",
-        "prompt": "hidden cctv surveillance still of {prompt}, security camera mounted high in the ceiling corner, steep high-angle looking down into the room, wide-angle lens with slight fisheye, fixed spy cam, doorframe or wall edge occluding part of the frame, subjects completely unaware and not facing the camera, grainy low-res voyeur footage, flat indoor overhead light, raw unedited",
-        "negative_prompt": "selfie, mirror selfie, front-facing camera, eye-level portrait, looking at camera, eye contact, posing, smile for camera, close-up face, bokeh portrait, tripod beauty shot, studio lighting, fashion editorial, cinematic, glamour, airbrushed, dslr, 8k, hdr"
+        "prompt": "cctv security camera footage of {prompt}, camera mounted high in the ceiling corner looking down, steep high-angle surveillance shot of the whole room, wide-angle spy cam with slight fisheye, fixed hidden camera, wall or doorframe occluding one edge of the frame, subjects unaware and not facing the camera, grainy low-res voyeur-house style, flat indoor overhead light, timestamp look, raw unedited still",
+        "negative_prompt": "selfie, mirror selfie, iphone selfie, front-facing camera, eye-level shot, looking at camera, eye contact, posing, portrait crop, close-up face, shallow depth of field, bokeh, beauty shot, tripod phone selfie, studio lighting, fashion editorial, cinematic, glamour, airbrushed, dslr, 8k, hdr"
     },
     {
         "name": "sunside-tripod-phone",
