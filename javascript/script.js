@@ -186,7 +186,7 @@ document.addEventListener('keydown', function(e) {
 const SUNSIDE_STYLE_TIPS = {
     "Sunside Expressive Selfie": "селфі з живою емоцією",
     "Sunside Mirror Selfie": "селфі в дзеркало",
-    "Sunside Hidden Camera": "прихована камера / voyeur",
+    "Sunside Hidden Camera": "CCTV зверху з кута стелі",
     "Sunside Tripod Phone": "телефон на штативі, full body",
     "Sunside Spontaneous Snap": "спійманий момент, motion",
     "Sunside Through Doorway": "зйомка через дверний проєм",
