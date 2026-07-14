@@ -5,12 +5,20 @@ from typing import Optional
 from urllib.request import Request, urlopen
 
 
+# Colab + HF Xet інколи «висить» на маленьких файлах без прогресу
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
+
+
 def _parse_hf_url(url: str):
     """Parse https://huggingface.co/{repo}/resolve/{rev}/{path} into parts."""
     try:
         p = urlparse(url)
-        if p.netloc not in ("huggingface.co", "hf.co") and "huggingface.co" not in url:
-            return None
+        host = (p.netloc or "").lower()
+        if "huggingface.co" not in host and host not in ("hf.co",):
+            # allow mirror hosts that still use /resolve/ paths
+            if "resolve" not in p.path:
+                return None
         parts = [unquote(x) for x in p.path.strip("/").split("/") if x]
         if "resolve" not in parts:
             return None
@@ -43,17 +51,23 @@ def _download_with_urllib(url: str, cached_file: str, progress: bool = True) -> 
             total = resp.headers.get("Content-Length")
             total_n = int(total) if total and total.isdigit() else None
             done = 0
+            last_pct = -1
             while True:
                 chunk = resp.read(1024 * 1024)
                 if not chunk:
                     break
                 out.write(chunk)
                 done += len(chunk)
-                if progress and total_n:
-                    pct = int(100 * done / total_n)
-                    print(f"\rDownloading: {pct}% ({done}/{total_n})", end="", flush=True)
+                if progress:
+                    if total_n:
+                        pct = int(100 * done / total_n)
+                        if pct != last_pct:
+                            print(f"\r  → {pct}% ({done}/{total_n} bytes)", end="", flush=True)
+                            last_pct = pct
+                    else:
+                        print(f"\r  → {done} bytes", end="", flush=True)
         if progress:
-            print()
+            print(flush=True)
         os.replace(tmp, cached_file)
     except Exception:
         if os.path.isfile(tmp):
@@ -85,33 +99,37 @@ def load_file_from_url(
     if os.path.exists(cached_file) and os.path.getsize(cached_file) > 0:
         return cached_file
 
-    print(f'Downloading: "{url}" to {cached_file}\n')
+    print(f'Downloading: "{url}" to {cached_file}', flush=True)
 
-    # 1) Prefer huggingface_hub (handles auth, mirrors, Colab 403)
+    # 1) urllib first — швидше і стабільніше на Colab (немає зависання Xet)
+    try:
+        print("  [download] urllib…", flush=True)
+        _download_with_urllib(url, cached_file, progress=progress)
+        print(f"  [download] ok ({os.path.getsize(cached_file)} bytes)", flush=True)
+        return cached_file
+    except Exception as e:
+        print(f"  [download] urllib failed: {e}", flush=True)
+
+    # 2) huggingface_hub
     hf_parts = _parse_hf_url(url)
     if hf_parts is not None:
         repo_id, revision, repo_file = hf_parts
         try:
+            print("  [download] huggingface_hub…", flush=True)
             from huggingface_hub import hf_hub_download
             downloaded = hf_hub_download(
                 repo_id=repo_id,
                 filename=repo_file,
                 revision=revision,
-                local_dir=None,
             )
             shutil.copy2(downloaded, cached_file)
+            print(f"  [download] ok ({os.path.getsize(cached_file)} bytes)", flush=True)
             return cached_file
         except Exception as e:
-            print(f'[Download] huggingface_hub failed ({e}); trying urllib…')
-
-    # 2) urllib with User-Agent (fixes many HF 403 from Colab/torch.hub)
-    try:
-        _download_with_urllib(url, cached_file, progress=progress)
-        return cached_file
-    except Exception as e:
-        print(f'[Download] urllib failed ({e}); trying torch.hub…')
+            print(f"  [download] huggingface_hub failed: {e}", flush=True)
 
     # 3) Legacy fallback
+    print("  [download] torch.hub…", flush=True)
     from torch.hub import download_url_to_file
     download_url_to_file(url, cached_file, progress=progress)
     return cached_file
