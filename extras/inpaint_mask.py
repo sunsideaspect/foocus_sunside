@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from extras.GroundingDINO.util.inference import default_groundingdino
 from extras.sam.predictor import SamPredictor
-from rembg import remove, new_session
 from segment_anything import sam_model_registry
 from segment_anything.utils.amg import remove_small_regions
 
@@ -59,6 +58,8 @@ def generate_mask_from_image(image: np.ndarray, mask_model: str = 'sam', extras=
         image = image['image']
 
     if mask_model != 'sam' or sam_options is None:
+        # Lazy import — rembg/onnxruntime may pull broken CuPy on Colab
+        from rembg import remove, new_session
         result = remove(
             image,
             session=new_session(mask_model, **extras),

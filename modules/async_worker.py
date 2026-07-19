@@ -1715,20 +1715,36 @@ def worker():
                 elif enhance_mask_model == 'u2net_cloth_seg':
                     extras['cloth_category'] = enhance_mask_cloth_category
 
-                if generate_mask_from_image is None:
-                    print(f'[Enhance] Mask generation unavailable, skipping: {_inpaint_mask_import_error}')
-                    continue
+                # Fix Face: never use rembg/SAM/DINO (CuPy/numpy breaks on Colab) — facexlib bbox only
+                if getattr(async_task, 'fix_face_enabled', False):
+                    from modules.face_fix_mask import face_bbox_mask
+                    print('[Sunside FixFace] building face mask (facexlib, no SAM/rembg)')
+                    mask = face_bbox_mask(img)
+                    if mask is None:
+                        print('[Sunside FixFace] no face found — skip variant')
+                        continue
+                    dino_detection_count = 1
+                    sam_detection_count = 1
+                    sam_detection_on_mask_count = 1
+                else:
+                    if generate_mask_from_image is None:
+                        print(f'[Enhance] Mask generation unavailable, skipping: {_inpaint_mask_import_error}')
+                        continue
 
-                mask, dino_detection_count, sam_detection_count, sam_detection_on_mask_count = generate_mask_from_image(
-                    img, mask_model=enhance_mask_model, extras=extras, sam_options=SAMOptions(
-                        dino_prompt=enhance_mask_dino_prompt_text,
-                        dino_box_threshold=enhance_mask_box_threshold,
-                        dino_text_threshold=enhance_mask_text_threshold,
-                        dino_erode_or_dilate=async_task.dino_erode_or_dilate,
-                        dino_debug=async_task.debugging_dino,
-                        max_detections=enhance_mask_sam_max_detections,
-                        model_type=enhance_mask_sam_model,
-                    ))
+                    mask, dino_detection_count, sam_detection_count, sam_detection_on_mask_count = generate_mask_from_image(
+                        img, mask_model=enhance_mask_model, extras=extras, sam_options=SAMOptions(
+                            dino_prompt=enhance_mask_dino_prompt_text,
+                            dino_box_threshold=enhance_mask_box_threshold,
+                            dino_text_threshold=enhance_mask_text_threshold,
+                            dino_erode_or_dilate=async_task.dino_erode_or_dilate,
+                            dino_debug=async_task.debugging_dino,
+                            max_detections=enhance_mask_sam_max_detections,
+                            model_type=enhance_mask_sam_model,
+                        ))
+
+                if mask is None:
+                    print('[Enhance] empty mask, skipping')
+                    continue
                 if len(mask.shape) == 3:
                     mask = mask[:, :, 0]
 
@@ -1748,16 +1764,8 @@ def worker():
                 print(f'[Enhance] {sam_detection_count} segments detected in boxes')
                 print(f'[Enhance] {sam_detection_on_mask_count} segments applied to mask')
 
-                if enhance_mask_model == 'sam' and (dino_detection_count == 0 or not async_task.debugging_dino and sam_detection_on_mask_count == 0):
-                    if getattr(async_task, 'fix_face_enabled', False):
-                        from modules.face_fix_mask import face_bbox_mask
-                        print('[Sunside FixFace] SAM miss — trying facexlib bbox fallback')
-                        fallback = face_bbox_mask(img)
-                        if fallback is None:
-                            print(f'[Enhance] No "{enhance_mask_dino_prompt_text}" detected, skipping')
-                            continue
-                        mask = fallback
-                    else:
+                if not getattr(async_task, 'fix_face_enabled', False):
+                    if enhance_mask_model == 'sam' and (dino_detection_count == 0 or not async_task.debugging_dino and sam_detection_on_mask_count == 0):
                         print(f'[Enhance] No "{enhance_mask_dino_prompt_text}" detected, skipping')
                         continue
 
