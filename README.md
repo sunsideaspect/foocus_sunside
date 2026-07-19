@@ -6,6 +6,9 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/fooocus_colab.ipynb)
 
+**FLUX.2 Klein 4B (окремий Colab):**  
+[![FLUX Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sunsideaspect/foocus_sunside/blob/main/flux2_klein_colab.ipynb)
+
 ## Швидкий старт (Colab)
 
 1. **Runtime → GPU** → **Restart session**
