@@ -285,7 +285,8 @@ with shared.gradio_root:
                     )
                     character_info = gr.Markdown(
                         value='Персонаж = лише якір зовнішності. Сцена/поза/кадр — у промпті. '
-                              'Після Generate: клікни фото в галереї → **Fix Face** (підтягне лише обличчя).'
+                              'Після Generate: клікни фото → **Fix Face** '
+                              '(кількість варіантів = Image Number).'
                     )
                 with gr.Column(scale=1):
                     _preview0 = None

@@ -277,17 +277,20 @@ class AsyncTask:
     def _configure_face_fix_pass(self):
         """Skip generation; auto-mask face via SAM and Improve Detail inpaint."""
         from modules.flags import disabled as disabled_flag
+        import modules.constants as constants
+
+        # Keep user's Image Number as how many face variants to produce
+        self.fix_face_variants = max(1, min(int(self.image_number or 1), 32))
 
         face_prompt = (
             'beautiful detailed face, sharp coherent eyes, intact nose and mouth, '
             'natural facial proportions, clear healthy skin, soft natural expression, '
-            'photorealistic identity consistency'
+            'photorealistic identity consistency, highly detailed face'
         )
         face_negative = (
             'deformed face, melted face, ugly face, asymmetric eyes, cross-eyed, '
             'blurry face, extra face, ahegao, fucked silly face, plastic skin, doll face'
         )
-        # Keep character appearance in the enhance prompt when enabled
         if self.character_enabled and self.character_name:
             try:
                 from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
@@ -300,32 +303,42 @@ class AsyncTask:
 
         self.prompt = face_prompt
         self.negative_prompt = face_negative
+        # Don't let selfie/CCTV styles wrap the face-only prompt
+        self.style_selections = [
+            s for s in (self.style_selections or [])
+            if s == 'Fooocus Semi Realistic'
+        ]
         self.input_image_checkbox = True
         self.current_tab = 'enhance'
         self.enhance_checkbox = True
         self.enhance_input_image = self.fix_face_image
         self.enhance_uov_method = disabled_flag.casefold()
-        self.image_number = 1
         self.save_final_enhanced_image_only = False
+        self.disable_seed_increment = False
+        self.seed = int(self.seed) % (constants.MAX_SEED + 1)
+        self._fix_face_seed_base = self.seed
         self.enhance_ctrls = [[
-            'face',           # SAM / GroundingDINO detection
-            face_prompt,      # enhance positive
-            face_negative,    # enhance negative
+            'face',
+            face_prompt,
+            face_negative,
             'sam',
             modules.config.default_inpaint_mask_cloth_category,
             modules.config.default_inpaint_mask_sam_model,
-            0.25,             # text threshold
-            0.30,             # box threshold
-            1,                # max detections = 1 face
-            False,            # disable initial latent
-            'None',           # Improve Detail engine
-            0.45,             # denoise — keep identity, fix quality
-            0.0,              # respective field = masked only
-            0,                # erode/dilate
-            False,            # invert mask
+            0.20,             # text threshold — more sensitive
+            0.25,             # box threshold
+            1,
+            False,
+            'None',           # Improve Detail
+            0.72,             # stronger denoise so change is visible
+            0.0,
+            12,               # dilate mask a bit
+            False,
         ]]
         self.should_enhance = True
-        print('[Sunside FixFace] armed — enhance-only Improve Detail on face mask')
+        print(
+            f'[Sunside FixFace] armed — {self.fix_face_variants} variant(s), '
+            f'strength=0.72, Improve Detail on face'
+        )
 
 
 async_tasks = []
@@ -1542,9 +1555,17 @@ def worker():
 
         images_to_enhance = []
         if 'enhance' in goals:
-            async_task.image_number = 1
-            images_to_enhance += [async_task.enhance_input_image]
-            height, width, _ = async_task.enhance_input_image.shape
+            if getattr(async_task, 'fix_face_enabled', False):
+                n = max(1, int(getattr(async_task, 'fix_face_variants', 1)))
+                base_img = async_task.enhance_input_image
+                images_to_enhance += [np.ascontiguousarray(base_img.copy()) for _ in range(n)]
+                async_task.image_number = n
+                height, width, _ = base_img.shape
+                print(f'[Sunside FixFace] queued {n} face variant(s) from Image Number')
+            else:
+                async_task.image_number = 1
+                images_to_enhance += [async_task.enhance_input_image]
+                height, width, _ = async_task.enhance_input_image.shape
             # input image already provided, processing is skipped
             steps = 0
             yield_result(async_task, async_task.enhance_input_image, current_progress, async_task.black_out_nsfw, False,
@@ -1728,12 +1749,27 @@ def worker():
                 print(f'[Enhance] {sam_detection_on_mask_count} segments applied to mask')
 
                 if enhance_mask_model == 'sam' and (dino_detection_count == 0 or not async_task.debugging_dino and sam_detection_on_mask_count == 0):
-                    print(f'[Enhance] No "{enhance_mask_dino_prompt_text}" detected, skipping')
-                    continue
+                    if getattr(async_task, 'fix_face_enabled', False):
+                        from modules.face_fix_mask import face_bbox_mask
+                        print('[Sunside FixFace] SAM miss — trying facexlib bbox fallback')
+                        fallback = face_bbox_mask(img)
+                        if fallback is None:
+                            print(f'[Enhance] No "{enhance_mask_dino_prompt_text}" detected, skipping')
+                            continue
+                        mask = fallback
+                    else:
+                        print(f'[Enhance] No "{enhance_mask_dino_prompt_text}" detected, skipping')
+                        continue
 
                 goals_enhance = ['inpaint']
 
                 try:
+                    if getattr(async_task, 'fix_face_enabled', False):
+                        import modules.constants as constants
+                        base = int(getattr(async_task, '_fix_face_seed_base', async_task.seed))
+                        async_task.seed = (base + index) % (constants.MAX_SEED + 1)
+                        print(f'[Sunside FixFace] variant {index + 1}/{len(images_to_enhance)} seed={async_task.seed}')
+
                     current_progress, img, enhance_prompt_processed, enhance_negative_prompt_processed = process_enhance(
                         all_steps, async_task, callback, controlnet_canny_path, controlnet_cpds_path,
                         ip_adapter_face_path, ip_adapter_path,
