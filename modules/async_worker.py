@@ -274,84 +274,39 @@ class AsyncTask:
         except Exception:
             pass
 
-        # Fix Face: enhance-only Improve Detail on selected gallery image
-        self.fix_face_enabled = False
-        self.fix_face_image = None
-        if len(args) >= 2:
-            # Always pop wiring slots; ignore enable — pasted-head quality was unusable
-            _ = bool(args.pop())
-            _ = args.pop()
-        self.fix_face_enabled = False
-        self.fix_face_image = None
-        # Face Improve Detail disabled in product (hard mask = pasted head look)
+        # Gallery Vary: UOV vary from selected image (whole-frame, not face paste)
+        self.vary_enabled = False
+        self.vary_image = None
+        self.vary_mode = None
+        if len(args) >= 3:
+            self.vary_enabled = bool(args.pop())
+            self.vary_image = args.pop()
+            self.vary_mode = args.pop()
+        elif len(args) >= 2:
+            self.vary_enabled = bool(args.pop())
+            self.vary_image = args.pop()
+        if self.vary_enabled and self.vary_image is not None:
+            self._configure_gallery_vary()
 
-    def _configure_face_fix_pass(self):
-        """Skip generation; auto-mask face via SAM and Improve Detail inpaint."""
-        from modules.flags import disabled as disabled_flag
-        import modules.constants as constants
-
-        # Keep user's Image Number as how many face variants to produce
-        self.fix_face_variants = max(1, min(int(self.image_number or 1), 32))
-
-        face_prompt = (
-            'beautiful detailed face, sharp coherent eyes, intact nose and mouth, '
-            'natural facial proportions, clear healthy skin, soft natural expression, '
-            'photorealistic identity consistency, highly detailed face'
-        )
-        face_negative = (
-            'deformed face, melted face, ugly face, asymmetric eyes, cross-eyed, '
-            'blurry face, extra face, ahegao, fucked silly face, plastic skin, doll face'
-        )
-        if self.character_enabled and self.character_name:
-            try:
-                from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
-                character = get_by_name(self.character_name)
-                if character is not None:
-                    face_prompt = apply_character_to_prompt(
-                        face_prompt, character, anchor_override=getattr(self, 'character_anchor_override', None)
-                    )
-                    face_negative = merge_character_negative(face_negative, character)
-            except Exception as e:
-                print(f'[Sunside FixFace] character merge: {e}')
-
-        self.prompt = face_prompt
-        self.negative_prompt = face_negative
-        # Don't let selfie/CCTV styles wrap the face-only prompt
-        self.style_selections = [
-            s for s in (self.style_selections or [])
-            if s == 'Fooocus Semi Realistic'
-        ]
+    def _configure_gallery_vary(self):
+        """Run Fooocus Vary (Subtle/Strong) on a gallery image — coherent whole-frame variants."""
+        from modules.flags import subtle_variation, strong_variation
+        mode = self.vary_mode or subtle_variation
+        mode_l = str(mode).casefold()
+        if 'strong' in mode_l:
+            mode = strong_variation
+        else:
+            mode = subtle_variation
         self.input_image_checkbox = True
-        self.current_tab = 'enhance'
-        self.enhance_checkbox = True
-        self.enhance_input_image = self.fix_face_image
-        self.enhance_uov_method = disabled_flag.casefold()
-        self.save_final_enhanced_image_only = False
-        self.disable_seed_increment = False
-        self.seed = int(self.seed) % (constants.MAX_SEED + 1)
-        self._fix_face_seed_base = self.seed
-        self.enhance_ctrls = [[
-            'face',
-            face_prompt,
-            face_negative,
-            'sam',
-            modules.config.default_inpaint_mask_cloth_category,
-            modules.config.default_inpaint_mask_sam_model,
-            0.20,             # text threshold — more sensitive
-            0.25,             # box threshold
-            1,
-            False,
-            'None',           # Improve Detail
-            0.72,             # stronger denoise so change is visible
-            0.0,
-            12,               # dilate mask a bit
-            False,
-        ]]
-        self.should_enhance = True
-        print(
-            f'[Sunside FixFace] armed — {self.fix_face_variants} variant(s), '
-            f'strength=0.72, Improve Detail on face'
-        )
+        self.current_tab = 'uov'
+        self.uov_method = mode
+        self.uov_input_image = self.vary_image
+        self.enhance_checkbox = False
+        self.enhance_ctrls = []
+        self.should_enhance = False
+        n = max(1, min(int(self.image_number or 1), 32))
+        self.image_number = n
+        print(f'[Sunside Vary] {mode} × {n} from gallery (Image Number)')
 
 
 async_tasks = []

@@ -44,10 +44,11 @@ characters/<id>/face_ref.jpg   # optional → Face pass
 
 ## Face consistency
 
-**FaceSwap / Fix Face вимкнено.** Inswapper валив Colab; face inpaint ліпив «чужу» голову.
+**FaceSwap / face-inpaint вимкнено** (OOM / «наклейка» голови).
 
-Однаковість: Character anchor (редагований) + промпт + face LoRA. Погане обличчя → новий seed / перегенерація.
+**Vary:** клікни фото в галереї → **Vary** (Subtle/Strong). Робить варіації **цілого кадру** через Fooocus UOV. Кількість = Image Number. Промпт/стиль/персонаж лишаються.
 
+Однаковість: Character anchor + промпт + face LoRA.
 ## Прапорці запуску
 
 `--disable-censor` · `--disable-pro-mode` · `--disable-preset-selection` · product ON by default

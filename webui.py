@@ -215,14 +215,23 @@ with shared.gradio_root:
 
                 with gr.Column(scale=3, min_width=0):
                     generate_button = gr.Button(label="Generate", value="Generate", elem_classes='type_row', elem_id='generate_button', visible=True)
-                    fix_face_button = gr.Button(
-                        label="Fix Face",
-                        value="Fix Face",
+                    vary_button = gr.Button(
+                        label="Vary",
+                        value="Vary",
                         elem_classes='type_row',
-                        elem_id='fix_face_button',
-                        visible=False,
+                        elem_id='vary_button',
+                        visible=SUNSIDE_PRODUCT,
                         variant='secondary',
                     )
+                    vary_mode = gr.Radio(
+                        label='Vary mode',
+                        choices=[flags.subtle_variation, flags.strong_variation],
+                        value=flags.subtle_variation,
+                        visible=SUNSIDE_PRODUCT,
+                        info='Клікни фото в галереї → Vary. Кількість = Image Number.',
+                    )
+                    # keep hidden alias for generate UI wiring that still references old name
+                    fix_face_button = vary_button
                     reset_button = gr.Button(label="Reconnect", value="Reconnect", elem_classes='type_row', elem_id='reset_button', visible=False)
                     load_parameter_button = gr.Button(label="Load Parameters", value="Load Parameters", elem_classes='type_row', elem_id='load_parameter_button', visible=False)
                     skip_button = gr.Button(label="Skip", value="Skip", elem_classes='type_row_half', elem_id='skip_button', visible=False)
@@ -285,7 +294,7 @@ with shared.gradio_root:
                     )
                     character_info = gr.Markdown(
                         value='Якір можна підправити справа. Сцена/поза/кадр — у Prompt. '
-                              'Face fix вимкнено (ліпив «чужу» голову). Краще перегенерувати кадр.'
+                              'Клікни кадр у галереї → **Vary** = варіації цілого фото (не face-paste).'
                     )
                 with gr.Column(scale=2):
                     _anchor0 = ''
@@ -316,6 +325,10 @@ with shared.gradio_root:
                 custom_height = gr.Number(visible=False, value=-1)
                 face_pass_checkbox = gr.Checkbox(visible=False, value=False)
                 face_ref_upload = gr.Image(visible=False, type='numpy', value=None)
+                if 'character_anchor' not in dir():
+                    character_anchor = gr.Textbox(visible=False, value='')
+                if 'vary_mode' not in dir():
+                    vary_mode = gr.Radio(visible=False, choices=[flags.subtle_variation], value=flags.subtle_variation)
             with gr.Row(visible=modules.config.default_image_prompt_checkbox) as image_input_panel:
                 with gr.Tabs(selected=modules.config.default_selected_image_input_tab_id):
                     with gr.Tab(label='Upscale or Variation', id='uov_tab') as uov_tab:
@@ -1306,9 +1319,12 @@ with shared.gradio_root:
         ctrls += enhance_ctrls
         # Sunside extras last (popped last in AsyncTask)
         ctrls += [character_checkbox, character_dropdown, face_pass_checkbox, face_ref_upload, character_anchor]
-        fix_face_enabled = gr.Checkbox(value=False, visible=False)
-        fix_face_image = gr.Image(type='numpy', visible=False)
-        ctrls += [fix_face_enabled, fix_face_image]
+        vary_enabled = gr.Checkbox(value=False, visible=False)
+        vary_image = gr.Image(type='numpy', visible=False)
+        # keep old names as aliases used by generate reset wiring
+        fix_face_enabled = vary_enabled
+        fix_face_image = vary_image
+        ctrls += [vary_enabled, vary_image, vary_mode]
 
         def _on_gallery_select(evt: gr.SelectData):
             try:
@@ -1340,7 +1356,7 @@ with shared.gradio_root:
                 return item
             return None
 
-        def _arm_fix_face(gallery_images, selected_index):
+        def _arm_vary(gallery_images, selected_index):
             import cv2
             import numpy as np
             if not gallery_images:
@@ -1350,20 +1366,22 @@ with shared.gradio_root:
             item = gallery_images[idx]
             path = _gallery_item_to_path(item)
             if not path:
-                raise gr.Error(f'Не можу витягнути шлях з галереї: {type(item).__name__} {item!r}'[:240])
+                raise gr.Error(f'Не можу витягнути шлях з галереї: {type(item).__name__}'[:200])
             if not os.path.isfile(path):
-                # try common Fooocus outputs dir fallback by basename
                 alt = os.path.join('/tmp/fooocus', os.path.basename(path))
                 if os.path.isfile(alt):
                     path = alt
                 else:
-                    raise gr.Error(f'Файл уже зник з диска (Colab tmp). Згенеруй знову і одразу Fix Face.\n{path}')
+                    raise gr.Error(f'Файл уже зник з диска. Згенеруй знову і одразу Vary.\n{path}')
             bgr = cv2.imread(path)
             if bgr is None:
                 raise gr.Error(f'Не можу відкрити зображення: {path}')
             rgb = np.ascontiguousarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
-            print(f'[Sunside FixFace] selected gallery[{idx}] → {path}')
+            print(f'[Sunside Vary] selected gallery[{idx}] → {path}')
             return rgb, True
+
+        # back-compat name used below if any leftover refs
+        _arm_fix_face = _arm_vary
 
         def parse_meta(raw_prompt_txt, is_generating):
             loaded_json = None
@@ -1458,7 +1476,7 @@ with shared.gradio_root:
             ),
             outputs=[stop_button, skip_button, generate_button, fix_face_button, state_is_generating],
         ) \
-            .then(fn=_arm_fix_face, inputs=[gallery, gallery_selected_index], outputs=[fix_face_image, fix_face_enabled]) \
+            .then(fn=_arm_vary, inputs=[gallery, gallery_selected_index], outputs=[vary_image, vary_enabled]) \
             .then(fn=get_task, inputs=ctrls, outputs=currentTask) \
             .then(fn=generate_clicked, inputs=currentTask, outputs=[progress_html, progress_window, progress_gallery, gallery]) \
             .then(
@@ -1471,7 +1489,7 @@ with shared.gradio_root:
                     False,
                     None,
                 ),
-                outputs=[generate_button, fix_face_button, stop_button, skip_button, state_is_generating, fix_face_enabled, fix_face_image],
+                outputs=[generate_button, fix_face_button, stop_button, skip_button, state_is_generating, vary_enabled, vary_image],
             ) \
             .then(fn=update_history_link, outputs=history_link) \
             .then(fn=lambda: None, _js='playNotification').then(fn=lambda: None, _js='refresh_grid_delayed')
