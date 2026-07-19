@@ -36,7 +36,7 @@ characters/<id>/
 Пайплайн: SDXL кадр → unload VRAM → Inswapper swap → збереження.  
 Старий Image Prompt **FaceSwap** лишається вимкненим (OOM на Colab).
 
-Пакет: `insightface` + `onnxruntime-gpu` (ставить Colab). Модель `inswapper_128.onnx` качається сама в `models/insightface/`.
+Пакет: `insightface` + `onnxruntime` **CPU** (ставить Colab). Після SDXL GPU ORT часто вбиває сесію — тому Face lock на CPU за замовчуванням (`SUNSIDE_FACELOCK_CPU=1`). Модель `inswapper_128.onnx` качається сама в `models/insightface/`.
 
 ## Export names
 Files save as `{character}_{style}_{timestamp}_{rand}.png` when product prefix is set.
