@@ -260,11 +260,10 @@ with shared.gradio_root:
                         interactive=True,
                     )
                     face_pass_checkbox = gr.Checkbox(
-                        label='Face pass — підмінити обличчя після генерації',
+                        label='Face pass — вимкнено (крашить Colab)',
                         value=False,
-                        info='Опційно. Бере face_ref.jpg персонажа і накладає обличчя на готовий кадр (Inswapper). '
-                             'Це НЕ Image Prompt FaceSwap. Треба insightface + models/insightface/inswapper_128.onnx. '
-                             'Без цього файлу просто нічого не робить. Залиш вимкненим, якщо не налаштовував.',
+                        interactive=False,
+                        info='Inswapper/FaceSwap на T4 нестабільні. Лишай вимкненим. Схожість обличчя = Character якір.',
                         visible=SUNSIDE_PRODUCT,
                     )
                     character_info = gr.Markdown(
@@ -341,13 +340,26 @@ with shared.gradio_root:
                                             ip_weights.append(ip_weight)
                                             ip_ctrls.append(ip_weight)
 
-                                        ip_type = gr.Radio(label='Type', choices=flags.ip_list, value=modules.config.default_ip_types[image_count], container=False)
+                                        ip_type = gr.Radio(
+                                            label='Type',
+                                            choices=flags.ip_list_product if SUNSIDE_PRODUCT else flags.ip_list,
+                                            value=modules.config.default_ip_types[image_count] if (
+                                                not SUNSIDE_PRODUCT
+                                                or modules.config.default_ip_types[image_count] in flags.ip_list_product
+                                            ) else flags.default_ip,
+                                            container=False,
+                                        )
                                         ip_types.append(ip_type)
                                         ip_ctrls.append(ip_type)
 
                                         ip_type.change(lambda x: flags.default_parameters[x], inputs=[ip_type], outputs=[ip_stop, ip_weight], queue=False, show_progress=False)
                                     ip_ad_cols.append(ad_col)
                         ip_advanced = gr.Checkbox(label='Advanced', value=modules.config.default_image_prompt_advanced_checkbox, container=False)
+                        if SUNSIDE_PRODUCT:
+                            gr.HTML(
+                                '<p style="color:#f59e0b"><b>Sunside:</b> FaceSwap вимкнено — на Colab він крашить VRAM. '
+                                'Для схожого обличчя використовуй Character (якір). Face pass поки теж краще не чіпати.</p>'
+                            )
                         gr.HTML('* \"Image Prompt\" is powered by Fooocus Image Mixture Engine (v1.0.1). <a href="https://github.com/lllyasviel/Fooocus/discussions/557" target="_blank">\U0001F4D4 Documentation</a>')
 
                         def ip_advance_checked(x):

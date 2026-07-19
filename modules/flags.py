@@ -76,6 +76,8 @@ cn_canny = "PyraCanny"
 cn_cpds = "CPDS"
 
 ip_list = [cn_ip, cn_canny, cn_cpds, cn_ip_face]
+# FaceSwap (IP-Adapter face) OOMs often on Colab — hide in Sunside product UI
+ip_list_product = [cn_ip, cn_canny, cn_cpds]
 default_ip = cn_ip
 
 default_parameters = {

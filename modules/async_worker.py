@@ -33,7 +33,7 @@ patch_all()
 
 class AsyncTask:
     def __init__(self, args):
-        from modules.flags import Performance, MetadataScheme, ip_list, disabled
+        from modules.flags import Performance, MetadataScheme, ip_list, disabled, cn_ip_face
         from modules.util import get_enabled_loras
         from modules.config import default_max_lora_number
         import args_manager
@@ -232,6 +232,17 @@ class AsyncTask:
                     self._character_face_ref = character.face_ref_path
             except Exception as e:
                 print(f'[Sunside Character] {e}')
+
+        # Product mode: never run IP-Adapter FaceSwap or Face pass (Colab OOM / crash)
+        try:
+            from modules.product_mode import is_product_mode
+            if is_product_mode():
+                self.face_pass_enabled = False
+                if cn_ip_face in self.cn_tasks and self.cn_tasks[cn_ip_face]:
+                    print('[Sunside] FaceSwap tasks stripped (disabled in product mode — causes Colab crashes)')
+                    self.cn_tasks[cn_ip_face] = []
+        except Exception:
+            pass
 
 async_tasks = []
 
