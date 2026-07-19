@@ -260,9 +260,11 @@ with shared.gradio_root:
                         interactive=True,
                     )
                     face_pass_checkbox = gr.Checkbox(
-                        label='Face pass (Inswapper post)',
+                        label='Face pass — підмінити обличчя після генерації',
                         value=False,
-                        info='Needs insightface + models/insightface/inswapper_128.onnx',
+                        info='Опційно. Бере face_ref.jpg персонажа і накладає обличчя на готовий кадр (Inswapper). '
+                             'Це НЕ Image Prompt FaceSwap. Треба insightface + models/insightface/inswapper_128.onnx. '
+                             'Без цього файлу просто нічого не робить. Залиш вимкненим, якщо не налаштовував.',
                         visible=SUNSIDE_PRODUCT,
                     )
                     character_info = gr.Markdown(
@@ -674,6 +676,15 @@ with shared.gradio_root:
                                                  value=modules.config.default_performance,
                                                  elem_classes=['performance_selection'])
 
+                overwrite_step = gr.Slider(
+                    label='Steps',
+                    minimum=-1,
+                    maximum=60,
+                    step=1,
+                    value=modules.config.default_overwrite_step,
+                    info='-1 = з Performance (Quality≈60, Speed≈30). Постав 40–60 щоб зафіксувати вручну.',
+                )
+
                 with gr.Accordion(label='Aspect Ratios', open=SUNSIDE_PRODUCT, elem_id='aspect_ratios_accordion') as aspect_ratios_accordion:
                     aspect_ratios_selection = gr.Radio(label='Aspect Ratios', show_label=False,
                                                        choices=modules.config.available_aspect_ratios_labels,
@@ -687,7 +698,7 @@ with shared.gradio_root:
                 image_number = gr.Slider(
                     label='Image Number',
                     minimum=1,
-                    maximum=min(4, modules.config.default_max_image_number) if SUNSIDE_PRODUCT else modules.config.default_max_image_number,
+                    maximum=modules.config.default_max_image_number,
                     step=1,
                     value=modules.config.default_image_number,
                 )
@@ -921,11 +932,7 @@ with shared.gradio_root:
                                                           info='(Experimental) This may cause performance problems on some computers and certain internet conditions.',
                                                           value=False)
 
-                        overwrite_step = gr.Slider(label='Forced Overwrite of Sampling Step',
-                                                   minimum=-1, maximum=200, step=1,
-                                                   value=modules.config.default_overwrite_step,
-                                                   info='-1 = use Performance (Quality=60, Speed=30). '
-                                                        'Colab preset: use 48 for fixed steps.')
+                        # Steps control lives in Settings as overwrite_step
                         overwrite_switch = gr.Slider(label='Forced Overwrite of Refiner Switch Step',
                                                      minimum=-1, maximum=200, step=1,
                                                      value=modules.config.default_overwrite_switch,
