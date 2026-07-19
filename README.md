@@ -44,11 +44,14 @@ characters/<id>/face_ref.jpg   # optional → Face pass
 
 ## Face consistency
 
-**FaceSwap / Face lock вимкнено на Colab** — insightface/inswapper убиває сесію (OOM), навіть на CPU.
+**FaceSwap / Inswapper вимкнено на Colab** (OOM).
 
-Поки що однаковість обличчя: **Character anchor** + детальний промпт + face LoRA в пресеті.
+### Fix Face (рекомендовано)
+1. Generate кадр з нормальною анатомією  
+2. Клікни потрібне фото в галереї  
+3. **Fix Face** — автомаска обличчя (SAM) + Improve Detail, без скачування  
 
-Stock Image Prompt **FaceSwap** також stripped у product mode.
+Character ON під час Fix Face допоможе тримати ідентичність.
 
 ## Прапорці запуску
 

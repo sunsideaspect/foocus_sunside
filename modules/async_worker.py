@@ -265,6 +265,69 @@ class AsyncTask:
         except Exception:
             pass
 
+        # Fix Face: enhance-only Improve Detail on selected gallery image
+        self.fix_face_enabled = False
+        self.fix_face_image = None
+        if len(args) >= 2:
+            self.fix_face_enabled = bool(args.pop())
+            self.fix_face_image = args.pop()
+        if self.fix_face_enabled and self.fix_face_image is not None:
+            self._configure_face_fix_pass()
+
+    def _configure_face_fix_pass(self):
+        """Skip generation; auto-mask face via SAM and Improve Detail inpaint."""
+        from modules.flags import disabled as disabled_flag
+
+        face_prompt = (
+            'beautiful detailed face, sharp coherent eyes, intact nose and mouth, '
+            'natural facial proportions, clear healthy skin, soft natural expression, '
+            'photorealistic identity consistency'
+        )
+        face_negative = (
+            'deformed face, melted face, ugly face, asymmetric eyes, cross-eyed, '
+            'blurry face, extra face, ahegao, fucked silly face, plastic skin, doll face'
+        )
+        # Keep character appearance in the enhance prompt when enabled
+        if self.character_enabled and self.character_name:
+            try:
+                from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
+                character = get_by_name(self.character_name)
+                if character is not None:
+                    face_prompt = apply_character_to_prompt(face_prompt, character)
+                    face_negative = merge_character_negative(face_negative, character)
+            except Exception as e:
+                print(f'[Sunside FixFace] character merge: {e}')
+
+        self.prompt = face_prompt
+        self.negative_prompt = face_negative
+        self.input_image_checkbox = True
+        self.current_tab = 'enhance'
+        self.enhance_checkbox = True
+        self.enhance_input_image = self.fix_face_image
+        self.enhance_uov_method = disabled_flag.casefold()
+        self.image_number = 1
+        self.save_final_enhanced_image_only = False
+        self.enhance_ctrls = [[
+            'face',           # SAM / GroundingDINO detection
+            face_prompt,      # enhance positive
+            face_negative,    # enhance negative
+            'sam',
+            modules.config.default_inpaint_mask_cloth_category,
+            modules.config.default_inpaint_mask_sam_model,
+            0.25,             # text threshold
+            0.30,             # box threshold
+            1,                # max detections = 1 face
+            False,            # disable initial latent
+            'None',           # Improve Detail engine
+            0.45,             # denoise — keep identity, fix quality
+            0.0,              # respective field = masked only
+            0,                # erode/dilate
+            False,            # invert mask
+        ]]
+        self.should_enhance = True
+        print('[Sunside FixFace] armed — enhance-only Improve Detail on face mask')
+
+
 async_tasks = []
 
 

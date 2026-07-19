@@ -200,6 +200,7 @@ with shared.gradio_root:
             gallery = gr.Gallery(label='Gallery', show_label=False, object_fit='contain', visible=True, height=768,
                                  elem_classes=['resizable_area', 'main_view', 'final_gallery', 'image_gallery'],
                                  elem_id='final_gallery')
+            gallery_selected_index = gr.State(value=-1)
             with gr.Row():
                 with gr.Column(scale=17):
                     prompt = gr.Textbox(
@@ -214,6 +215,14 @@ with shared.gradio_root:
 
                 with gr.Column(scale=3, min_width=0):
                     generate_button = gr.Button(label="Generate", value="Generate", elem_classes='type_row', elem_id='generate_button', visible=True)
+                    fix_face_button = gr.Button(
+                        label="Fix Face",
+                        value="Fix Face",
+                        elem_classes='type_row',
+                        elem_id='fix_face_button',
+                        visible=SUNSIDE_PRODUCT,
+                        variant='secondary',
+                    )
                     reset_button = gr.Button(label="Reconnect", value="Reconnect", elem_classes='type_row', elem_id='reset_button', visible=False)
                     load_parameter_button = gr.Button(label="Load Parameters", value="Load Parameters", elem_classes='type_row', elem_id='load_parameter_button', visible=False)
                     skip_button = gr.Button(label="Skip", value="Skip", elem_classes='type_row_half', elem_id='skip_button', visible=False)
@@ -275,8 +284,8 @@ with shared.gradio_root:
                         visible=False,
                     )
                     character_info = gr.Markdown(
-                        value='Персонаж = лише якір зовнішності. Сцена, поза, кадр — у промпті. '
-                              'Face swap вимкнено (валив Colab). Однаковість обличчя — через якір + промпт.'
+                        value='Персонаж = лише якір зовнішності. Сцена/поза/кадр — у промпті. '
+                              'Після Generate: клікни фото в галереї → **Fix Face** (підтягне лише обличчя).'
                     )
                 with gr.Column(scale=1):
                     _preview0 = None
@@ -1292,6 +1301,35 @@ with shared.gradio_root:
         ctrls += enhance_ctrls
         # Sunside extras last (popped last in AsyncTask)
         ctrls += [character_checkbox, character_dropdown, face_pass_checkbox, face_ref_upload]
+        fix_face_enabled = gr.Checkbox(value=False, visible=False)
+        fix_face_image = gr.Image(type='numpy', visible=False)
+        ctrls += [fix_face_enabled, fix_face_image]
+
+        def _on_gallery_select(evt: gr.SelectData):
+            try:
+                return int(evt.index)
+            except Exception:
+                return -1
+
+        gallery.select(_on_gallery_select, outputs=gallery_selected_index, queue=False, show_progress=False)
+
+        def _arm_fix_face(gallery_images, selected_index):
+            import cv2
+            import numpy as np
+            if not gallery_images:
+                raise gr.Error('Галерея порожня — спочатку Generate')
+            idx = selected_index if isinstance(selected_index, int) and selected_index >= 0 else len(gallery_images) - 1
+            idx = max(0, min(idx, len(gallery_images) - 1))
+            item = gallery_images[idx]
+            path = item[0] if isinstance(item, (list, tuple)) else item
+            if not path or not os.path.isfile(str(path)):
+                raise gr.Error(f'Не можу прочитати фото з галереї: {path}')
+            bgr = cv2.imread(str(path))
+            if bgr is None:
+                raise gr.Error(f'Не можу відкрити: {path}')
+            rgb = np.ascontiguousarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
+            print(f'[Sunside FixFace] selected gallery[{idx}] → {path}')
+            return rgb, True
 
         def parse_meta(raw_prompt_txt, is_generating):
             loaded_json = None
@@ -1324,13 +1362,83 @@ with shared.gradio_root:
         metadata_import_button.click(trigger_metadata_import, inputs=[metadata_input_image, state_is_generating], outputs=load_data_outputs, queue=False, show_progress=True) \
             .then(style_sorter.sort_styles, inputs=style_selections, outputs=style_selections, queue=False, show_progress=False)
 
-        generate_button.click(lambda: (gr.update(visible=True, interactive=True), gr.update(visible=True, interactive=True), gr.update(visible=False, interactive=False), [], True),
-                              outputs=[stop_button, skip_button, generate_button, gallery, state_is_generating]) \
+        def _prepare_generate_ui():
+            return (
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=False, interactive=False),
+                gr.update(visible=False, interactive=False) if SUNSIDE_PRODUCT else gr.update(),
+                [],
+                True,
+            )
+
+        def _finish_generate_ui():
+            return (
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=True, interactive=True) if SUNSIDE_PRODUCT else gr.update(),
+                gr.update(visible=False, interactive=False),
+                gr.update(visible=False, interactive=False),
+                False,
+                False,
+                None,
+            )
+
+        generate_button.click(
+            lambda: (
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=False, interactive=False),
+                gr.update(visible=False, interactive=False) if SUNSIDE_PRODUCT else gr.update(),
+                [],
+                True,
+                False,
+                None,
+            ),
+            outputs=[stop_button, skip_button, generate_button, fix_face_button, gallery, state_is_generating, fix_face_enabled, fix_face_image],
+        ) \
             .then(fn=refresh_seed, inputs=[seed_random, image_seed], outputs=image_seed) \
             .then(fn=get_task, inputs=ctrls, outputs=currentTask) \
             .then(fn=generate_clicked, inputs=currentTask, outputs=[progress_html, progress_window, progress_gallery, gallery]) \
-            .then(lambda: (gr.update(visible=True, interactive=True), gr.update(visible=False, interactive=False), gr.update(visible=False, interactive=False), False),
-                  outputs=[generate_button, stop_button, skip_button, state_is_generating]) \
+            .then(
+                lambda: (
+                    gr.update(visible=True, interactive=True),
+                    gr.update(visible=True, interactive=True) if SUNSIDE_PRODUCT else gr.update(),
+                    gr.update(visible=False, interactive=False),
+                    gr.update(visible=False, interactive=False),
+                    False,
+                    False,
+                    None,
+                ),
+                outputs=[generate_button, fix_face_button, stop_button, skip_button, state_is_generating, fix_face_enabled, fix_face_image],
+            ) \
+            .then(fn=update_history_link, outputs=history_link) \
+            .then(fn=lambda: None, _js='playNotification').then(fn=lambda: None, _js='refresh_grid_delayed')
+
+        fix_face_button.click(
+            lambda: (
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=True, interactive=True),
+                gr.update(visible=False, interactive=False),
+                gr.update(visible=False, interactive=False),
+                True,
+            ),
+            outputs=[stop_button, skip_button, generate_button, fix_face_button, state_is_generating],
+        ) \
+            .then(fn=_arm_fix_face, inputs=[gallery, gallery_selected_index], outputs=[fix_face_image, fix_face_enabled]) \
+            .then(fn=get_task, inputs=ctrls, outputs=currentTask) \
+            .then(fn=generate_clicked, inputs=currentTask, outputs=[progress_html, progress_window, progress_gallery, gallery]) \
+            .then(
+                lambda: (
+                    gr.update(visible=True, interactive=True),
+                    gr.update(visible=True, interactive=True),
+                    gr.update(visible=False, interactive=False),
+                    gr.update(visible=False, interactive=False),
+                    False,
+                    False,
+                    None,
+                ),
+                outputs=[generate_button, fix_face_button, stop_button, skip_button, state_is_generating, fix_face_enabled, fix_face_image],
+            ) \
             .then(fn=update_history_link, outputs=history_link) \
             .then(fn=lambda: None, _js='playNotification').then(fn=lambda: None, _js='refresh_grid_delayed')
 
