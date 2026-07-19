@@ -263,7 +263,7 @@ with shared.gradio_root:
                 advanced_checkbox = gr.Checkbox(label='Advanced', value=modules.config.default_advanced_checkbox, container=False, elem_classes='min_check')
 
             with gr.Row(visible=False) as character_panel:
-                with gr.Column(scale=3):
+                with gr.Column(scale=1):
                     _char_names = character_choices() if SUNSIDE_PRODUCT else []
                     character_dropdown = gr.Dropdown(
                         label='Character',
@@ -284,21 +284,21 @@ with shared.gradio_root:
                         visible=False,
                     )
                     character_info = gr.Markdown(
-                        value='Персонаж = лише якір зовнішності. Сцена/поза/кадр — у промпті. '
-                              'Після Generate: клікни фото → **Fix Face** '
-                              '(кількість варіантів = Image Number).'
+                        value='Якір можна підправити нижче. Сцена/поза/кадр — у Prompt. '
+                              'Після Generate: клікни фото → **Fix Face** (варіанти = Image Number).'
                     )
-                with gr.Column(scale=1):
-                    _preview0 = None
+                with gr.Column(scale=2):
+                    _anchor0 = ''
                     if SUNSIDE_PRODUCT and _char_names:
                         _c0 = get_by_name(_char_names[0])
-                        _preview0 = _c0.preview_path if _c0 else None
-                    character_preview = gr.Image(
-                        label='Preview',
-                        value=_preview0,
-                        height=160,
-                        interactive=False,
-                        show_label=True,
+                        _anchor0 = _c0.anchor if _c0 else ''
+                    character_anchor = gr.Textbox(
+                        label='Prompt anchor (зовнішність)',
+                        value=_anchor0,
+                        lines=8,
+                        max_lines=16,
+                        interactive=True,
+                        info='Підставляється перед твоїм промптом. Редагуй вільно — файл персонажа не змінюється.',
                     )
 
             if SUNSIDE_PRODUCT:
@@ -1218,9 +1218,9 @@ with shared.gradio_root:
 
         def _character_selected(name):
             c = get_by_name(name)
-            preview = c.preview_path if c else None
-            tip = 'Якір зовнішності підставиться автоматично. Сцена / поза / кадр — у промпті.'
-            return preview, tip
+            anchor = c.anchor if c else ''
+            tip = 'Якір можна підправити справа. Сцена / поза / кадр — у промпті.'
+            return anchor, tip
 
         def _apply_size_preset(preset, width_val, height_val):
             if preset == 'Custom':
@@ -1257,7 +1257,7 @@ with shared.gradio_root:
         character_checkbox.change(_toggle_character, inputs=character_checkbox, outputs=character_panel,
                                   queue=False, show_progress=False)
         character_dropdown.change(_character_selected, inputs=character_dropdown,
-                                  outputs=[character_preview, character_info],
+                                  outputs=[character_anchor, character_info],
                                   queue=False, show_progress=False)
 
         size_preset.change(
@@ -1305,7 +1305,7 @@ with shared.gradio_root:
                   enhance_uov_prompt_type]
         ctrls += enhance_ctrls
         # Sunside extras last (popped last in AsyncTask)
-        ctrls += [character_checkbox, character_dropdown, face_pass_checkbox, face_ref_upload]
+        ctrls += [character_checkbox, character_dropdown, face_pass_checkbox, face_ref_upload, character_anchor]
         fix_face_enabled = gr.Checkbox(value=False, visible=False)
         fix_face_image = gr.Image(type='numpy', visible=False)
         ctrls += [fix_face_enabled, fix_face_image]

@@ -203,9 +203,16 @@ class AsyncTask:
         self.character_name = None
         self.face_pass_enabled = False
         self.face_ref_image = None
+        self.character_anchor_override = None
         self.export_prefix = None
         self._character_face_ref = None
-        if len(args) >= 4:
+        if len(args) >= 5:
+            self.character_enabled = bool(args.pop())
+            self.character_name = args.pop()
+            self.face_pass_enabled = bool(args.pop())
+            self.face_ref_image = args.pop()
+            self.character_anchor_override = args.pop()
+        elif len(args) >= 4:
             self.character_enabled = bool(args.pop())
             self.character_name = args.pop()
             self.face_pass_enabled = bool(args.pop())
@@ -232,7 +239,9 @@ class AsyncTask:
                 from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
                 character = get_by_name(self.character_name)
                 if character is not None:
-                    self.prompt = apply_character_to_prompt(self.prompt, character)
+                    self.prompt = apply_character_to_prompt(
+                        self.prompt, character, anchor_override=self.character_anchor_override
+                    )
                     self.negative_prompt = merge_character_negative(self.negative_prompt, character)
                     self.export_prefix = build_export_prefix(character.name, self.style_selections)
                     self._character_face_ref = character.face_ref_path
@@ -296,7 +305,9 @@ class AsyncTask:
                 from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
                 character = get_by_name(self.character_name)
                 if character is not None:
-                    face_prompt = apply_character_to_prompt(face_prompt, character)
+                    face_prompt = apply_character_to_prompt(
+                        face_prompt, character, anchor_override=getattr(self, 'character_anchor_override', None)
+                    )
                     face_negative = merge_character_negative(face_negative, character)
             except Exception as e:
                 print(f'[Sunside FixFace] character merge: {e}')

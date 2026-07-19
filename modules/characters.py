@@ -91,23 +91,27 @@ def get_by_name(name: str | None) -> Character | None:
     return None
 
 
-def apply_character_to_prompt(prompt: str, character: Character | None) -> str:
+def apply_character_to_prompt(prompt: str, character: Character | None, anchor_override: str | None = None) -> str:
     """Prepend appearance anchor; append light face-protect (NSFW tokens steal face budget)."""
-    if character is None:
+    if character is None and not (anchor_override and str(anchor_override).strip()):
         return prompt
     prompt = (prompt or '').strip()
+    anchor = (anchor_override or '').strip()
+    if not anchor and character is not None:
+        anchor = character.anchor
+    if not anchor:
+        return prompt
     face_protect = (
         'sharp coherent face, intact eyes and mouth, natural facial proportions, '
         'detailed facial features'
     )
     if not prompt:
-        return f'{character.anchor}, {face_protect}'
-    if character.anchor[:48] in prompt:
+        return f'{anchor}, {face_protect}'
+    if anchor[:48] in prompt:
         if 'coherent face' not in prompt.lower():
             return f'{prompt}, {face_protect}'
         return prompt
-    # Face/identity first, scene after — CLIP attends more to early tokens
-    return f'{character.anchor}, {face_protect}, {prompt}'
+    return f'{anchor}, {face_protect}, {prompt}'
 
 
 def merge_character_negative(negative: str, character: Character | None) -> str:
