@@ -35,7 +35,7 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, doll face, bad anatomy, extra limbs, deformed, bad hands, lowres, blurry, jpeg artifacts, watermark, text, cartoon, anime, cgi",
+    "default_prompt_negative": "studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, doll face, bad anatomy, extra limbs, deformed, bad hands, lowres, blurry, jpeg artifacts, watermark, text, cartoon, anime, cgi, tattoo, tattoos, tattooed, inked, body ink, tribal tattoo, sleeve tattoo, neck tattoo, face tattoo, hand tattoo, writing on skin",
     "default_styles": [
         "Fooocus Semi Realistic"
     ],
