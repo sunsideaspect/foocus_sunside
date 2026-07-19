@@ -41,9 +41,11 @@ characters/<id>/face_ref.jpg   # optional → Face pass
 
 ## Face consistency
 
-Stock **FaceSwap** (Image Prompt) на Colab часто крашиться — не використовувати.
+**FaceSwap / Face lock вимкнено на Colab** — insightface/inswapper убиває сесію (OOM), навіть на CPU.
 
-Опційний **Face pass** (Inswapper) після генерації, якщо є `face_ref.jpg` + insightface.
+Поки що однаковість обличчя: **Character anchor** + детальний промпт + face LoRA в пресеті.
+
+Stock Image Prompt **FaceSwap** також stripped у product mode.
 
 ## Прапорці запуску
 

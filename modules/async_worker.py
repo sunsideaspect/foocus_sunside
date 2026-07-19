@@ -245,18 +245,22 @@ class AsyncTask:
         else:
             self._face_lock_ref = self._character_face_ref
 
-        # Auto face lock when Character ON + ref present (checkbox can still disable)
-        if self.character_enabled and self._face_lock_ref is not None and self.face_pass_enabled:
-            self._apply_face_lock = True
-        else:
-            self._apply_face_lock = False
+        # Face lock DISABLED in product mode: insightface/inswapper still OOM-kills
+        # Colab (SIGKILL) even on CPU — try/except cannot catch that.
+        self._apply_face_lock = False
+        try:
+            from modules.product_mode import is_product_mode
+            if is_product_mode() and self.face_pass_enabled:
+                print('[Sunside] Face lock ignored (disabled — crashes Colab). Use Character anchor + prompt.')
+        except Exception:
+            pass
 
-        # Never use IP-Adapter FaceSwap in product mode (OOM). Post face-lock is OK.
+        # Never use IP-Adapter FaceSwap in product mode (OOM).
         try:
             from modules.product_mode import is_product_mode
             if is_product_mode():
                 if cn_ip_face in self.cn_tasks and self.cn_tasks[cn_ip_face]:
-                    print('[Sunside] IP-Adapter FaceSwap stripped (use Character Face lock upload instead)')
+                    print('[Sunside] IP-Adapter FaceSwap stripped (disabled on Colab)')
                     self.cn_tasks[cn_ip_face] = []
         except Exception:
             pass

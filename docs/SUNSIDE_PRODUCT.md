@@ -27,17 +27,11 @@ characters/<id>/
   face_ref.jpg   # optional, for Face lock
 ```
 
-## Face lock (опційно)
+## Face lock
 
-1. Character ON  
-2. Завантаж еталон обличчя в UI (**Face ref**) — анфас, чисте лице  
-3. Галочка **Face lock після генерації**  
-4. Generate  
+**Вимкнено в product mode.** Inswapper/insightface на Colab валить процес (OOM/SIGKILL) навіть на CPU — `try/except` це не рятує.
 
-Пайплайн: SDXL кадр → unload VRAM → Inswapper swap → збереження.  
-Старий Image Prompt **FaceSwap** лишається вимкненим (OOM на Colab).
-
-Пакет: `insightface` + `onnxruntime` **CPU** (ставить Colab). Після SDXL GPU ORT часто вбиває сесію — тому Face lock на CPU за замовчуванням (`SUNSIDE_FACELOCK_CPU=1`). Модель `inswapper_128.onnx` качається сама в `models/insightface/`.
+Однаковість обличчя зараз: Character `anchor.txt` + промпт + face LoRA в пресеті.
 
 ## Export names
 Files save as `{character}_{style}_{timestamp}_{rand}.png` when product prefix is set.

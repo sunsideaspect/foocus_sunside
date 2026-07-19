@@ -263,22 +263,20 @@ with shared.gradio_root:
                         interactive=True,
                     )
                     face_ref_upload = gr.Image(
-                        label='Face ref — завантаж еталон обличчя (анфас)',
+                        label='Face ref',
                         source='upload',
                         type='numpy',
                         height=220,
-                        visible=SUNSIDE_PRODUCT,
+                        visible=False,
                     )
                     face_pass_checkbox = gr.Checkbox(
-                        label='Face lock після генерації (Inswapper, CPU)',
+                        label='Face lock',
                         value=False,
-                        interactive=True,
-                        info='Завантаж Face ref вище, потім увімкни. Працює на CPU після кадру (повільніше, але не має валити Colab). '
-                             'Якщо знову впаде — вимкни галочку: кадр все одно збережеться без swap.',
-                        visible=SUNSIDE_PRODUCT,
+                        visible=False,
                     )
                     character_info = gr.Markdown(
-                        value='Персонаж = лише якір зовнішності. Сцена, поза, кадр — у промпті.'
+                        value='Персонаж = лише якір зовнішності. Сцена, поза, кадр — у промпті. '
+                              'Face swap вимкнено (валив Colab). Однаковість обличчя — через якір + промпт.'
                     )
                 with gr.Column(scale=1):
                     _preview0 = None
@@ -358,8 +356,8 @@ with shared.gradio_root:
                         ip_advanced = gr.Checkbox(label='Advanced', value=modules.config.default_image_prompt_advanced_checkbox, container=False)
                         if SUNSIDE_PRODUCT:
                             gr.HTML(
-                                '<p style="color:#f59e0b"><b>Sunside:</b> старий FaceSwap (Image Prompt) вимкнено — крашить Colab. '
-                                'Еталон обличчя завантажуй у <b>Character → Face ref</b> + увімкни Face lock.</p>'
+                                '<p style="color:#f59e0b"><b>Sunside:</b> FaceSwap / Face lock вимкнено — '
+                                'на Colab валить сесію (OOM). Однаковість обличчя: Character + промпт.</p>'
                             )
                         gr.HTML('* \"Image Prompt\" is powered by Fooocus Image Mixture Engine (v1.0.1). <a href="https://github.com/lllyasviel/Fooocus/discussions/557" target="_blank">\U0001F4D4 Documentation</a>')
 
@@ -1208,8 +1206,6 @@ with shared.gradio_root:
             c = get_by_name(name)
             preview = c.preview_path if c else None
             tip = 'Якір зовнішності підставиться автоматично. Сцена / поза / кадр — у промпті.'
-            if c and c.face_ref_path:
-                tip += ' Face ref є для Face lock.'
             return preview, tip
 
         def _apply_size_preset(preset, width_val, height_val):
