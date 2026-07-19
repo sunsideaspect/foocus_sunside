@@ -1317,6 +1317,28 @@ with shared.gradio_root:
 
         gallery.select(_on_gallery_select, outputs=gallery_selected_index, queue=False, show_progress=False)
 
+        def _gallery_item_to_path(item):
+            """Gradio Gallery may return str, (path,), or dict{name,data,is_file}."""
+            if item is None:
+                return None
+            if isinstance(item, dict):
+                for key in ('name', 'path', 'data'):
+                    val = item.get(key)
+                    if isinstance(val, str) and val and not val.startswith('http'):
+                        return val
+                # last resort: local path embedded in gradio file URL
+                data = item.get('data') or item.get('name') or ''
+                if isinstance(data, str) and '/file=' in data:
+                    return data.split('/file=', 1)[-1].split('?', 1)[0]
+                if isinstance(data, str) and data.startswith('/') and os.path.isfile(data):
+                    return data
+                return None
+            if isinstance(item, (list, tuple)) and item:
+                return _gallery_item_to_path(item[0])
+            if isinstance(item, str):
+                return item
+            return None
+
         def _arm_fix_face(gallery_images, selected_index):
             import cv2
             import numpy as np
@@ -1325,12 +1347,19 @@ with shared.gradio_root:
             idx = selected_index if isinstance(selected_index, int) and selected_index >= 0 else len(gallery_images) - 1
             idx = max(0, min(idx, len(gallery_images) - 1))
             item = gallery_images[idx]
-            path = item[0] if isinstance(item, (list, tuple)) else item
-            if not path or not os.path.isfile(str(path)):
-                raise gr.Error(f'Не можу прочитати фото з галереї: {path}')
-            bgr = cv2.imread(str(path))
+            path = _gallery_item_to_path(item)
+            if not path:
+                raise gr.Error(f'Не можу витягнути шлях з галереї: {type(item).__name__} {item!r}'[:240])
+            if not os.path.isfile(path):
+                # try common Fooocus outputs dir fallback by basename
+                alt = os.path.join('/tmp/fooocus', os.path.basename(path))
+                if os.path.isfile(alt):
+                    path = alt
+                else:
+                    raise gr.Error(f'Файл уже зник з диска (Colab tmp). Згенеруй знову і одразу Fix Face.\n{path}')
+            bgr = cv2.imread(path)
             if bgr is None:
-                raise gr.Error(f'Не можу відкрити: {path}')
+                raise gr.Error(f'Не можу відкрити зображення: {path}')
             rgb = np.ascontiguousarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
             print(f'[Sunside FixFace] selected gallery[{idx}] → {path}')
             return rgb, True
