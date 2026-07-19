@@ -184,19 +184,19 @@ document.addEventListener('keydown', function(e) {
 });
 
 const SUNSIDE_STYLE_TIPS = {
-    "Sunside Phone Raw": "сирий iphone-вигляд: шум, compression, аматорське фото",
-    "Sunside Mirror Glass": "відбиття в дзеркалі + блік скла",
-    "Sunside Cctv Grain": "зернисте CCTV, fisheye, плоске світло зверху",
-    "Sunside Tripod Still": "статичний кадр зі штатива, без shake",
-    "Sunside Candid Snap": "спійманий момент: motion blur, imperfect focus",
-    "Sunside Doorway Ambient": "зйомка з коридору через дверний проєм",
-    "Sunside Night Iso": "ніч, лампа, сильне ISO-зерно",
-    "Sunside Steam Humidity": "пар, конденсат, волога атмосфера",
-    "Sunside Close Detail": "дуже близький кадр, пори шкіри",
-    "Sunside Wet Room": "мокра ванна / душ, краплі, fluorescent",
-    "Sunside Post Shower": "щойно з душу: мокре волосся, residual steam",
-    "Sunside Dim Room": "темна кімната, лампа / glow екрана",
-    "Fooocus Semi Realistic": "якість / anti-cgi (негатив) — майже без зміни сцени",
+    "Sunside Expressive Selfie": "селфі з телефону, емоція в обличчя, arms length",
+    "Sunside Mirror Selfie": "селфі в дзеркало (телефон видно в кадрі)",
+    "Sunside Hidden Camera": "прихована CCTV зверху з кута — не селфі",
+    "Sunside Tripod Phone": "телефон на штативі, full body у кадрі",
+    "Sunside Spontaneous Snap": "спійманий момент, motion / imperfect focus",
+    "Sunside Through Doorway": "підгляд з коридору через двері",
+    "Sunside Bedside Night": "ліжко вночі, лампа / screen glow",
+    "Sunside Bathroom Steam": "пар у ванній, вологе скло",
+    "Sunside Zoom Crop": "дуже близький phone crop",
+    "Sunside Shower Peek": "підгляд у душ крізь щілину дверей",
+    "Sunside Towel Drop": "рушник сповзає після душу, mid-motion",
+    "Sunside Send Nudes Crop": "фронт-камера «скинь»: face + торс",
+    "Fooocus Semi Realistic": "якість / anti-cgi (негатив) — сцену не міняє",
 };
 
 function initStylePreviewOverlay() {

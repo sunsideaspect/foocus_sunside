@@ -1,62 +1,62 @@
 [
     {
-        "name": "sunside-phone-raw",
-        "prompt": "{prompt}, (raw unedited iphone photo:1.25), heavy phone compression, visible noise and jpeg artifacts, flat flash or window light, amateur social media photo, natural skin pores",
-        "negative_prompt": "studio lighting, softbox, cinematic, airbrushed, glamour, plastic skin, doll face, dslr bokeh, 8k, hdr, stock photo, perfect retouching"
+        "name": "sunside-expressive-selfie",
+        "prompt": "candid iphone selfie of {prompt}, front-facing camera at arms length, clear natural facial emotion, looking at camera, soft natural light, unedited phone photo, natural skin texture",
+        "negative_prompt": "cctv, surveillance, tripod, doorway peep, studio lighting, softbox, cinematic, airbrushed, glamour, dslr, 8k, hdr, blank expression, dead eyes"
     },
     {
-        "name": "sunside-mirror-glass",
-        "prompt": "{prompt}, (mirror reflection photo:1.2), glass glare and mirror frame edge, phone camera in mirror, slightly fogged glass, casual bathroom or bedroom mirror capture",
-        "negative_prompt": "studio backdrop, cinematic, airbrushed, glamour, plastic skin, doll face, dslr bokeh, 8k, hdr, no mirror"
+        "name": "sunside-mirror-selfie",
+        "prompt": "mirror selfie phone photo of {prompt}, reflection in bathroom or bedroom mirror, phone visible in frame, front-facing camera, soft window light, casual unedited phone capture",
+        "negative_prompt": "cctv, hidden camera, no mirror, studio backdrop, cinematic, airbrushed, glamour, dslr, 8k"
     },
     {
-        "name": "sunside-cctv-grain",
-        "prompt": "{prompt}, (grainy low-res cctv footage:1.3), surveillance camera still, flat overhead indoor light, slight fisheye distortion, timestamp overlay aesthetic, dirty lens, muted colors",
-        "negative_prompt": "beauty shot, glamour, cinematic, airbrushed, shallow depth of field, bokeh, dslr, 8k, hdr, polished stock photo, selfie selfie"
+        "name": "sunside-hidden-camera",
+        "prompt": "cctv security camera footage of {prompt}, camera mounted high in the ceiling corner looking down, steep high-angle surveillance shot of the whole room, wide-angle spy cam with slight fisheye, fixed hidden camera, wall or doorframe occluding one edge, subjects unaware and not facing the camera, grainy low-res voyeur style, flat indoor overhead light, raw unedited still",
+        "negative_prompt": "selfie, mirror selfie, iphone selfie, front-facing camera, eye-level shot, looking at camera, eye contact, posing, portrait crop, close-up face, beauty shot, tripod phone selfie, studio lighting, cinematic, glamour, dslr, 8k"
     },
     {
-        "name": "sunside-tripod-still",
-        "prompt": "{prompt}, (static tripod phone photo:1.2), smartphone on stand, locked camera angle, sharp phone capture, natural room light, realistic proportions, no handheld shake",
-        "negative_prompt": "studio backdrop, cinematic, airbrushed, glamour, dslr bokeh, 8k, hdr, selfie arm, floating camera, motion blur"
+        "name": "sunside-tripod-phone",
+        "prompt": "full-frame vertical phone photo of {prompt} on a tripod, smartphone propped on a stand, remote shutter, entire body in frame from head to feet, apartment interior, static camera, raw phone capture, natural light, realistic proportions",
+        "negative_prompt": "selfie arm, mirror reflection of photographer, cropped body, close-up face only, cctv fisheye, studio backdrop, cinematic, airbrushed, glamour, dslr bokeh, 8k"
     },
     {
-        "name": "sunside-candid-snap",
-        "prompt": "{prompt}, (spontaneous candid phone snap:1.25), slight motion blur, imperfect focus, caught in the moment, messy real environment, raw social media upload",
-        "negative_prompt": "posed studio portrait, perfect product focus, cinematic, airbrushed, polished, glamour, stock photo, dslr, 8k, hdr"
+        "name": "sunside-spontaneous-snap",
+        "prompt": "spontaneous phone snap of {prompt}, caught in the moment, slight motion blur, imperfect focus, candid lifestyle photo, natural messy environment, raw unedited social media photo",
+        "negative_prompt": "posed portrait, studio, perfect focus product shot, cinematic, airbrushed, polished, glamour, stock photo, dslr, 8k, hdr"
     },
     {
-        "name": "sunside-doorway-ambient",
-        "prompt": "{prompt}, (shot through doorway:1.2), dark hallway foreground, doorframe occlusion, warm room light spill, voyeuristic candid phone capture, partial framing",
-        "negative_prompt": "studio set, wide cinematic establishing shot, airbrushed, glamorous posing, perfect symmetry, dslr bokeh, 8k, hdr"
+        "name": "sunside-through-doorway",
+        "prompt": "phone photo of {prompt} seen through an open doorway, shot from the dark hallway, partial door frame in foreground occluding the edges, candid intimate moment, subject may be unaware, natural room light spill, raw voyeuristic phone capture",
+        "negative_prompt": "selfie, looking at camera proudly, studio set, wide cinematic establishing shot, airbrushed, glamorous posing, perfect symmetry, dslr bokeh, 8k"
     },
     {
-        "name": "sunside-night-iso",
-        "prompt": "{prompt}, (nighttime high-iso phone photo:1.3), warm bedside lamp glow, heavy grain and noise, underexposed shadows, soft screen glow, unedited night snap",
+        "name": "sunside-bedside-night",
+        "prompt": "nighttime phone photo of {prompt} in bed, bedside lamp or phone screen glow, warm low light, cozy bedroom, grainy iso noise, intimate candid capture, realistic skin and fabric, unedited",
         "negative_prompt": "daylight, studio softbox, cinematic color grade, neon cyberpunk, airbrushed, glamour, plastic skin, overexposed flash beauty shot, 8k"
     },
     {
-        "name": "sunside-steam-humidity",
-        "prompt": "{prompt}, (steamy humid bathroom atmosphere:1.25), condensation on glass, foggy air, wet skin sheen, soft diffused moisture light, candid wet-room phone snapshot",
-        "negative_prompt": "dry studio, fashion commercial, cinematic, airbrushed, plastic skin, perfect makeup photoshoot, 8k, hdr"
+        "name": "sunside-bathroom-steam",
+        "prompt": "steamy bathroom phone photo of {prompt}, soft condensation on mirror or glass, humid air, wet skin sheen, foggy atmosphere, candid wet-room snapshot, natural tiles, realistic",
+        "negative_prompt": "dry studio, fashion soap commercial, cinematic, airbrushed, plastic skin, perfect makeup photoshoot, 8k, hdr"
     },
     {
-        "name": "sunside-close-detail",
-        "prompt": "{prompt}, (extreme close phone detail:1.25), macro-like skin pores, slight phone lens distortion, intimate framing, raw close snapshot, natural light, unedited",
-        "negative_prompt": "studio beauty dish, airbrushed porcelain skin, glamorous retouching, cinematic, dslr macro commercial, 8k, wide full body"
+        "name": "sunside-zoom-crop",
+        "prompt": "tight phone zoom crop of {prompt}, camera held close, intimate framing, skin detail and pores visible, slight phone compression, raw close-up snapshot, natural light, unedited",
+        "negative_prompt": "full body wide shot, cctv wide room, studio beauty dish, airbrushed porcelain skin, glamorous retouching, cinematic, dslr macro commercial, 8k"
     },
     {
-        "name": "sunside-wet-room",
-        "prompt": "{prompt}, (wet shower bathroom look:1.25), water droplets, heavy steam, harsh bathroom fluorescent light, wet tiles, raw unedited phone photo",
-        "negative_prompt": "studio bathtub commercial, fashion soap ad, cinematic, airbrushed, glamorous posing, plastic skin, perfect composition, dslr, 8k, hdr"
+        "name": "sunside-shower-peek",
+        "prompt": "phone peek of {prompt} through a slightly open bathroom door, shower steam and water droplets, wet skin, partially obscured by door frame or frosted glass, candid voyeuristic snapshot, harsh bathroom light, raw unedited phone photo",
+        "negative_prompt": "selfie posing for camera, studio bathtub commercial, fashion soap ad, cinematic, airbrushed, glamorous posing, plastic skin, perfect composition, dslr, 8k"
     },
     {
-        "name": "sunside-post-shower",
-        "prompt": "{prompt}, (just out of shower:1.2), wet dripping hair, damp skin, residual steam, towel nearby, slight motion, raw phone capture, realistic wet skin",
-        "negative_prompt": "posed towel fashion shoot, studio softbox, cinematic, airbrushed, glamour, plastic skin, perfect makeup photoshoot, stock photo, dslr, 8k"
+        "name": "sunside-towel-drop",
+        "prompt": "candid phone photo of {prompt} just out of the shower, towel slipping or falling mid-motion, wet hair dripping, bathroom tiles, steam still in the air, caught-in-the-act framing, slight motion blur, raw phone capture, realistic wet skin",
+        "negative_prompt": "posed towel fashion shoot, studio softbox, cinematic slow motion, airbrushed, glamour, plastic skin, perfect makeup photoshoot, stock photo, dslr, 8k"
     },
     {
-        "name": "sunside-dim-room",
-        "prompt": "{prompt}, (dim messy bedroom phone photo:1.25), soft lamp or phone screen glow, underexposed amateur angle, cluttered background, raw unedited night indoor snap",
-        "negative_prompt": "studio nude, fashion editorial, cinematic, airbrushed porcelain skin, glamorous retouching, beauty dish, perfect posing, dslr, 8k, hdr, bright daylight"
+        "name": "sunside-send-nudes-crop",
+        "prompt": "front-facing phone camera nude selfie crop of {prompt}, send-nudes framing, face and bare torso both clearly visible in frame, looking at camera, bedroom or bathroom background messy and dim, phone held at arms length, slightly awkward angle, soft room light or screen glow, raw unedited, realistic skin texture",
+        "negative_prompt": "full body tripod, cctv overhead, studio nude, fashion editorial, cinematic, airbrushed porcelain skin, glamorous retouching, beauty dish, perfect posing, dslr, 8k, hdr"
     }
 ]

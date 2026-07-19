@@ -768,10 +768,12 @@ with shared.gradio_root:
             with gr.Tab(label='Styles', elem_classes=['style_selections_tab']):
                 if SUNSIDE_PRODUCT:
                     gr.Markdown(
-                        '**Стилі діють** — обирай **1 Sunside** (+ опційно Semi Realistic).\n\n'
-                        '- Hover на стиль → короткий опис look\n'
-                        '- Semi Realistic сам по собі майже не міняє сцену (лише negative)\n'
-                        '- Сцена / поза / кадр — у **Prompt**; стиль = зерно, світло, атмосфера'
+                        '**1 Sunside-стиль = тип зйомки** (додається до твого промпту).\n\n'
+                        '- Selfie / Mirror / Send Nudes → телефон в обличчя\n'
+                        '- Hidden Camera / Doorway / Shower Peek → підгляд / CCTV\n'
+                        '- Tripod → full body зі штатива\n'
+                        '- Hover на стиль → короткий опис\n'
+                        '- Сцена й поза — у **Prompt**; стиль — як і звідки знято'
                     )
                 style_sorter.try_load_sorted_styles(
                     style_names=legal_style_names,
