@@ -768,8 +768,10 @@ with shared.gradio_root:
             with gr.Tab(label='Styles', elem_classes=['style_selections_tab']):
                 if SUNSIDE_PRODUCT:
                     gr.Markdown(
-                        '**Стилі = лише look зображення** (зерно, світло, телефон). '
-                        'Сцена, поза, кадр, одяг — пиши в **Prompt**. Рекомендовано: Semi Realistic + опційно 1 Sunside.'
+                        '**Стилі діють** — обирай **1 Sunside** (+ опційно Semi Realistic).\n\n'
+                        '- Hover на стиль → короткий опис look\n'
+                        '- Semi Realistic сам по собі майже не міняє сцену (лише negative)\n'
+                        '- Сцена / поза / кадр — у **Prompt**; стиль = зерно, світло, атмосфера'
                     )
                 style_sorter.try_load_sorted_styles(
                     style_names=legal_style_names,
