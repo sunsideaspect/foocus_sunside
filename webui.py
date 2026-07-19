@@ -220,7 +220,7 @@ with shared.gradio_root:
                         value="Fix Face",
                         elem_classes='type_row',
                         elem_id='fix_face_button',
-                        visible=SUNSIDE_PRODUCT,
+                        visible=False,
                         variant='secondary',
                     )
                     reset_button = gr.Button(label="Reconnect", value="Reconnect", elem_classes='type_row', elem_id='reset_button', visible=False)
