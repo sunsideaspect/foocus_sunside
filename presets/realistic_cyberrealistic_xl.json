@@ -6,17 +6,17 @@
         [
             true,
             "emotional.safetensors",
-            0.7
+            0.35
         ],
         [
             true,
             "face_xl_v0_1.safetensors",
-            0.55
+            0.9
         ],
         [
             true,
             "10mb_bodyproportion.safetensors",
-            0.55
+            0.35
         ],
         [
             false,
@@ -29,7 +29,7 @@
             1.0
         ]
     ],
-    "default_cfg_scale": 4.5,
+    "default_cfg_scale": 4.0,
     "default_sample_sharpness": 1.0,
     "default_sampler": "dpmpp_2m_sde_gpu",
     "default_scheduler": "karras",
