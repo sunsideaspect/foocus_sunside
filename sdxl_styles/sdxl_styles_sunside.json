@@ -11,8 +11,8 @@
     },
     {
         "name": "sunside-hidden-camera",
-        "prompt": "cctv security camera footage of {prompt}, camera mounted high in the ceiling corner looking down, steep high-angle surveillance shot of the whole room, wide-angle spy cam with slight fisheye, fixed hidden camera, wall or doorframe occluding one edge, subjects unaware and not facing the camera, grainy low-res voyeur style, flat indoor overhead light, raw unedited still",
-        "negative_prompt": "selfie, mirror selfie, iphone selfie, front-facing camera, eye-level shot, looking at camera, eye contact, posing, portrait crop, close-up face, beauty shot, tripod phone selfie, studio lighting, cinematic, glamour, dslr, 8k"
+        "prompt": "secret hidden cctv still of {prompt}, (camera fixed high in ceiling corner:1.3), steep top-down surveillance angle of the room interior, subject small in wide frame inside the room, (unaware:1.3), (not looking at camera:1.3), back or side to camera, grainy low-res spy cam, slight fisheye, flat overhead light, voyeur footage, raw unedited",
+        "negative_prompt": "selfie, mirror selfie, iphone selfie, front-facing camera, eye-level portrait, looking at camera, eye contact, posing, smiling at camera, standing in hallway facing camera, beauty shot, tripod phone selfie, studio lighting, cinematic, glamour, dslr, 8k"
     },
     {
         "name": "sunside-tripod-phone",
@@ -26,8 +26,8 @@
     },
     {
         "name": "sunside-through-doorway",
-        "prompt": "phone photo of {prompt} seen through an open doorway, shot from the dark hallway, partial door frame in foreground occluding the edges, candid intimate moment, subject may be unaware, natural room light spill, raw voyeuristic phone capture",
-        "negative_prompt": "selfie, looking at camera proudly, studio set, wide cinematic establishing shot, airbrushed, glamorous posing, perfect symmetry, dslr bokeh, 8k"
+        "prompt": "(voyeur peep from dark hallway:1.35), camera stays in the dark corridor outside the room, (looking into the lit room through a half-open door:1.3), thick doorframe and wall in foreground left and right as occlusion, {prompt} is inside the bedroom or living room beyond the doorway, (subject unaware:1.3), (not facing camera:1.3), side view or back view, busy with something in the room, warm light only inside the room spilling through the door gap, hallway underexposed, candid spy phone photo, imperfect framing",
+        "negative_prompt": "standing in the hallway, woman in corridor facing camera, looking at camera, eye contact, posing in doorway facing viewer, selfie, mirror selfie, front-facing camera, portrait, smiling at camera, centered beauty shot, full clear view without doorframe, studio, cinematic, glamour, dslr, 8k"
     },
     {
         "name": "sunside-bedside-night",
@@ -46,8 +46,8 @@
     },
     {
         "name": "sunside-shower-peek",
-        "prompt": "phone peek of {prompt} through a slightly open bathroom door, shower steam and water droplets, wet skin, partially obscured by door frame or frosted glass, candid voyeuristic snapshot, harsh bathroom light, raw unedited phone photo",
-        "negative_prompt": "selfie posing for camera, studio bathtub commercial, fashion soap ad, cinematic, airbrushed, glamorous posing, plastic skin, perfect composition, dslr, 8k"
+        "prompt": "(peeping through a barely open bathroom door from outside:1.35), camera in the dark hallway, door crack and door edge in foreground, {prompt} inside the steamy shower or bathroom beyond the gap, partially obscured by door and frosted glass, (unaware:1.3), (not looking at camera:1.3), water droplets steam, harsh bathroom light only inside, raw voyeur phone still",
+        "negative_prompt": "standing in hallway posing, looking at camera, eye contact, selfie, open door full clear portrait, fashion soap ad, studio bathtub, cinematic, airbrushed, glamorous posing, plastic skin, dslr, 8k"
     },
     {
         "name": "sunside-towel-drop",
