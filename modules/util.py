@@ -165,12 +165,16 @@ def join_prompts(*args, **kwargs):
     return ', '.join(prompts)
 
 
-def generate_temp_filename(folder='./outputs/', extension='png'):
+def generate_temp_filename(folder='./outputs/', extension='png', prefix=None):
     current_time = datetime.datetime.now()
     date_string = current_time.strftime("%Y-%m-%d")
     time_string = current_time.strftime("%Y-%m-%d_%H-%M-%S")
     random_number = random.randint(1000, 9999)
-    filename = f"{time_string}_{random_number}.{extension}"
+    if prefix:
+        safe = re.sub(r'[^a-zA-Z0-9_-]+', '_', str(prefix)).strip('_')[:64]
+        filename = f"{safe}_{time_string}_{random_number}.{extension}" if safe else f"{time_string}_{random_number}.{extension}"
+    else:
+        filename = f"{time_string}_{random_number}.{extension}"
     result = os.path.join(folder, date_string, filename)
     return date_string, os.path.abspath(result), filename
 

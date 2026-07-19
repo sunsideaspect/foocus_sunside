@@ -43,6 +43,17 @@ from modules.private_logger import ensure_daily_log_html, get_current_html_path
 from modules.ui_gradio_extensions import reload_javascript
 from modules.auth import auth_enabled, check_auth
 from modules.util import is_json
+from modules.product_mode import (
+    is_product_mode, SIZE_PRESET_LABELS, SIZE_PRESET_MAP, SCENARIOS, SCENARIO_LABELS, clamp_dim
+)
+from modules.characters import character_choices, get_by_name, load_characters
+
+SUNSIDE_PRODUCT = is_product_mode()
+if SUNSIDE_PRODUCT:
+    print('[Sunside] Product mode enabled')
+    # Prefer uncensor in product builds
+    if not getattr(args_manager.args, 'disable_censor', False):
+        args_manager.args.disable_censor = True
 
 def get_task(*args):
     args = list(args)
@@ -167,7 +178,7 @@ reload_javascript()
 
 ensure_daily_log_html()
 
-title = f'Fooocus {fooocus_version.version}'
+title = f'Sunside {fooocus_version.version}' if SUNSIDE_PRODUCT else f'Fooocus {fooocus_version.version}'
 
 if isinstance(args_manager.args.preset, str):
     title += ' ' + args_manager.args.preset
@@ -223,8 +234,78 @@ with shared.gradio_root:
                     skip_button.click(skip_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False)
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(label='Input Image', value=modules.config.default_image_prompt_checkbox, container=False, elem_classes='min_check')
-                enhance_checkbox = gr.Checkbox(label='Enhance', value=modules.config.default_enhance_checkbox, container=False, elem_classes='min_check')
+                enhance_checkbox = gr.Checkbox(
+                    label='Enhance',
+                    value=False if SUNSIDE_PRODUCT else modules.config.default_enhance_checkbox,
+                    container=False,
+                    elem_classes='min_check',
+                    visible=not SUNSIDE_PRODUCT,
+                )
+                character_checkbox = gr.Checkbox(
+                    label='Character',
+                    value=False,
+                    container=False,
+                    elem_classes='min_check',
+                    visible=SUNSIDE_PRODUCT,
+                )
                 advanced_checkbox = gr.Checkbox(label='Advanced', value=modules.config.default_advanced_checkbox, container=False, elem_classes='min_check')
+
+            with gr.Row(visible=False) as character_panel:
+                with gr.Column(scale=3):
+                    _char_names = character_choices() if SUNSIDE_PRODUCT else []
+                    character_dropdown = gr.Dropdown(
+                        label='Character',
+                        choices=_char_names or ['Aria'],
+                        value=(_char_names[0] if _char_names else 'Aria'),
+                        interactive=True,
+                    )
+                    face_pass_checkbox = gr.Checkbox(
+                        label='Face pass (Inswapper post)',
+                        value=False,
+                        info='Needs insightface + models/insightface/inswapper_128.onnx',
+                        visible=SUNSIDE_PRODUCT,
+                    )
+                    character_info = gr.Markdown(
+                        value='Увімкни Character, обери персону — якір підставиться сам. Пиши лише сцену.'
+                    )
+                with gr.Column(scale=1):
+                    _preview0 = None
+                    if SUNSIDE_PRODUCT and _char_names:
+                        _c0 = get_by_name(_char_names[0])
+                        _preview0 = _c0.preview_path if _c0 else None
+                    character_preview = gr.Image(
+                        label='Preview',
+                        value=_preview0,
+                        height=160,
+                        interactive=False,
+                        show_label=False,
+                    )
+
+            if SUNSIDE_PRODUCT:
+                with gr.Row():
+                    scenario_radio = gr.Radio(
+                        label='Scenario',
+                        choices=SCENARIO_LABELS,
+                        value=None,
+                        info='Ставить Sunside-стиль + розмір. Лише 1 Sunside-стиль.',
+                    )
+                with gr.Row():
+                    size_preset = gr.Radio(
+                        label='Size',
+                        choices=SIZE_PRESET_LABELS + ['Custom'],
+                        value=SIZE_PRESET_LABELS[0],
+                    )
+                    custom_width = gr.Number(label='Width', value=768, precision=0, visible=False, minimum=512, maximum=1536)
+                    custom_height = gr.Number(label='Height', value=1344, precision=0, visible=False, minimum=512, maximum=1536)
+            else:
+                scenario_radio = gr.Radio(visible=False, choices=SCENARIO_LABELS, value=None)
+                size_preset = gr.Radio(visible=False, choices=SIZE_PRESET_LABELS + ['Custom'], value=SIZE_PRESET_LABELS[0])
+                custom_width = gr.Number(visible=False, value=-1)
+                custom_height = gr.Number(visible=False, value=-1)
+                face_pass_checkbox = gr.Checkbox(visible=False, value=False)
+                # keep character widgets for wiring even if hidden
+                if not SUNSIDE_PRODUCT:
+                    pass
             with gr.Row(visible=modules.config.default_image_prompt_checkbox) as image_input_panel:
                 with gr.Tabs(selected=modules.config.default_selected_image_input_tab_id):
                     with gr.Tab(label='Upscale or Variation', id='uov_tab') as uov_tab:
@@ -357,7 +438,7 @@ with shared.gradio_root:
                                                                    example_inpaint_mask_dino_prompt_text],
                                                           queue=False, show_progress=False)
 
-                    with gr.Tab(label='Describe', id='describe_tab') as describe_tab:
+                    with gr.Tab(label='Describe', id='describe_tab', visible=not SUNSIDE_PRODUCT) as describe_tab:
                         with gr.Row():
                             with gr.Column():
                                 describe_input_image = grh.Image(label='Image', source='upload', type='numpy', show_label=False)
@@ -593,7 +674,7 @@ with shared.gradio_root:
                                                  value=modules.config.default_performance,
                                                  elem_classes=['performance_selection'])
 
-                with gr.Accordion(label='Aspect Ratios', open=False, elem_id='aspect_ratios_accordion') as aspect_ratios_accordion:
+                with gr.Accordion(label='Aspect Ratios', open=SUNSIDE_PRODUCT, elem_id='aspect_ratios_accordion') as aspect_ratios_accordion:
                     aspect_ratios_selection = gr.Radio(label='Aspect Ratios', show_label=False,
                                                        choices=modules.config.available_aspect_ratios_labels,
                                                        value=modules.config.default_aspect_ratio,
@@ -603,7 +684,13 @@ with shared.gradio_root:
                     aspect_ratios_selection.change(lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}')
                     shared.gradio_root.load(lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}')
 
-                image_number = gr.Slider(label='Image Number', minimum=1, maximum=modules.config.default_max_image_number, step=1, value=modules.config.default_image_number)
+                image_number = gr.Slider(
+                    label='Image Number',
+                    minimum=1,
+                    maximum=min(4, modules.config.default_max_image_number) if SUNSIDE_PRODUCT else modules.config.default_max_image_number,
+                    step=1,
+                    value=modules.config.default_image_number,
+                )
 
                 output_format = gr.Radio(label='Output Format',
                                          choices=flags.OutputFormat.list(),
@@ -680,7 +767,7 @@ with shared.gradio_root:
                                                        show_progress=False).then(
                     lambda: None, _js='()=>{refresh_style_localization();}')
 
-            with gr.Tab(label='Models'):
+            with gr.Tab(label='Models', visible=not SUNSIDE_PRODUCT):
                 with gr.Group():
                     with gr.Row():
                         base_model = gr.Dropdown(label='Base Model (SDXL only)', choices=modules.config.model_filenames, value=modules.config.default_base_model_name, show_label=True)
@@ -796,9 +883,14 @@ with shared.gradio_root:
                                       value=modules.config.default_sample_sharpness,
                                       info='Higher value means image and texture are sharper.')
                 gr.HTML('<a href="https://github.com/lllyasviel/Fooocus/discussions/117" target="_blank">\U0001F4D4 Documentation</a>')
-                dev_mode = gr.Checkbox(label='Developer Debug Mode', value=modules.config.default_developer_debug_mode_checkbox, container=False)
+                dev_mode = gr.Checkbox(
+                    label='Developer Debug Mode',
+                    value=False if SUNSIDE_PRODUCT else modules.config.default_developer_debug_mode_checkbox,
+                    container=False,
+                    visible=not SUNSIDE_PRODUCT,
+                )
 
-                with gr.Column(visible=modules.config.default_developer_debug_mode_checkbox) as dev_tools:
+                with gr.Column(visible=False if SUNSIDE_PRODUCT else modules.config.default_developer_debug_mode_checkbox) as dev_tools:
                     with gr.Tab(label='Debug Tools'):
                         adm_scaler_positive = gr.Slider(label='Positive ADM Guidance Scaler', minimum=0.1, maximum=3.0,
                                                         step=0.001, value=1.5, info='The scaler multiplied to positive ADM (use 1.0 to disable). ')
@@ -866,13 +958,18 @@ with shared.gradio_root:
                                                              value=False)
                         read_wildcards_in_order = gr.Checkbox(label="Read wildcards in order", value=False)
 
-                        black_out_nsfw = gr.Checkbox(label='Black Out NSFW', value=modules.config.default_black_out_nsfw and (not args_manager.args.disable_censor),
-                                                     interactive=(not modules.config.default_black_out_nsfw) and (not args_manager.args.disable_censor),
-                                                     info='Use black image if NSFW is detected.')
+                        black_out_nsfw = gr.Checkbox(
+                            label='Black Out NSFW',
+                            value=False,
+                            interactive=False if SUNSIDE_PRODUCT else ((not modules.config.default_black_out_nsfw) and (not args_manager.args.disable_censor)),
+                            visible=not SUNSIDE_PRODUCT,
+                            info='Use black image if NSFW is detected.',
+                        )
 
-                        black_out_nsfw.change(lambda x: gr.update(value=x, interactive=not x),
-                                              inputs=black_out_nsfw, outputs=disable_preview, queue=False,
-                                              show_progress=False)
+                        if not SUNSIDE_PRODUCT:
+                            black_out_nsfw.change(lambda x: gr.update(value=x, interactive=not x),
+                                                  inputs=black_out_nsfw, outputs=disable_preview, queue=False,
+                                                  show_progress=False)
 
                         if not args_manager.args.disable_image_log:
                             save_final_enhanced_image_only = gr.Checkbox(label='Save only final enhanced image',
@@ -1078,6 +1175,88 @@ with shared.gradio_root:
                                            inpaint_mask_sam_max_detections, dino_erode_or_dilate, debugging_dino],
                                    outputs=inpaint_mask_image, show_progress=True, queue=True)
 
+        # --- Sunside product wiring ---
+        def _toggle_character(enabled):
+            return gr.update(visible=bool(enabled))
+
+        def _character_selected(name):
+            c = get_by_name(name)
+            preview = c.preview_path if c else None
+            tip = 'Якір підставиться автоматично. Пиши лише сцену.'
+            if c and c.face_ref_path:
+                tip += ' Face ref готовий для Face pass.'
+            elif c:
+                tip += ' Додай face_ref.jpg у characters/ для Face pass.'
+            return preview, tip
+
+        def _apply_size_preset(preset, width_val, height_val):
+            if preset == 'Custom':
+                w = clamp_dim(width_val)
+                h = clamp_dim(height_val)
+                if w < 0:
+                    w = 768
+                if h < 0:
+                    h = 1344
+                return (
+                    gr.update(visible=True, value=w),
+                    gr.update(visible=True, value=h),
+                    w,
+                    h,
+                    gr.update(),
+                )
+            w, h = SIZE_PRESET_MAP.get(preset, (768, 1344))
+            aspect = modules.config.default_aspect_ratio
+            for label in modules.config.available_aspect_ratios_labels:
+                if label.startswith(f'{w}×{h}'):
+                    aspect = label
+                    break
+            return (
+                gr.update(visible=False),
+                gr.update(visible=False),
+                -1,
+                -1,
+                gr.update(value=aspect),
+            )
+
+        def _apply_custom_dims(width_val, height_val):
+            return clamp_dim(width_val), clamp_dim(height_val)
+
+        def _apply_scenario(scenario):
+            if not scenario or scenario not in SCENARIOS:
+                return gr.update(), gr.update(), gr.update()
+            styles, size_label, count = SCENARIOS[scenario]
+            return styles, size_label, count
+
+        character_checkbox.change(_toggle_character, inputs=character_checkbox, outputs=character_panel,
+                                  queue=False, show_progress=False)
+        character_dropdown.change(_character_selected, inputs=character_dropdown,
+                                  outputs=[character_preview, character_info],
+                                  queue=False, show_progress=False)
+
+        size_preset.change(
+            _apply_size_preset,
+            inputs=[size_preset, custom_width, custom_height],
+            outputs=[custom_width, custom_height, overwrite_width, overwrite_height, aspect_ratios_selection],
+            queue=False, show_progress=False,
+        )
+
+        custom_width.change(_apply_custom_dims, inputs=[custom_width, custom_height],
+                            outputs=[overwrite_width, overwrite_height], queue=False, show_progress=False)
+        custom_height.change(_apply_custom_dims, inputs=[custom_width, custom_height],
+                             outputs=[overwrite_width, overwrite_height], queue=False, show_progress=False)
+
+        scenario_radio.change(
+            _apply_scenario,
+            inputs=scenario_radio,
+            outputs=[style_selections, size_preset, image_number],
+            queue=False, show_progress=False,
+        ).then(
+            _apply_size_preset,
+            inputs=[size_preset, custom_width, custom_height],
+            outputs=[custom_width, custom_height, overwrite_width, overwrite_height, aspect_ratios_selection],
+            queue=False, show_progress=False,
+        )
+
         ctrls = [currentTask, generate_image_grid]
         ctrls += [
             prompt, negative_prompt, style_selections,
@@ -1110,6 +1289,8 @@ with shared.gradio_root:
                   enhance_input_image, enhance_checkbox, enhance_uov_method, enhance_uov_processing_order,
                   enhance_uov_prompt_type]
         ctrls += enhance_ctrls
+        # Sunside extras last (popped last in AsyncTask)
+        ctrls += [character_checkbox, character_dropdown, face_pass_checkbox]
 
         def parse_meta(raw_prompt_txt, is_generating):
             loaded_json = None

@@ -28,6 +28,9 @@ args_parser.parser.add_argument("--disable-metadata", action='store_true',
 args_parser.parser.add_argument("--disable-censor", action='store_true',
                                 help="Disables the NSFW safety checker (no blur/blackout).")
 
+args_parser.parser.add_argument("--disable-sunside-product", action='store_true',
+                                help="Disable Sunside product UI (show full Fooocus surface).")
+
 args_parser.parser.add_argument("--disable-pro-mode", action='store_true',
                                 help="Disables Pro Mode (ranking, structure control, auto detail passes).")
 
@@ -58,6 +61,12 @@ args_parser.parser.set_defaults(
 )
 
 args_parser.args = args_parser.parser.parse_args()
+
+# Sunside product mode ON by default for this fork
+import os as _os
+args_parser.args.sunside_product = not bool(args_parser.args.disable_sunside_product)
+if _os.environ.get('SUNSIDE_PRODUCT', '').strip() in ('0', 'false', 'False'):
+    args_parser.args.sunside_product = False
 
 # (Disable by default because of issues like https://github.com/lllyasviel/Fooocus/issues/724)
 args_parser.args.always_offload_from_vram = not args_parser.args.disable_offload_from_vram

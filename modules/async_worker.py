@@ -198,6 +198,41 @@ class AsyncTask:
         self.images_to_enhance_count = 0
         self.enhance_stats = {}
 
+        # Sunside extras appended at end of ctrls -> remain at front after reverse; pop from end last
+        self.character_enabled = False
+        self.character_name = None
+        self.face_pass_enabled = False
+        self.export_prefix = None
+        self._character_face_ref = None
+        if len(args) >= 3:
+            self.character_enabled = bool(args.pop())
+            self.character_name = args.pop()
+            self.face_pass_enabled = bool(args.pop())
+
+        try:
+            from modules.product_mode import is_product_mode, build_export_prefix
+            if is_product_mode():
+                self.black_out_nsfw = False
+        except Exception:
+            def build_export_prefix(*_a, **_k):
+                return 'sunside'
+
+        self.export_prefix = build_export_prefix(
+            self.character_name if self.character_enabled else None,
+            self.style_selections,
+        )
+        if self.character_enabled and self.character_name:
+            try:
+                from modules.characters import get_by_name, apply_character_to_prompt, merge_character_negative
+                character = get_by_name(self.character_name)
+                if character is not None:
+                    self.prompt = apply_character_to_prompt(self.prompt, character)
+                    self.negative_prompt = merge_character_negative(self.negative_prompt, character)
+                    self.export_prefix = build_export_prefix(character.name, self.style_selections)
+                    self._character_face_ref = character.face_ref_path
+            except Exception as e:
+                print(f'[Sunside Character] {e}')
+
 async_tasks = []
 
 
@@ -532,7 +567,19 @@ def worker():
             d.append(('Metadata Scheme', 'metadata_scheme',
                       async_task.metadata_scheme.value if async_task.save_metadata_to_images else async_task.save_metadata_to_images))
             d.append(('Version', 'version', 'Fooocus v' + fooocus_version.version))
-            img_paths.append(log(x, d, metadata_parser, async_task.output_format, task, persist_image))
+
+            img_to_save = x
+            if getattr(async_task, 'face_pass_enabled', False) and getattr(async_task, '_character_face_ref', None):
+                try:
+                    from modules.face_pass import apply_face_pass
+                    img_to_save = apply_face_pass(x, async_task._character_face_ref)
+                except Exception as e:
+                    print(f'[Sunside FacePass] {e}')
+
+            img_paths.append(log(
+                img_to_save, d, metadata_parser, async_task.output_format, task, persist_image,
+                filename_prefix=getattr(async_task, 'export_prefix', None)
+            ))
 
         return img_paths
 

@@ -22,18 +22,31 @@ def normalize_key(k):
     return k
 
 
+def _product_mode_active():
+    try:
+        import args_manager
+        from modules.product_mode import is_product_mode
+        return is_product_mode()
+    except Exception:
+        return False
+
+
 styles = {}
 styles_files = get_files_from_folder(styles_path, ['.json'])
 
-for x in ['sdxl_styles_fooocus.json',
-          'sdxl_styles_sai.json',
-          'sdxl_styles_mre.json',
-          'sdxl_styles_twri.json',
-          'sdxl_styles_diva.json',
-          'sdxl_styles_marc_k3nt3l.json']:
-    if x in styles_files:
-        styles_files.remove(x)
-        styles_files.append(x)
+if _product_mode_active():
+    from modules.product_mode import PRODUCT_STYLE_FILES
+    styles_files = [f for f in styles_files if f in PRODUCT_STYLE_FILES]
+else:
+    for x in ['sdxl_styles_fooocus.json',
+              'sdxl_styles_sai.json',
+              'sdxl_styles_mre.json',
+              'sdxl_styles_twri.json',
+              'sdxl_styles_diva.json',
+              'sdxl_styles_marc_k3nt3l.json']:
+        if x in styles_files:
+            styles_files.remove(x)
+            styles_files.append(x)
 
 for styles_file in styles_files:
     try:
@@ -46,6 +59,11 @@ for styles_file in styles_files:
     except Exception as e:
         print(str(e))
         print(f'Failed to load style file {styles_file}')
+
+if _product_mode_active():
+    from modules.product_mode import filter_product_styles
+    styles = filter_product_styles(styles)
+    print(f'[Sunside] Product styles loaded: {len(styles)}')
 
 style_keys = list(styles.keys())
 fooocus_expansion = 'Fooocus V2'
@@ -94,4 +112,3 @@ def apply_arrays(text, index):
         i = i+1
     
     return text
-

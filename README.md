@@ -1,6 +1,6 @@
-# Fooocus Sunside
+# Sunside Visual Factory
 
-Форк [Fooocus](https://github.com/lllyasviel/Fooocus) для **Google Colab**: фотореалізм, face + body, без цензури.
+Форк [Fooocus](https://github.com/lllyasviel/Fooocus) → **продакшн-фабрика** реалістичних NSFW / amateur кадрів (Colab).
 
 **Репозиторій:** https://github.com/sunsideaspect/foocus_sunside  
 
@@ -8,53 +8,44 @@
 
 ## Швидкий старт (Colab)
 
-1. **Runtime → GPU (T4 / L4 / A100)** → **Restart session**
-2. **Run all** — перший запуск **10–20 хв** (завантаження моделей)
-3. У комірці **«КРОК 2»** — за замовчуванням **Juggernaut** (full body + face)
-4. Дочекайся в launch-комірці **`App started successful`**
-5. Відкрий **`https://….gradio.live`** з виводу комірки
+1. **Runtime → GPU** → **Restart session**
+2. **Run all** (10–20 хв перший раз)
+3. Дочекайся **`App started successful`**
+4. Відкрий **`https://….gradio.live`**
 
-**Моделі (вибір у Colab, комірка «КРОК 2»):**
+### Simple flow
+**Character** (опційно) → **Scenario / Style** → **Size** → промпт сцени → **Generate**
 
-| Preset | Checkpoint | Коли брати |
-|--------|------------|------------|
-| `realistic_cyberrealistic_xl` | [CyberRealistic XL V10](https://huggingface.co/cyberdelia/CyberRealisticXL) (~6.5 GB) | **Default:** чистий фотореал |
-| `realistic_epicrealism_xl` | epiCRealism XL Pure (~7 GB) | Люди / тіло |
-| `realistic_juggernaut_ragnarok` | Juggernaut XL Ragnarok (~7 GB) | Full body + universal |
-| `realistic_realvis_xl` | [RealVisXL V5](https://huggingface.co/SG161222/RealVisXL_V5.0) (~6.5 GB) | Портрет / лице |
-| `realistic_realcore_xl` | [RealCore XL](https://huggingface.co/rityak/RealCoreXL) (~13 GB) | Soft photo (експеримент; OOM на T4) |
+## Product mode (за замовчуванням)
 
-Спільні LoRA (мінімум, з коробки): **emotional** (0.9), **face-helper** (0.4), **bodyproportion** (0.65).  
-Style: **Sunside Expressive Selfie** + Semi Realistic. Без SOAP / nudity / зайвих слайдерів.
+- Одна модель: **CyberRealistic XL** + emotional / face / body LoRA
+- Стилі: лише **Sunside** (+ Semi Realistic)
+- Чекбокс **Character**: Aria / Mila / Vera (якір у промпт)
+- **Size**: Story / Square / Landscape / Landing / Custom W×H
+- **Scenario** chips для швидких сцен + batch×4
+- Black Out NSFW вимкнено
+- Імена файлів: `aria_hidden_camera_….png`
 
-**Прапорці:** `--disable-censor`, `--disable-pro-mode`, `--disable-preset-selection`
+Повний Fooocus UI: `--disable-sunside-product` або `SUNSIDE_PRODUCT=0`.
 
-## Що всередині
+Деталі: [docs/SUNSIDE_PRODUCT.md](docs/SUNSIDE_PRODUCT.md)
 
-| Файл | Призначення |
-|------|-------------|
-| `fooocus_colab.ipynb` | Єдиний Colab-ноутбук |
-| `presets/realistic_juggernaut_ragnarok.json` | Juggernaut + LoRA |
-| `presets/realistic_cyberrealistic_xl.json` | CyberRealistic XL V10 |
-| `presets/realistic_epicrealism_xl.json` | epiCRealism XL Pure |
-| `presets/realistic_realvis_xl.json` | RealVis + LoRA |
-| `presets/realistic_realcore_xl.json` | RealCore XL + LoRA |
-| `sdxl_styles/sdxl_styles_sunside.json` | Phone / amateur стилі |
-| `docs/PRESENTATION_PM_UA.md` | Презентація для PM |
-| `docs/fooocus-pro-presentation.html` | HTML-слайди |
+## Characters
 
-## Локальний запуск (NVIDIA)
-
-```bash
-python launch.py --preset realistic_cyberrealistic_xl --disable-censor --disable-pro-mode --disable-preset-selection
+```
+characters/<id>/character.json
+characters/<id>/anchor.txt
+characters/<id>/negative.txt
+characters/<id>/preview.jpg
+characters/<id>/face_ref.jpg   # optional → Face pass
 ```
 
-Потрібна відеокарта NVIDIA з CUDA (мінімум ~4 GB VRAM).
+## Face consistency
 
-## Презентація
+Stock **FaceSwap** (Image Prompt) на Colab часто крашиться — не використовувати.
 
-[Презентація Fooocus Pro](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sunsideaspect/foocus_sunside/main/docs/fooocus-pro-presentation.html)
+Опційний **Face pass** (Inswapper) після генерації, якщо є `face_ref.jpg` + insightface.
 
-## Ліцензія
+## Прапорці запуску
 
-Базовий Fooocus — [GPL-3.0](https://github.com/lllyasviel/Fooocus). Форк sunsideaspect — Colab + preset + без blur.
+`--disable-censor` · `--disable-pro-mode` · `--disable-preset-selection` · product ON by default

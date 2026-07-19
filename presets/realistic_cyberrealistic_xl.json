@@ -41,9 +41,19 @@
         "Fooocus Semi Realistic"
     ],
     "default_aspect_ratio": "768*1344",
+    "available_aspect_ratios": [
+        "768*1344",
+        "1024*1024",
+        "1344*768",
+        "1216*832"
+    ],
     "default_overwrite_step": 40,
     "default_image_number": 1,
+    "default_max_image_number": 4,
     "default_black_out_nsfw": false,
+    "default_developer_debug_mode_checkbox": false,
+    "default_enhance_checkbox": false,
+    "default_advanced_checkbox": false,
     "default_pro_mode_enabled": false,
     "default_pro_mode_detail_pass_enabled": false,
     "default_pro_mode_structure_control_enabled": false,
