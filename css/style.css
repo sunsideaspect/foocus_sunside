@@ -91,6 +91,28 @@ div:has(> #positive_prompt) {
   height: 34px !important;
 }
 
+/* Sunside: keep Vary controls in one horizontal strip, Character row aligned */
+.sunside_vary_row {
+  align-items: center !important;
+  margin-top: 4px !important;
+  margin-bottom: 2px !important;
+}
+
+.sunside_vary_mode {
+  width: 100% !important;
+}
+
+.sunside_vary_mode .wrap {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.sunside_character_row {
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
 .refresh_button {
   border: none !important;
   background: none !important;

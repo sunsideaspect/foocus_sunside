@@ -213,22 +213,15 @@ with shared.gradio_root:
                     if isinstance(default_prompt, str) and default_prompt != '':
                         shared.gradio_root.load(lambda: default_prompt, outputs=prompt)
 
-                with gr.Column(scale=3, min_width=0):
+                with gr.Column(scale=3, min_width=140):
                     generate_button = gr.Button(label="Generate", value="Generate", elem_classes='type_row', elem_id='generate_button', visible=True)
                     vary_button = gr.Button(
                         label="Vary",
                         value="Vary",
-                        elem_classes='type_row',
+                        elem_classes='type_row_half',
                         elem_id='vary_button',
                         visible=SUNSIDE_PRODUCT,
                         variant='secondary',
-                    )
-                    vary_mode = gr.Radio(
-                        label='Vary mode',
-                        choices=[flags.subtle_variation, flags.strong_variation],
-                        value=flags.subtle_variation,
-                        visible=SUNSIDE_PRODUCT,
-                        info='Клікни фото в галереї → Vary. Кількість = Image Number.',
                     )
                     # keep hidden alias for generate UI wiring that still references old name
                     fix_face_button = vary_button
@@ -253,6 +246,24 @@ with shared.gradio_root:
 
                     stop_button.click(stop_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False, _js='cancelGenerateForever')
                     skip_button.click(skip_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False)
+
+            # Vary mode under prompt row — full width, not stuffed in the button column
+            if SUNSIDE_PRODUCT:
+                with gr.Row(elem_classes='sunside_vary_row'):
+                    vary_mode = gr.Radio(
+                        label='Vary',
+                        choices=[flags.subtle_variation, flags.strong_variation],
+                        value=flags.subtle_variation,
+                        info='Клікни фото в галереї → Vary. Кількість = Image Number.',
+                        elem_classes='sunside_vary_mode',
+                    )
+            else:
+                vary_mode = gr.Radio(
+                    visible=False,
+                    choices=[flags.subtle_variation, flags.strong_variation],
+                    value=flags.subtle_variation,
+                )
+
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(label='Input Image', value=modules.config.default_image_prompt_checkbox, container=False, elem_classes='min_check')
                 enhance_checkbox = gr.Checkbox(
@@ -271,9 +282,9 @@ with shared.gradio_root:
                 )
                 advanced_checkbox = gr.Checkbox(label='Advanced', value=modules.config.default_advanced_checkbox, container=False, elem_classes='min_check')
 
-            with gr.Row(visible=False) as character_panel:
-                with gr.Column(scale=1):
-                    _char_names = character_choices() if SUNSIDE_PRODUCT else []
+            with gr.Row(visible=False, elem_classes='sunside_character_row') as character_panel:
+                _char_names = character_choices() if SUNSIDE_PRODUCT else []
+                with gr.Column(scale=1, min_width=160):
                     character_dropdown = gr.Dropdown(
                         label='Character',
                         choices=_char_names or ['Aria'],
@@ -292,11 +303,7 @@ with shared.gradio_root:
                         value=False,
                         visible=False,
                     )
-                    character_info = gr.Markdown(
-                        value='Якір можна підправити справа. Сцена/поза/кадр — у Prompt. '
-                              'Клікни кадр у галереї → **Vary** = варіації цілого фото (не face-paste).'
-                    )
-                with gr.Column(scale=2):
+                with gr.Column(scale=4, min_width=280):
                     _anchor0 = ''
                     if SUNSIDE_PRODUCT and _char_names:
                         _c0 = get_by_name(_char_names[0])
@@ -304,10 +311,10 @@ with shared.gradio_root:
                     character_anchor = gr.Textbox(
                         label='Prompt anchor (зовнішність)',
                         value=_anchor0,
-                        lines=8,
-                        max_lines=16,
+                        lines=5,
+                        max_lines=12,
                         interactive=True,
-                        info='Підставляється перед твоїм промптом. Редагуй вільно — файл персонажа не змінюється.',
+                        info='Перед твоїм промптом. Редагуй вільно — файл персонажа не змінюється. Сцена/поза — у Prompt.',
                     )
 
             if SUNSIDE_PRODUCT:
@@ -327,8 +334,6 @@ with shared.gradio_root:
                 face_ref_upload = gr.Image(visible=False, type='numpy', value=None)
                 if 'character_anchor' not in dir():
                     character_anchor = gr.Textbox(visible=False, value='')
-                if 'vary_mode' not in dir():
-                    vary_mode = gr.Radio(visible=False, choices=[flags.subtle_variation], value=flags.subtle_variation)
             with gr.Row(visible=modules.config.default_image_prompt_checkbox) as image_input_panel:
                 with gr.Tabs(selected=modules.config.default_selected_image_input_tab_id):
                     with gr.Tab(label='Upscale or Variation', id='uov_tab') as uov_tab:
@@ -1231,9 +1236,7 @@ with shared.gradio_root:
 
         def _character_selected(name):
             c = get_by_name(name)
-            anchor = c.anchor if c else ''
-            tip = 'Якір можна підправити справа. Сцена / поза / кадр — у промпті.'
-            return anchor, tip
+            return c.anchor if c else ''
 
         def _apply_size_preset(preset, width_val, height_val):
             if preset == 'Custom':
@@ -1270,7 +1273,7 @@ with shared.gradio_root:
         character_checkbox.change(_toggle_character, inputs=character_checkbox, outputs=character_panel,
                                   queue=False, show_progress=False)
         character_dropdown.change(_character_selected, inputs=character_dropdown,
-                                  outputs=[character_anchor, character_info],
+                                  outputs=[character_anchor],
                                   queue=False, show_progress=False)
 
         size_preset.change(
