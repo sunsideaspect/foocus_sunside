@@ -46,12 +46,11 @@ characters/<id>/face_ref.jpg   # optional → Face pass
 
 **FaceSwap / Inswapper вимкнено на Colab** (OOM).
 
-### Fix Face (рекомендовано)
-1. Generate кадр з нормальною анатомією  
-2. Клікни потрібне фото в галереї  
-3. **Fix Face** — автомаска обличчя (SAM) + Improve Detail, без скачування  
+### Face consistency
 
-Character ON під час Fix Face допоможе тримати ідентичність.
+**FaceSwap / Fix Face вимкнено.** Inswapper валив Colab; Improve Detail inpaint ліпив «чужу» голову.
+
+Однаковість: Character anchor (редагований) + промпт + face LoRA. Погане обличчя → новий seed / перегенерація.
 
 ## Прапорці запуску
 

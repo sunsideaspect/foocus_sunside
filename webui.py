@@ -284,8 +284,8 @@ with shared.gradio_root:
                         visible=False,
                     )
                     character_info = gr.Markdown(
-                        value='Якір можна підправити нижче. Сцена/поза/кадр — у Prompt. '
-                              'Після Generate: клікни фото → **Fix Face** (варіанти = Image Number).'
+                        value='Якір можна підправити справа. Сцена/поза/кадр — у Prompt. '
+                              'Face fix вимкнено (ліпив «чужу» голову). Краще перегенерувати кадр.'
                     )
                 with gr.Column(scale=2):
                     _anchor0 = ''

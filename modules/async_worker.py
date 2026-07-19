@@ -278,10 +278,12 @@ class AsyncTask:
         self.fix_face_enabled = False
         self.fix_face_image = None
         if len(args) >= 2:
-            self.fix_face_enabled = bool(args.pop())
-            self.fix_face_image = args.pop()
-        if self.fix_face_enabled and self.fix_face_image is not None:
-            self._configure_face_fix_pass()
+            # Always pop wiring slots; ignore enable — pasted-head quality was unusable
+            _ = bool(args.pop())
+            _ = args.pop()
+        self.fix_face_enabled = False
+        self.fix_face_image = None
+        # Face Improve Detail disabled in product (hard mask = pasted head look)
 
     def _configure_face_fix_pass(self):
         """Skip generation; auto-mask face via SAM and Improve Detail inpaint."""
