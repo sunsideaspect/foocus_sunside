@@ -95,12 +95,18 @@ def apply_character_to_prompt(prompt: str, character: Character | None) -> str:
     if character is None:
         return prompt
     prompt = (prompt or '').strip()
+    # Face trailer helps SDXL keep identity when nude/body tokens dominate
+    face_trailer = (
+        'sharp coherent face, intact eyes and mouth, natural facial proportions, '
+        'no deformed face'
+    )
     if not prompt:
-        return character.anchor
-    # Avoid double-injecting if user already pasted the anchor
+        return f'{character.anchor}, {face_trailer}'
     if character.anchor[:48] in prompt:
+        if 'coherent face' not in prompt.lower():
+            return f'{prompt}, {face_trailer}'
         return prompt
-    return f'{character.anchor}, {prompt}'
+    return f'{character.anchor}, {prompt}, {face_trailer}'
 
 
 def merge_character_negative(negative: str, character: Character | None) -> str:
