@@ -26,14 +26,17 @@ characters/<id>/
   face_ref.jpg   # optional, for Face pass
 ```
 
-## Face pass
-Not stock Fooocus FaceSwap (VRAM crash on Colab).
+## Face lock (рекомендовано)
 
-Optional post-step Inswapper when:
-- Character ON
-- `face_ref.jpg` present
-- Face pass checkbox ON
-- `insightface` installed + `models/insightface/inswapper_128.onnx`
+1. Character ON  
+2. Завантаж еталон обличчя в UI (**Face ref**) — анфас, чисте лице  
+3. Галочка **Face lock після генерації**  
+4. Generate  
+
+Пайплайн: SDXL кадр → unload VRAM → Inswapper swap → збереження.  
+Старий Image Prompt **FaceSwap** лишається вимкненим (OOM на Colab).
+
+Пакет: `insightface` + `onnxruntime-gpu` (ставить Colab). Модель `inswapper_128.onnx` качається сама в `models/insightface/`.
 
 ## Export names
 Files save as `{character}_{style}_{timestamp}_{rand}.png` when product prefix is set.

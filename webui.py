@@ -259,15 +259,24 @@ with shared.gradio_root:
                         value=(_char_names[0] if _char_names else 'Aria'),
                         interactive=True,
                     )
+                    face_ref_upload = gr.Image(
+                        label='Face ref — завантаж еталон обличчя (анфас)',
+                        source='upload',
+                        type='numpy',
+                        height=220,
+                        visible=SUNSIDE_PRODUCT,
+                    )
                     face_pass_checkbox = gr.Checkbox(
-                        label='Face pass — вимкнено (крашить Colab)',
-                        value=False,
-                        interactive=False,
-                        info='Inswapper/FaceSwap на T4 нестабільні. Лишай вимкненим. Схожість обличчя = Character якір.',
+                        label='Face lock після генерації (Inswapper)',
+                        value=True,
+                        interactive=True,
+                        info='Після кадру підміняє обличчя на завантажений еталон. '
+                             'Безпечніше за старий FaceSwap: спочатку генерація, потім swap з очисткою VRAM. '
+                             'Потрібен пакет insightface (Colab ставить сам).',
                         visible=SUNSIDE_PRODUCT,
                     )
                     character_info = gr.Markdown(
-                        value='Увімкни Character, обери персону — якір підставиться сам. Пиши лише сцену.'
+                        value='1) Обери персонажа  2) Завантаж еталон обличчя  3) Пиши лише сцену → Generate'
                     )
                 with gr.Column(scale=1):
                     _preview0 = None
@@ -279,7 +288,7 @@ with shared.gradio_root:
                         value=_preview0,
                         height=160,
                         interactive=False,
-                        show_label=False,
+                        show_label=True,
                     )
 
             if SUNSIDE_PRODUCT:
@@ -304,6 +313,7 @@ with shared.gradio_root:
                 custom_width = gr.Number(visible=False, value=-1)
                 custom_height = gr.Number(visible=False, value=-1)
                 face_pass_checkbox = gr.Checkbox(visible=False, value=False)
+                face_ref_upload = gr.Image(visible=False, type='numpy', value=None)
                 # keep character widgets for wiring even if hidden
                 if not SUNSIDE_PRODUCT:
                     pass
@@ -357,8 +367,8 @@ with shared.gradio_root:
                         ip_advanced = gr.Checkbox(label='Advanced', value=modules.config.default_image_prompt_advanced_checkbox, container=False)
                         if SUNSIDE_PRODUCT:
                             gr.HTML(
-                                '<p style="color:#f59e0b"><b>Sunside:</b> FaceSwap вимкнено — на Colab він крашить VRAM. '
-                                'Для схожого обличчя використовуй Character (якір). Face pass поки теж краще не чіпати.</p>'
+                                '<p style="color:#f59e0b"><b>Sunside:</b> старий FaceSwap (Image Prompt) вимкнено — крашить Colab. '
+                                'Еталон обличчя завантажуй у <b>Character → Face ref</b> + увімкни Face lock.</p>'
                             )
                         gr.HTML('* \"Image Prompt\" is powered by Fooocus Image Mixture Engine (v1.0.1). <a href="https://github.com/lllyasviel/Fooocus/discussions/557" target="_blank">\U0001F4D4 Documentation</a>')
 
@@ -1309,7 +1319,7 @@ with shared.gradio_root:
                   enhance_uov_prompt_type]
         ctrls += enhance_ctrls
         # Sunside extras last (popped last in AsyncTask)
-        ctrls += [character_checkbox, character_dropdown, face_pass_checkbox]
+        ctrls += [character_checkbox, character_dropdown, face_pass_checkbox, face_ref_upload]
 
         def parse_meta(raw_prompt_txt, is_generating):
             loaded_json = None

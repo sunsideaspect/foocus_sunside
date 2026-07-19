@@ -202,9 +202,15 @@ class AsyncTask:
         self.character_enabled = False
         self.character_name = None
         self.face_pass_enabled = False
+        self.face_ref_image = None
         self.export_prefix = None
         self._character_face_ref = None
-        if len(args) >= 3:
+        if len(args) >= 4:
+            self.character_enabled = bool(args.pop())
+            self.character_name = args.pop()
+            self.face_pass_enabled = bool(args.pop())
+            self.face_ref_image = args.pop()
+        elif len(args) >= 3:
             self.character_enabled = bool(args.pop())
             self.character_name = args.pop()
             self.face_pass_enabled = bool(args.pop())
@@ -233,13 +239,24 @@ class AsyncTask:
             except Exception as e:
                 print(f'[Sunside Character] {e}')
 
-        # Product mode: never run IP-Adapter FaceSwap or Face pass (Colab OOM / crash)
+        # Prefer UI-uploaded face ref over folder file
+        if self.face_ref_image is not None:
+            self._face_lock_ref = self.face_ref_image
+        else:
+            self._face_lock_ref = self._character_face_ref
+
+        # Auto face lock when Character ON + ref present (checkbox can still disable)
+        if self.character_enabled and self._face_lock_ref is not None and self.face_pass_enabled:
+            self._apply_face_lock = True
+        else:
+            self._apply_face_lock = False
+
+        # Never use IP-Adapter FaceSwap in product mode (OOM). Post face-lock is OK.
         try:
             from modules.product_mode import is_product_mode
             if is_product_mode():
-                self.face_pass_enabled = False
                 if cn_ip_face in self.cn_tasks and self.cn_tasks[cn_ip_face]:
-                    print('[Sunside] FaceSwap tasks stripped (disabled in product mode — causes Colab crashes)')
+                    print('[Sunside] IP-Adapter FaceSwap stripped (use Character Face lock upload instead)')
                     self.cn_tasks[cn_ip_face] = []
         except Exception:
             pass
@@ -580,12 +597,15 @@ def worker():
             d.append(('Version', 'version', 'Fooocus v' + fooocus_version.version))
 
             img_to_save = x
-            if getattr(async_task, 'face_pass_enabled', False) and getattr(async_task, '_character_face_ref', None):
+            if getattr(async_task, '_apply_face_lock', False) and getattr(async_task, '_face_lock_ref', None) is not None:
                 try:
-                    from modules.face_pass import apply_face_pass
-                    img_to_save = apply_face_pass(x, async_task._character_face_ref)
+                    from modules.face_pass import apply_face_lock
+                    # Free SDXL once per batch before first swap
+                    free_first = not getattr(async_task, '_face_lock_vram_freed', False)
+                    img_to_save = apply_face_lock(x, async_task._face_lock_ref, free_vram_first=free_first)
+                    async_task._face_lock_vram_freed = True
                 except Exception as e:
-                    print(f'[Sunside FacePass] {e}')
+                    print(f'[Sunside FaceLock] {e}')
 
             img_paths.append(log(
                 img_to_save, d, metadata_parser, async_task.output_format, task, persist_image,
