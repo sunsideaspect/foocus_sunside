@@ -1,4 +1,4 @@
-"""Built-in Sunside characters with stable prompt anchors."""
+"""Built-in Sunside characters with stable appearance anchors."""
 from __future__ import annotations
 
 import json
@@ -92,21 +92,15 @@ def get_by_name(name: str | None) -> Character | None:
 
 
 def apply_character_to_prompt(prompt: str, character: Character | None) -> str:
+    """Prepend appearance anchor only — scene/pose/framing stay in user prompt."""
     if character is None:
         return prompt
     prompt = (prompt or '').strip()
-    # Face trailer helps SDXL keep identity when nude/body tokens dominate
-    face_trailer = (
-        'sharp coherent face, intact eyes and mouth, natural facial proportions, '
-        'no deformed face'
-    )
     if not prompt:
-        return f'{character.anchor}, {face_trailer}'
+        return character.anchor
     if character.anchor[:48] in prompt:
-        if 'coherent face' not in prompt.lower():
-            return f'{prompt}, {face_trailer}'
         return prompt
-    return f'{character.anchor}, {prompt}, {face_trailer}'
+    return f'{character.anchor}, {prompt}'
 
 
 def merge_character_negative(negative: str, character: Character | None) -> str:

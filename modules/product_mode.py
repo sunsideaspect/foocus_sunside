@@ -1,4 +1,4 @@
-"""Sunside product-mode helpers: slim styles, sizes, scenarios."""
+"""Sunside product-mode helpers: slim styles and sizes."""
 from __future__ import annotations
 
 import os
@@ -25,18 +25,6 @@ SIZE_PRESETS = [
 
 SIZE_PRESET_LABELS = [x[0] for x in SIZE_PRESETS]
 SIZE_PRESET_MAP = {label: (w, h) for label, w, h in SIZE_PRESETS}
-
-# Scenario chip -> (styles, size label, image_number)
-SCENARIOS = {
-    'Selfie': (['Sunside Expressive Selfie', 'Fooocus Semi Realistic'], 'Story 768×1344', 1),
-    'Send Nudes': (['Sunside Send Nudes Crop', 'Fooocus Semi Realistic'], 'Story 768×1344', 1),
-    'Shower Peek': (['Sunside Shower Peek', 'Fooocus Semi Realistic'], 'Story 768×1344', 1),
-    'Hidden CCTV': (['Sunside Hidden Camera', 'Fooocus Semi Realistic'], 'Square 1024×1024', 1),
-    'Bedside Night': (['Sunside Bedside Night', 'Fooocus Semi Realistic'], 'Story 768×1344', 1),
-    'Pack Batch x4': (['Sunside Expressive Selfie', 'Fooocus Semi Realistic'], 'Story 768×1344', 4),
-}
-
-SCENARIO_LABELS = list(SCENARIOS.keys())
 
 MIN_DIM = 512
 MAX_DIM = 1536

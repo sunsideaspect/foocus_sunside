@@ -14,17 +14,16 @@
 4. Відкрий **`https://….gradio.live`**
 
 ### Simple flow
-**Character** (опційно) → **Scenario / Style** → **Size** → промпт сцени → **Generate**
+**Prompt** (сцена/поза/кадр) → **Character** (опційно, лише вигляд) → **Style look** → **Size** → **Generate**
 
 ## Product mode (за замовчуванням)
 
 - Одна модель: **CyberRealistic XL** + emotional / face / body LoRA
-- Стилі: лише **Sunside** (+ Semi Realistic)
-- Чекбокс **Character**: Aria / Mila / Vera (якір у промпт)
+- **Prompt** — головне; стилі лише look (не сцена)
+- Чекбокс **Character**: Aria / Mila / Vera (якір зовнішності)
 - **Size**: Story / Square / Landscape / Landing / Custom W×H
-- **Scenario** chips для швидких сцен + batch×4
 - Black Out NSFW вимкнено
-- Імена файлів: `aria_hidden_camera_….png`
+- Імена файлів: `aria_phone_raw_….png`
 
 Повний Fooocus UI: `--disable-sunside-product` або `SUNSIDE_PRODUCT=0`.
 

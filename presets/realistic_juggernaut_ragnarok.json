@@ -35,9 +35,8 @@
     "default_scheduler": "karras",
     "default_performance": "Quality",
     "default_prompt": "",
-    "default_prompt_negative": "blank expression, dead eyes, frozen face, plastic smile, warped mouth, broken teeth, studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, bad anatomy, extra limbs, deformed, bad hands, lowres, blurry, jpeg artifacts, watermark, text, cartoon, anime, cgi",
+    "default_prompt_negative": "studio lighting, softbox, cinematic, airbrushed, polished, glamour, plastic skin, waxy skin, doll face, bad anatomy, extra limbs, deformed, bad hands, lowres, blurry, jpeg artifacts, watermark, text, cartoon, anime, cgi",
     "default_styles": [
-        "Sunside Expressive Selfie",
         "Fooocus Semi Realistic"
     ],
     "default_aspect_ratio": "768*1344",

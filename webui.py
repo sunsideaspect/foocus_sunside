@@ -44,7 +44,7 @@ from modules.ui_gradio_extensions import reload_javascript
 from modules.auth import auth_enabled, check_auth
 from modules.util import is_json
 from modules.product_mode import (
-    is_product_mode, SIZE_PRESET_LABELS, SIZE_PRESET_MAP, SCENARIOS, SCENARIO_LABELS, clamp_dim
+    is_product_mode, SIZE_PRESET_LABELS, SIZE_PRESET_MAP, clamp_dim
 )
 from modules.characters import character_choices, get_by_name, load_characters
 
@@ -202,7 +202,10 @@ with shared.gradio_root:
                                  elem_id='final_gallery')
             with gr.Row():
                 with gr.Column(scale=17):
-                    prompt = gr.Textbox(show_label=False, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
+                    prompt = gr.Textbox(
+                        show_label=False,
+                        placeholder="Prompt: сцена, поза, кадр, одяг — головне. Character лише якір зовнішності." if SUNSIDE_PRODUCT else "Type prompt here or paste parameters.",
+                        elem_id='positive_prompt',
                                         autofocus=True, lines=3)
 
                     default_prompt = modules.config.default_prompt
@@ -275,7 +278,7 @@ with shared.gradio_root:
                         visible=SUNSIDE_PRODUCT,
                     )
                     character_info = gr.Markdown(
-                        value='1) Обери персонажа  2) Завантаж еталон обличчя  3) Пиши лише сцену → Generate'
+                        value='Персонаж = лише якір зовнішності. Сцена, поза, кадр — у промпті.'
                     )
                 with gr.Column(scale=1):
                     _preview0 = None
@@ -292,13 +295,6 @@ with shared.gradio_root:
 
             if SUNSIDE_PRODUCT:
                 with gr.Row():
-                    scenario_radio = gr.Radio(
-                        label='Scenario',
-                        choices=SCENARIO_LABELS,
-                        value=None,
-                        info='Ставить Sunside-стиль + розмір. Лише 1 Sunside-стиль.',
-                    )
-                with gr.Row():
                     size_preset = gr.Radio(
                         label='Size',
                         choices=SIZE_PRESET_LABELS + ['Custom'],
@@ -307,15 +303,11 @@ with shared.gradio_root:
                     custom_width = gr.Number(label='Width', value=768, precision=0, visible=False, minimum=512, maximum=1536)
                     custom_height = gr.Number(label='Height', value=1344, precision=0, visible=False, minimum=512, maximum=1536)
             else:
-                scenario_radio = gr.Radio(visible=False, choices=SCENARIO_LABELS, value=None)
                 size_preset = gr.Radio(visible=False, choices=SIZE_PRESET_LABELS + ['Custom'], value=SIZE_PRESET_LABELS[0])
                 custom_width = gr.Number(visible=False, value=-1)
                 custom_height = gr.Number(visible=False, value=-1)
                 face_pass_checkbox = gr.Checkbox(visible=False, value=False)
                 face_ref_upload = gr.Image(visible=False, type='numpy', value=None)
-                # keep character widgets for wiring even if hidden
-                if not SUNSIDE_PRODUCT:
-                    pass
             with gr.Row(visible=modules.config.default_image_prompt_checkbox) as image_input_panel:
                 with gr.Tabs(selected=modules.config.default_selected_image_input_tab_id):
                     with gr.Tab(label='Upscale or Variation', id='uov_tab') as uov_tab:
@@ -767,6 +759,11 @@ with shared.gradio_root:
                 shared.gradio_root.load(update_history_link, outputs=history_link, queue=False, show_progress=False)
 
             with gr.Tab(label='Styles', elem_classes=['style_selections_tab']):
+                if SUNSIDE_PRODUCT:
+                    gr.Markdown(
+                        '**Стилі = лише look зображення** (зерно, світло, телефон). '
+                        'Сцена, поза, кадр, одяг — пиши в **Prompt**. Рекомендовано: Semi Realistic + опційно 1 Sunside.'
+                    )
                 style_sorter.try_load_sorted_styles(
                     style_names=legal_style_names,
                     default_selected=modules.config.default_styles)
@@ -1210,11 +1207,9 @@ with shared.gradio_root:
         def _character_selected(name):
             c = get_by_name(name)
             preview = c.preview_path if c else None
-            tip = 'Якір підставиться автоматично. Пиши лише сцену.'
+            tip = 'Якір зовнішності підставиться автоматично. Сцена / поза / кадр — у промпті.'
             if c and c.face_ref_path:
-                tip += ' Face ref готовий для Face pass.'
-            elif c:
-                tip += ' Додай face_ref.jpg у characters/ для Face pass.'
+                tip += ' Face ref є для Face lock.'
             return preview, tip
 
         def _apply_size_preset(preset, width_val, height_val):
@@ -1249,12 +1244,6 @@ with shared.gradio_root:
         def _apply_custom_dims(width_val, height_val):
             return clamp_dim(width_val), clamp_dim(height_val)
 
-        def _apply_scenario(scenario):
-            if not scenario or scenario not in SCENARIOS:
-                return gr.update(), gr.update(), gr.update()
-            styles, size_label, count = SCENARIOS[scenario]
-            return styles, size_label, count
-
         character_checkbox.change(_toggle_character, inputs=character_checkbox, outputs=character_panel,
                                   queue=False, show_progress=False)
         character_dropdown.change(_character_selected, inputs=character_dropdown,
@@ -1272,18 +1261,6 @@ with shared.gradio_root:
                             outputs=[overwrite_width, overwrite_height], queue=False, show_progress=False)
         custom_height.change(_apply_custom_dims, inputs=[custom_width, custom_height],
                              outputs=[overwrite_width, overwrite_height], queue=False, show_progress=False)
-
-        scenario_radio.change(
-            _apply_scenario,
-            inputs=scenario_radio,
-            outputs=[style_selections, size_preset, image_number],
-            queue=False, show_progress=False,
-        ).then(
-            _apply_size_preset,
-            inputs=[size_preset, custom_width, custom_height],
-            outputs=[custom_width, custom_height, overwrite_width, overwrite_height, aspect_ratios_selection],
-            queue=False, show_progress=False,
-        )
 
         ctrls = [currentTask, generate_image_grid]
         ctrls += [
