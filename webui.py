@@ -267,12 +267,11 @@ with shared.gradio_root:
                         visible=SUNSIDE_PRODUCT,
                     )
                     face_pass_checkbox = gr.Checkbox(
-                        label='Face lock після генерації (Inswapper)',
-                        value=True,
+                        label='Face lock після генерації (Inswapper, CPU)',
+                        value=False,
                         interactive=True,
-                        info='Після кадру підміняє обличчя на завантажений еталон. '
-                             'Безпечніше за старий FaceSwap: спочатку генерація, потім swap з очисткою VRAM. '
-                             'Потрібен пакет insightface (Colab ставить сам).',
+                        info='Завантаж Face ref вище, потім увімкни. Працює на CPU після кадру (повільніше, але не має валити Colab). '
+                             'Якщо знову впаде — вимкни галочку: кадр все одно збережеться без swap.',
                         visible=SUNSIDE_PRODUCT,
                     )
                     character_info = gr.Markdown(

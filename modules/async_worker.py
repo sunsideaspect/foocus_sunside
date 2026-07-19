@@ -600,12 +600,12 @@ def worker():
             if getattr(async_task, '_apply_face_lock', False) and getattr(async_task, '_face_lock_ref', None) is not None:
                 try:
                     from modules.face_pass import apply_face_lock
-                    # Free SDXL once per batch before first swap
                     free_first = not getattr(async_task, '_face_lock_vram_freed', False)
                     img_to_save = apply_face_lock(x, async_task._face_lock_ref, free_vram_first=free_first)
                     async_task._face_lock_vram_freed = True
                 except Exception as e:
-                    print(f'[Sunside FaceLock] {e}')
+                    print(f'[Sunside FaceLock] ignored error, saving original: {e}')
+                    img_to_save = x
 
             img_paths.append(log(
                 img_to_save, d, metadata_parser, async_task.output_format, task, persist_image,
