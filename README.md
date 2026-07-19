@@ -44,11 +44,7 @@ characters/<id>/face_ref.jpg   # optional → Face pass
 
 ## Face consistency
 
-**FaceSwap / Inswapper вимкнено на Colab** (OOM).
-
-### Face consistency
-
-**FaceSwap / Fix Face вимкнено.** Inswapper валив Colab; Improve Detail inpaint ліпив «чужу» голову.
+**FaceSwap / Fix Face вимкнено.** Inswapper валив Colab; face inpaint ліпив «чужу» голову.
 
 Однаковість: Character anchor (редагований) + промпт + face LoRA. Погане обличчя → новий seed / перегенерація.
 
