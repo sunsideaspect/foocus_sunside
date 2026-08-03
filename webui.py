@@ -326,6 +326,50 @@ with shared.gradio_root:
                     )
                     custom_width = gr.Number(label='Width', value=768, precision=0, visible=False, minimum=512, maximum=1536)
                     custom_height = gr.Number(label='Height', value=1344, precision=0, visible=False, minimum=512, maximum=1536)
+
+                from modules.nsfw_prompt_writer import (
+                    compose_from_ui,
+                    intensity_choices,
+                    motion_choices,
+                    partner_choices,
+                    scene_choices,
+                )
+                with gr.Accordion(label='NSFW Prompt Writer (локально, без Gemini)', open=False):
+                    gr.Markdown(
+                        'Збирає англійський prompt + negative для SDXL. **18+ only.** '
+                        'Character якір не чіпає — увімкни Character окремо.'
+                    )
+                    with gr.Row():
+                        pw_scene = gr.Dropdown(
+                            label='Сцена',
+                            choices=scene_choices(),
+                            value=scene_choices()[0],
+                        )
+                        pw_intensity = gr.Dropdown(
+                            label='Інтенсивність',
+                            choices=intensity_choices(),
+                            value=intensity_choices()[-1],
+                        )
+                    with gr.Row():
+                        pw_partner = gr.Dropdown(
+                            label='Партнер',
+                            choices=partner_choices(),
+                            value=partner_choices()[0],
+                        )
+                        pw_motion = gr.Dropdown(
+                            label='Рух',
+                            choices=motion_choices(),
+                            value=motion_choices()[1],
+                        )
+                    pw_extra = gr.Textbox(
+                        label='Додай деталі (опційно)',
+                        placeholder='напр. red lingerie, creampie, against the window…',
+                        lines=2,
+                    )
+                    with gr.Row():
+                        pw_build = gr.Button(value='Зібрати промпт', variant='primary')
+                        pw_roll = gr.Button(value='Ще варіант', variant='secondary')
+                    pw_tip = gr.Markdown(value='')
             else:
                 size_preset = gr.Radio(visible=False, choices=SIZE_PRESET_LABELS + ['Custom'], value=SIZE_PRESET_LABELS[0])
                 custom_width = gr.Number(visible=False, value=-1)
@@ -1275,6 +1319,24 @@ with shared.gradio_root:
         character_dropdown.change(_character_selected, inputs=character_dropdown,
                                   outputs=[character_anchor],
                                   queue=False, show_progress=False)
+
+        if SUNSIDE_PRODUCT:
+            def _pw_fill(scene, intensity, partner, motion, extra, randomize):
+                p, n, tip = compose_from_ui(scene, intensity, partner, motion, extra, randomize)
+                return p, n, tip
+
+            pw_build.click(
+                lambda s, i, p, m, e: _pw_fill(s, i, p, m, e, False),
+                inputs=[pw_scene, pw_intensity, pw_partner, pw_motion, pw_extra],
+                outputs=[prompt, negative_prompt, pw_tip],
+                queue=False,
+            )
+            pw_roll.click(
+                lambda s, i, p, m, e: _pw_fill(s, i, p, m, e, True),
+                inputs=[pw_scene, pw_intensity, pw_partner, pw_motion, pw_extra],
+                outputs=[prompt, negative_prompt, pw_tip],
+                queue=False,
+            )
 
         size_preset.change(
             _apply_size_preset,
