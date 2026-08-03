@@ -15,10 +15,10 @@ Character id: **Sola** (`characters/sola/`)
 2. У Prompt — **тільки сцена/поза** (не дублюй обличчя)
 3. Image Number 3–4 → бери кадр з найкращим обличчям → **Vary Subtle**
 
-## Чесна стеля
-Текстовий якір ≠ 100% face-ID.  
-Для справжнього «один в один» далі потрібен **face LoRA** на 20–40 її фото (навчання окремо).  
-Цей Character — максимум без LoRA.
+## Face LoRA (наступний рівень)
+Датасет підготовлено: 107 кадрів, trigger `sola_face`.
+Див. [SOLA_LORA_TRAIN.md](SOLA_LORA_TRAIN.md) + `sola_face_lora_colab.ipynb`.
+
 
 ## Промпт-сцена (приклад, без якоря)
 ```

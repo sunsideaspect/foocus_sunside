@@ -57,3 +57,10 @@ user_path_config-deprecated.txt
 /.coverage*
 /auth.json
 .DS_Store
+
+# Local face LoRA datasets / zips (binaries stay local)
+/datasets/sola_face/
+/datasets/sola_face_train/
+/datasets/sola_face_kohya/
+/datasets/*.zip
+/configs/*.safetensors

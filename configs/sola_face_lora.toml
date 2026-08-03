@@ -1,0 +1,53 @@
+# SDXL LoRA — Sola face (Kohya ss)
+# Use with: https://github.com/kohya-ss/sd-scripts
+# Dataset folder structure already prepared:
+#   datasets/sola_face_kohya/10_sola_face/*.jpg + *.txt
+# Trigger word in captions: sola_face
+
+[model_arguments]
+pretrained_model_name_or_path = "stabilityai/stable-diffusion-xl-base-1.0"
+# Or local CyberRealistic / RealVis XL .safetensors path on Colab
+
+[dataset_arguments]
+train_data_dir = "./datasets/sola_face_kohya"
+resolution = "1024,1024"
+enable_bucket = true
+min_bucket_reso = 512
+max_bucket_reso = 2048
+caption_extension = ".txt"
+shuffle_caption = false
+keep_tokens = 1
+
+[training_arguments]
+output_dir = "./outputs/sola_face_lora"
+output_name = "sola_face_sdxl"
+save_model_as = "safetensors"
+save_every_n_epochs = 1
+max_train_epochs = 10
+train_batch_size = 1
+gradient_accumulation_steps = 1
+learning_rate = 1e-4
+unet_lr = 1e-4
+text_encoder_lr = 5e-5
+lr_scheduler = "cosine_with_restarts"
+lr_scheduler_num_cycles = 3
+optimizer_type = "AdamW8bit"
+mixed_precision = "fp16"
+xformers = true
+cache_latents = true
+cache_latents_to_disk = true
+seed = 42
+max_data_loader_n_workers = 2
+persistent_data_loader_workers = true
+noise_offset = 0.0357
+min_snr_gamma = 5.0
+
+[additional_network_arguments]
+network_module = "networks.lora"
+network_dim = 16
+network_alpha = 8
+
+[sample_prompt_arguments]
+# optional samples during train
+sample_every_n_epochs = 2
+sample_prompts = "sola_face, photo of a woman, looking at camera, natural light --w 768 --h 1024 --s 28 --l 5"
