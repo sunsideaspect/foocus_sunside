@@ -19,8 +19,6 @@
 ### Simple flow
 **Prompt** (сцена/поза/кадр) → **Character** (опційно, лише вигляд) → **Style look** → **Size** → **Generate**
 
-Або відкрий **NSFW Prompt Writer** під Size: обери сцену/інтенсивність → **Зібрати промпт** (локально, без Gemini).
-
 ## Product mode (за замовчуванням)
 
 - Одна модель: **CyberRealistic XL** + emotional / face / body LoRA
