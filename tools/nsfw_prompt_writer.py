@@ -1,7 +1,4 @@
-"""Boudoir / lingerie prompt pack matching project reference photos.
-
-Offline helper for the Cursor NSFW Prompt Writer chat. Adults 18+ only.
-"""
+"""Solazola-aesthetic prompt pack (soft boudoir → hard explicit solo). Adults 18+ only."""
 from __future__ import annotations
 
 import random
@@ -9,113 +6,86 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-
 _UNDERAGE_RE = re.compile(
-    r"\b("
-    r"child|children|kid|kids|toddler|infant|baby|babies|minor|underage|"
-    r"teen(?!age woman|tage women)|teenager|schoolgirl|schoolboy|"
-    r"prepubescent|loli|shota|pedophil|"
-    r"дитин|підліт|школяр|малоліт|неповноліт"
-    r")\b",
-    flags=re.IGNORECASE,
+    r"\b(child|kid|toddler|infant|baby|minor|underage|teenager|schoolgirl|loli|shota|"
+    r"дитин|підліт|школяр|малоліт|неповноліт)\b",
+    re.I,
 )
 
 BASE_NEGATIVE = (
-    "teen, teenager, child, underage, baby face, bad anatomy, extra limbs, "
-    "deformed hands, plastic skin, airbrushed porcelain, anime, cgi, cartoon, "
+    "teen, teenager, child, underage, baby face, schoolgirl, bad anatomy, extra limbs, "
+    "deformed hands, fused fingers, plastic skin, airbrushed porcelain, anime, cgi, cartoon, "
     "watermark, text, logo, cinematic color grade, oversharpen, 8k, hdr"
 )
 
-# id → (label, prompt body, style tip)
-SCENES: Dict[str, Tuple[str, str, str]] = {
+SOFT: Dict[str, Tuple[str, str]] = {
     "robe_studio": (
-        "1 Sheer floral robe nude studio",
+        "Sheer floral robe nude studio",
         "full body photoreal studio photo, plain light grey wall, slim adult woman standing facing camera, "
-        "long straight brown hair middle part, sheer black mesh open robe with small colorful floral embroidery "
-        "draped on shoulders, robe open, nude underneath, hands lightly covering breasts at collarbone, "
-        "bare stomach and hips visible, soft even beauty lighting, natural skin texture, calm sultry eye contact",
-        "none / clean studio",
+        "long straight brown hair middle part, sheer black mesh open robe with colorful floral embroidery, "
+        "robe open, nude underneath, hands lightly covering breasts at collarbone, soft even beauty lighting, "
+        "natural skin texture, calm sultry eye contact",
     ),
     "floral_corset": (
-        "2 White floral milkmaid corset",
-        "medium close-up photoreal portrait, bright modern apartment, shallow depth of field, adult woman "
-        "long straight dark brown hair, white floral corset crop top with orange yellow blossom print, "
-        "sweetheart neckline white lace trim, short puffed milkmaid sleeves, center hook-and-eye closures, "
-        "deep cleavage, soft natural front light, looking at camera, blurred wall art behind, realistic skin pores",
-        "Spontaneous Snap",
+        "Floral milkmaid corset",
+        "medium close-up photoreal portrait, bright modern apartment, slim adult woman long straight dark brown hair, "
+        "white floral corset crop top orange yellow blossoms, lace trim, puffed milkmaid sleeves, hook-and-eye front, "
+        "deep cleavage, soft daylight, looking at camera, shallow DOF",
     ),
     "red_lace_dark": (
-        "3 Red lace dark bedroom",
-        "medium photoreal boudoir shot, dark bedroom bokeh, adult woman long dark brown hair over one shoulder, "
-        "bright red lace bra and matching red lace garter panties, black lace-top thigh-high stockings, "
-        "finger resting on parted lips, other arm across midriff, soft low-key front light, suggestive eye contact, "
-        "sharp lace detail",
-        "Bedside Night",
-    ),
-    "red_lace_soft": (
-        "4 Red lace soft gaze",
-        "vertical photoreal portrait in bedroom, navy blue wall soft bokeh, bed with white and blue pillows, "
-        "adult woman long chestnut hair middle part, eyes cast downward soft expression, vivid red lace bra and "
-        "high-waist red lace garter belt with thin straps, hint of black stocking, soft warm indoor light, "
-        "intricate lace texture, natural skin",
-        "Bedside Night",
-    ),
-    "blue_xmas": (
-        "5 Blue sheer Christmas bokeh",
-        "photoreal three-quarter back view, looking over shoulder at camera, long wavy light-brown hair, "
-        "sheer light-blue off-shoulder crop top with white polka dots and ruffles, matching sheer thong, "
-        "Christmas tree warm fairy lights bokeh background, soft even key light on skin, glamorous boudoir photo",
-        "Spontaneous Snap",
-    ),
-    "mesh_bed": (
-        "6 Black floral mesh on bed",
-        "medium photoreal bedroom shot, white sheets wooden headboard, adult woman sitting on bed slight smile, "
-        "long straight brown hair, black sheer mesh lingerie with pink-red floral embroidery, underwire bra "
-        "thin ribbon shoulder ties, high-cut side-tie panties, smartphone on bed, soft daylight, "
-        "realistic fabric transparency",
-        "Spontaneous Snap",
-    ),
-    "kitchen_sheer": (
-        "7 Kitchen sheer turtleneck",
-        "photoreal indoor kitchen portrait soft bokeh cabinets, adult woman long straight brown hair, "
-        "black sheer long-sleeve polka turtleneck crop tied in a knot at waist, breasts visible through sheer fabric, "
-        "black lace panties scalloped edge, one arm raised above head, slight lean back, warm indoor light, "
-        "candid glam photo",
-        "Spontaneous Snap",
-    ),
-    "harness": (
-        "8 Black harness bodysuit",
-        "medium photoreal standing portrait, white wardrobe and paneled door background, adult woman "
-        "long straight brown hair past waist, black strappy harness bodysuit with metal rings, mesh panels "
-        "and side cutout, soft daylight, intricate strap geometry sharp, pale nails thin bracelet, calm eye contact",
-        "Tripod Phone",
+        "Red lace dark bedroom",
+        "medium photoreal boudoir, dark bedroom bokeh, long dark brown hair, bright red lace bra and garter panties, "
+        "black lace-top thigh highs, finger on parted lips, soft low-key light, suggestive eye contact",
     ),
     "prone_lace": (
-        "9 Prone black lace on bed",
-        "photoreal bedroom medium shot, rumpled white sheets, adult woman lying on stomach propped on elbows, "
-        "hands clasped, long straight brown hair, black lace bra with thin decorative chest straps, matching "
-        "lace panties, knees bent hips slightly arched, soft natural light, shallow DOF, boudoir gaze at camera",
-        "Bedside Night",
+        "Prone black lace",
+        "photoreal bedroom, rumpled white sheets, adult woman on stomach propped on elbows, black lace bra and panties, "
+        "knees bent hips arched, soft daylight, looking at camera",
     ),
 }
 
-INTENSITY_LABELS = {
-    "match_ref": "Як на рефі (за замовч.)",
-    "softer": "М’якше / менше sheer",
-    "harder": "Жорсткіше / більше nude",
+HARD: Dict[str, Tuple[str, str]] = {
+    "spread_bed": (
+        "Legs spread on bed",
+        "photoreal amateur erotic photo, modern minimal bedroom, white bed, soft natural daylight, "
+        "slim adult woman long straight brown hair middle part, sitting on bed edge facing camera, "
+        "legs spread wide knees out, explicit pussy fully visible, pink lace panties pulled aside, "
+        "looking at camera, natural skin texture, raw unedited",
+    ),
+    "spread_sofa": (
+        "Legs spread on grey sofa",
+        "photoreal amateur erotic photo, modern living room grey sofa, soft daylight, "
+        "slim adult woman long straight brown hair, one leg up on sofa, dark red lace lingerie, "
+        "panties hooked aside, fingers spreading herself, explicit wet pussy clear, calm dirty eye contact",
+    ),
+    "kneel_lift": (
+        "Kneeling top lifted",
+        "photoreal amateur, white bed, slim adult woman kneeling on mattress, long brown hair, "
+        "white crop tank lifted over bare breasts, black lace thong, thighs apart, back slightly arched, "
+        "looking at camera, soft window light",
+    ),
+    "full_frontal": (
+        "Full frontal nude stand",
+        "photoreal full body, plain textured wall, slim adult woman standing nude, hands behind head, "
+        "long straight brown hair, weight on one hip, explicit breasts and pussy visible, soft even light, "
+        "looking at camera, raw amateur still",
+    ),
+    "stairs_nude": (
+        "Nude on stairs",
+        "photoreal indoor staircase, warm soft light, slim adult woman seated on steps nude, "
+        "long brown hair, legs casually open, explicit frontal, calm expression, modern apartment, shallow DOF",
+    ),
+    "all_fours": (
+        "All fours looking back",
+        "photoreal bedroom, slim adult woman on all fours on bed, looking back over shoulder, "
+        "black thong pulled between cheeks, long brown hair, arched back, soft daylight, erotic amateur photo",
+    ),
 }
 
 
-def scene_choices() -> List[str]:
-    return [f"{sid} — {meta[0]}" for sid, meta in SCENES.items()]
-
-
-def intensity_choices() -> List[str]:
-    return [f"{k} — {v}" for k, v in INTENSITY_LABELS.items()]
-
-
-def _key(choice: str, fallback: str) -> str:
-    return ((choice or fallback).split("—", 1)[0].strip() or fallback)
+def scene_choices(tier: str = "hard") -> List[str]:
+    src = HARD if tier == "hard" else SOFT
+    return [f"{k} — {v[0]}" for k, v in src.items()]
 
 
 def blocks_underage(text: str) -> bool:
@@ -129,39 +99,29 @@ class PromptPack:
     tip: str
 
 
-def compose(scene_choice: str, intensity_choice: str = "match_ref", extra: str = "") -> PromptPack:
-    sid = _key(scene_choice, "red_lace_dark")
-    intensity = _key(intensity_choice, "match_ref")
-    if sid not in SCENES:
-        sid = "red_lace_dark"
+def _key(choice: str, fallback: str) -> str:
+    return ((choice or fallback).split("—", 1)[0].strip() or fallback)
 
-    extra = (extra or "").strip()
+
+def compose(scene_choice: str, tier: str = "hard", extra: str = "", randomize: bool = False) -> PromptPack:
     if blocks_underage(extra) or blocks_underage(scene_choice):
         return PromptPack("", BASE_NEGATIVE, "Заблоковано: лише 18+.")
-
-    label, body, style = SCENES[sid]
-    if intensity == "softer":
-        body = body.replace("nude underneath, ", "lingerie underneath, ")
-        body = body.replace("breasts visible through sheer fabric, ", "subtle sheer fabric, ")
-    elif intensity == "harder":
-        body = body + ", more explicit revealing pose, stronger erotic tension"
-
-    if extra and not blocks_underage(extra):
-        body = f"{body}, {extra}"
-
-    body = f"{body}, photorealistic, raw unedited, no watermark"
-    tip = f"**{label}** · Style tip: {style}. Character якір у Sunside окремо."
-    return PromptPack(body, BASE_NEGATIVE, tip)
-
-
-def compose_from_ui(scene_choice: str, intensity_choice: str, extra: str = "") -> Tuple[str, str, str]:
-    pack = compose(scene_choice, intensity_choice, extra)
-    return pack.prompt, pack.negative, pack.tip
+    src = HARD if tier.startswith("hard") else SOFT
+    if randomize:
+        sid = random.choice(list(src.keys()))
+    else:
+        sid = _key(scene_choice, next(iter(src)))
+        if sid not in src:
+            sid = next(iter(src))
+    label, body = src[sid]
+    if extra.strip():
+        body = f"{body}, {extra.strip()}"
+    body = f"{body}, photorealistic, no watermark"
+    return PromptPack(body, BASE_NEGATIVE, f"**{label}** · tier={tier} · Character якір окремо")
 
 
 if __name__ == "__main__":
-    for c in scene_choices():
-        p, n, t = compose_from_ui(c, "match_ref — Як на рефі (за замовч.)")
-        print("===", c)
-        print(p)
-        print()
+    for t in ("soft", "hard"):
+        print("====", t)
+        for c in scene_choices(t):
+            print(compose(c, t).prompt[:120], "...")
